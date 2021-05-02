@@ -85,6 +85,12 @@
                         :validation="$v.form.gender"
                         :options="genderOptions"
                     />
+                    <form-input-checkbox-group
+                        label="Pohlaví"
+                        v-model="form.genderTest"
+                        :validation="$v.form.genderTest"
+                        :options="genderOptions"
+                    />
                 </div>
             </div>
 
@@ -178,7 +184,7 @@ export default {
     },
     data () {
         const dataset = {
-            form: JSON.parse(JSON.stringify(this.value)),
+            form: { ...JSON.parse(JSON.stringify(this.value)), genderTest: [] },
             redraw: false,
             isValid: true
         }

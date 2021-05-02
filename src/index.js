@@ -5,7 +5,8 @@ import {
     FormTextareaPlugin,
     FormSelectPlugin,
     FormGroupPlugin,
-    FormInputPlugin
+    FormInputPlugin,
+    FormCheckboxPlugin
 } from 'bootstrap-vue'
 import inputs from './Inputs/index.js'
 
@@ -18,6 +19,7 @@ export const FormInputsPlugin = {
         Vue.use(FormSelectPlugin)
         Vue.use(FormGroupPlugin)
         Vue.use(FormInputPlugin)
+        Vue.use(FormCheckboxPlugin)
         for (const input of inputs) {
             Vue.component(input.name, input)
         }
@@ -30,3 +32,4 @@ export { default as FormInputFeedbackMessage } from './Inputs/FormInputFeedbackM
 export { default as FormInputRadioGroup } from './Inputs/FormInputRadioGroup.vue'
 export { default as FormInputSelect } from './Inputs/FormInputSelect.vue'
 export { default as FormInputTextarea } from './Inputs/FormInputTextarea.vue'
+export { default as FormInputCheckboxGroup } from './Inputs/FormInputCheckboxGroup.vue'
