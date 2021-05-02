@@ -2,6 +2,7 @@
     <b-form-group
         :label="label"
         :description="hint"
+        :label-for="id"
     >
         <div
             v-if="renderAsGroup"
@@ -9,6 +10,7 @@
         >
             <b-form-input
                 v-model.trim="model"
+                :id="id"
                 :size="size"
                 :type="type"
                 :state="(invalid !== null) ? !invalid : null"
@@ -27,6 +29,7 @@
         <b-form-input
             v-else
             v-model.trim="model"
+            :id="id"
             :size="size"
             :type="type"
             :state="(invalid !== null) ? !invalid : null"
@@ -111,6 +114,10 @@ export default {
             type: Boolean,
             required: false,
             default: false
+        },
+        id: {
+            type: String,
+            required: false
         }
     },
     computed: {

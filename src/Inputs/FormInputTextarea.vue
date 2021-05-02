@@ -2,10 +2,12 @@
     <b-form-group
         :label="label"
         :description="hint"
+        :label-for="id"
     >
         <b-form-textarea
             v-model.trim="model"
             :size="size"
+            :id="id"
             :state="(invalid !== null) ? !invalid : null"
             :disabled="disabled"
             :formatter="formatValue"

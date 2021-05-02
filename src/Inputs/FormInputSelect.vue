@@ -2,6 +2,7 @@
     <b-form-group
         :label="label"
         :description="hint"
+        :label-for="id"
     >
         <div
             v-if="renderAsGroup"
@@ -10,6 +11,7 @@
             <b-form-select
                 v-model="model"
                 :size="size"
+                :id="id"
                 :state="(invalid !== null) ? !invalid : null"
                 :disabled="disabled"
                 :placeholder="placeholder"
@@ -26,6 +28,7 @@
             v-else
             v-model="model"
             :size="size"
+            :id="id"
             :state="(invalid !== null) ? !invalid : null"
             :disabled="disabled"
             :placeholder="placeholder"

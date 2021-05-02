@@ -1,6 +1,6 @@
 {
   "name": "@tvaliasek/vue-form-inputs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": false,
   "main": "dist/vueFormInputs.umd.min.js",
   "module": "dist/vueFormInputs.common.js",

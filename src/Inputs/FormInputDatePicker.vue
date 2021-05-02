@@ -2,8 +2,10 @@
     <b-form-group
         :label="label"
         :description="hint"
+        :label-for="id"
     >
         <b-form-datepicker
+            :id="id"
             :no-flip="true"
             :show-decade-nav="true"
             :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
