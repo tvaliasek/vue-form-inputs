@@ -19,6 +19,7 @@
                 @change="onEvent('change')"
                 @update="onEvent('update')"
                 @blur="onEvent('blur')"
+                :readonly="readOnly"
             />
             <div class="input-group-append">
                 <slot></slot>
@@ -36,6 +37,7 @@
             @change="onEvent('change')"
             @update="onEvent('update')"
             @blur="onEvent('blur')"
+            :readonly="readOnly"
         />
         <b-form-invalid-feedback
             v-if="invalid"

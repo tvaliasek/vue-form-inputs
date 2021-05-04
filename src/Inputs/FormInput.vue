@@ -17,6 +17,7 @@
                 :disabled="disabled"
                 :formatter="formatValue"
                 :placeholder="placeholder"
+                :readonly="readOnly"
                 lazy-formatter
                 @change="onEvent('change')"
                 @update="onEvent('update')"
@@ -36,6 +37,7 @@
             :disabled="disabled"
             :formatter="formatValue"
             :placeholder="placeholder"
+            :readonly="readOnly"
             lazy-formatter
             @change="onEvent('change')"
             @update="onEvent('update')"
@@ -118,6 +120,11 @@ export default {
         id: {
             type: String,
             required: false
+        },
+        readOnly: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
     computed: {

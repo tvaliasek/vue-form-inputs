@@ -13,6 +13,7 @@
             @change="onEvent('change')"
             @update="onEvent('update')"
             @blur="onEvent('blur')"
+            :readonly="readOnly"
         />
         <b-form-invalid-feedback
             v-if="invalid"

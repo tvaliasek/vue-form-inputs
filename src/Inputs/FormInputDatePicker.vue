@@ -19,6 +19,7 @@
             :max="maxDate"
             :start-weekday="1"
             v-bind="labels"
+            :readonly="readOnly"
             @change="onEvent('change')"
             @update="onEvent('update')"
             @blur="onEvent('blur')"
@@ -63,7 +64,7 @@ export default {
                     labelNextDecade: 'Další dekáda',
                     labelNextMonth: 'Další měsíc',
                     labelNextYear: 'Další rok',
-                    labelNoDateSelected: 'Nevybráno žádný datum',
+                    labelNoDateSelected: 'Nevybráno žádné datum',
                     labelPrevDecade: 'Předchozí dekáda',
                     labelPrevMonth: 'Předchozí měsíc',
                     labelPrevYear: 'Předchozí rok',

@@ -13,6 +13,7 @@
                         label="Titul před"
                         v-model.trim="form.prenominal"
                         :id="'prenominal'"
+                        :read-only="form.prenominal !== null && form.prenominal.length > 3"
                     />
                 </div>
                 <div class="col-12 col-md-4">
