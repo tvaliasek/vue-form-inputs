@@ -20,6 +20,7 @@
                 @update="onEvent('update')"
                 @blur="onEvent('blur')"
                 :multiple="multi"
+                :select-size="selectSize"
             />
             <div class="input-group-append">
                 <slot></slot>
@@ -38,6 +39,7 @@
             @update="onEvent('update')"
             @blur="onEvent('blur')"
             :multiple="multi"
+            :select-size="selectSize"
         />
         <b-form-invalid-feedback
             v-if="invalid"
@@ -67,6 +69,9 @@ export default {
             type: Boolean,
             required: false,
             default: false
+        },
+        selectSize: {
+            required: false
         }
     },
     computed: {
