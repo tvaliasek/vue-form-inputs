@@ -19,6 +19,7 @@
                 @change="onEvent('change')"
                 @update="onEvent('update')"
                 @blur="onEvent('blur')"
+                :multiple="multi"
             />
             <div class="input-group-append">
                 <slot></slot>
@@ -36,6 +37,7 @@
             @change="onEvent('change')"
             @update="onEvent('update')"
             @blur="onEvent('blur')"
+            :multiple="multi"
         />
         <b-form-invalid-feedback
             v-if="invalid"
@@ -60,6 +62,11 @@ export default {
             validator (value) {
                 return (typeof value === 'object' || Array.isArray(value))
             }
+        },
+        multi: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
     computed: {

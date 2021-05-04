@@ -116,6 +116,7 @@
                 </div>
                 <div class="col-12 col-md-4">
                     <form-input-select
+                        :multi="true"
                         label="Daňový domicil"
                         v-model="form.taxDomicile"
                         :validation="$v.form.taxDomicile"
