@@ -7,13 +7,12 @@
             v-model="model"
             :size="size"
             :state="(invalid !== null) ? !invalid : null"
-            :disabled="disabled"
+            :disabled="disabled || readOnly"
             :options="arrayOptions"
             :stacked="stacked"
             @change="onEvent('change')"
             @update="onEvent('update')"
             @blur="onEvent('blur')"
-            :readonly="readOnly"
         />
         <b-form-invalid-feedback
             v-if="invalid"

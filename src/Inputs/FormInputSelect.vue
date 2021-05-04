@@ -13,13 +13,12 @@
                 :size="size"
                 :id="id"
                 :state="(invalid !== null) ? !invalid : null"
-                :disabled="disabled"
+                :disabled="disabled || readOnly"
                 :placeholder="placeholder"
                 :options="arrayOptions"
                 @change="onEvent('change')"
                 @update="onEvent('update')"
                 @blur="onEvent('blur')"
-                :readonly="readOnly"
             />
             <div class="input-group-append">
                 <slot></slot>
@@ -31,13 +30,12 @@
             :size="size"
             :id="id"
             :state="(invalid !== null) ? !invalid : null"
-            :disabled="disabled"
+            :disabled="disabled || readOnly"
             :placeholder="placeholder"
             :options="arrayOptions"
             @change="onEvent('change')"
             @update="onEvent('update')"
             @blur="onEvent('blur')"
-            :readonly="readOnly"
         />
         <b-form-invalid-feedback
             v-if="invalid"

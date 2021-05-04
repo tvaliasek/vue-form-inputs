@@ -60,6 +60,7 @@
                         v-model="form.birthNumberCountry"
                         :validation="$v.form.birthNumberCountry"
                         :options="countries"
+                        :read-only="true"
                     />
                 </div>
                 <div class="col-12 col-md-3">
