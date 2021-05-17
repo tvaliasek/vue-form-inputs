@@ -43,6 +43,52 @@ export default {
     methods: {
         getDefaultMessage (ruleType, params) {
             let parameter
+            if (this.$i18n !== undefined && this.$t !== undefined) {
+                switch (ruleType) {
+                    case 'required':
+                    case 'requiredIf':
+                    case 'requiredUnless':
+                        return this.$t('vueFormInputs.feedback.required')
+                    case 'minLength':
+                        return this.$t('vueFormInputs.feedback.minLength', { minLength: params.minLength.min })
+                    case 'maxLength':
+                        return this.$t('vueFormInputs.feedback.maxLength', { maxLength: params.maxLength.max })
+                    case 'minValue':
+                        // eslint-disable-next-line no-case-declarations
+                        parameter = (params.minValue.min instanceof Date) ? params.minValue.min.toLocaleDateString() : params.minValue.min
+                        return this.$t('vueFormInputs.feedback.minValue', { minValue: parameter })
+                    case 'maxValue':
+                        // eslint-disable-next-line no-case-declarations
+                        parameter = (params.maxValue.max instanceof Date) ? params.maxValue.max.toLocaleDateString() : params.maxValue.max
+                        return this.$t('vueFormInputs.feedback.maxValue', { maxValue: parameter })
+                    case 'between':
+                        return this.$t('vueFormInputs.feedback.between', { betweenMin: params.between.min, betweenMax: params.between.max })
+                    case 'alpha':
+                        return this.$t('vueFormInputs.feedback.alpha')
+                    case 'alphaNum':
+                        return this.$t('vueFormInputs.feedback.alphaNum')
+                    case 'numeric':
+                        return this.$t('vueFormInputs.feedback.numeric')
+                    case 'integer':
+                        return this.$t('vueFormInputs.feedback.integer')
+                    case 'decimal':
+                        return this.$t('vueFormInputs.feedback.decimal')
+                    case 'email':
+                        return this.$t('vueFormInputs.feedback.email')
+                    case 'ipAddress':
+                        return this.$t('vueFormInputs.feedback.ipAddress')
+                    case 'macAddress':
+                        return this.$t('vueFormInputs.feedback.macAddress')
+                    case 'sameAs':
+                        return this.$t('vueFormInputs.feedback.sameAs')
+                    case 'url':
+                        return this.$t('vueFormInputs.feedback.url')
+                    case 'validated_email':
+                        return this.$t('vueFormInputs.feedback.validatedEmail')
+                    default:
+                        return this.$t('vueFormInputs.feedback.invalidValue')
+                }
+            }
             switch (ruleType) {
                 case 'required':
                 case 'requiredIf':
