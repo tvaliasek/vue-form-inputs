@@ -24,7 +24,7 @@
                     :no-flip="true"
                     :show-decade-nav="true"
                     :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-                    :locale="'cs-CZ'"
+                    :locale="locale"
                     v-model.trim="model"
                     :size="size"
                     :state="(invalid !== null) ? !invalid : null"
@@ -51,7 +51,7 @@
             :no-flip="true"
             :show-decade-nav="true"
             :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-            :locale="'cs-CZ'"
+            :locale="locale"
             v-model.trim="model"
             :size="size"
             :state="(invalid !== null) ? !invalid : null"
@@ -82,7 +82,6 @@
 import FormInput from './FormInput.vue'
 
 function parseFormatDate (value) {
-    console.log(value)
     if (value instanceof Date) {
         return `${value.getDate()}. ${value.getMonth() + 1}. ${value.getFullYear()}`
     }
@@ -142,6 +141,11 @@ export default {
         }
     },
     props: {
+        locale: {
+            type: String,
+            required: false,
+            default: 'cs-CZ'
+        },
         buttonOnly: {
             type: Boolean,
             required: false,
