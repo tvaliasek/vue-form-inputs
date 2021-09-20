@@ -2,11 +2,12 @@
     <b-form-group
         :label="label"
         :description="hint"
-        :label-for="`${id}_input`"
+        :label-for="((id) ? `${id}_input` : undefined)"
+        :class="{ 'form-group-required': isRequired }"
     >
         <b-input-group v-if="buttonOnly" :class="((invalid !== null) ? ((invalid ? 'is-invalid' : 'is-valid'))  : undefined)">
             <b-form-input
-                :id="`${id}_input`"
+                :id="((id) ? `${id}_input` : undefined)"
                 v-model.trim="localDate"
                 type="text"
                 :placeholder="datePlaceholder"

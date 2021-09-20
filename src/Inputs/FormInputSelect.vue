@@ -2,6 +2,7 @@
     <b-form-group
         :label="label"
         :description="hint"
+        :class="{ 'form-group-required': isRequired }"
         :label-for="id"
     >
         <div

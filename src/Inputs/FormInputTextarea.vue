@@ -3,6 +3,7 @@
         :label="label"
         :description="hint"
         :label-for="id"
+        :class="{ 'form-group-required': isRequired }"
     >
         <b-form-textarea
             v-model.trim="model"

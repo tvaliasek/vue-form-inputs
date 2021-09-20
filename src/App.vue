@@ -102,6 +102,7 @@
                 <div class="col-12 col-md-4">
                     <form-input
                         label="Místo narození"
+                        id="placeofbirth"
                         v-model.trim="form.placeOfBirth"
                         :validation="$v.form.placeOfBirth"
                     />
@@ -109,6 +110,7 @@
                 <div class="col-12 col-md-4">
                     <form-input-select
                         label="Občanství"
+                        id="citizenship"
                         v-model="form.citizenship"
                         :validation="$v.form.citizenship"
                         :options="countries"
@@ -294,3 +296,15 @@ export default {
     }
 }
 </script>
+
+<style lang="scss">
+.form-group-required {
+    & > legend, & > label {
+        &::after {
+            content: " *";
+            display: inline;
+            color: red;
+        }
+    }
+}
+</style>

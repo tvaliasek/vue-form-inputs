@@ -3,6 +3,7 @@
         :label="label"
         :description="hint"
         :label-for="id"
+        :class="{ 'form-group-required': isRequired }"
     >
         <div
             v-if="renderAsGroup"
@@ -128,6 +129,12 @@ export default {
         }
     },
     computed: {
+        isRequired () {
+            if (!this.validation || Object.keys(this.validation).length === 0) {
+                return false
+            }
+            return Object.keys(this.validation).filter(propName => !`${propName}`.startsWith('$')).length > 0
+        },
         model: {
             get () {
                 return this.value

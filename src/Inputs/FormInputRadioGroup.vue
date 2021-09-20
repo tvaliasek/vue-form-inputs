@@ -2,9 +2,12 @@
     <b-form-group
         :label="label"
         :description="hint"
+        :class="{ 'form-group-required': isRequired }"
+        :label-for="id"
     >
         <b-form-radio-group
             v-model="model"
+            :id="id"
             :size="size"
             :state="(invalid !== null) ? !invalid : null"
             :disabled="disabled || readOnly"
