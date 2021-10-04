@@ -126,10 +126,20 @@ export default {
             type: Boolean,
             required: false,
             default: false
+        },
+        showAsRequired: {
+            required: false,
+            default: null
         }
     },
     computed: {
         isRequired () {
+            if (this.showAsRequired === false) {
+                return false
+            }
+            if (this.showAsRequired === true) {
+                return true
+            }
             if (!this.validation || Object.keys(this.validation).length === 0) {
                 return false
             }
