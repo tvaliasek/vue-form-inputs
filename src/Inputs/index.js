@@ -4,6 +4,7 @@ import FormInputTextarea from './FormInputTextarea.vue'
 import FormInputSelect from './FormInputSelect.vue'
 import FormInputRadioGroup from './FormInputRadioGroup.vue'
 import FormInputCheckboxGroup from './FormInputCheckboxGroup.vue'
+import FormInputCheckbox from './FormInputCheckbox.vue'
 
 export default [
     FormInput,
@@ -11,5 +12,6 @@ export default [
     FormInputTextarea,
     FormInputSelect,
     FormInputRadioGroup,
-    FormInputCheckboxGroup
+    FormInputCheckboxGroup,
+    FormInputCheckbox
 ]

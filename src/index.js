@@ -33,3 +33,4 @@ export { default as FormInputRadioGroup } from './Inputs/FormInputRadioGroup.vue
 export { default as FormInputSelect } from './Inputs/FormInputSelect.vue'
 export { default as FormInputTextarea } from './Inputs/FormInputTextarea.vue'
 export { default as FormInputCheckboxGroup } from './Inputs/FormInputCheckboxGroup.vue'
+export { default as FormInputCheckbox } from './Inputs/FormInputCheckbox.vue'
