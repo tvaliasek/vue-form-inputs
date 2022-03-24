@@ -37,7 +37,7 @@ export default {
                     }
                 }
             }
-            return 'Chybně vyplněná hodnota.'
+            return this.getDefaultMessage()
         }
     },
     methods: {
