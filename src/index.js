@@ -6,7 +6,8 @@ import {
     FormSelectPlugin,
     FormGroupPlugin,
     FormInputPlugin,
-    FormCheckboxPlugin
+    FormCheckboxPlugin,
+    TooltipPlugin
 } from 'bootstrap-vue'
 import inputs from './Inputs/index.js'
 
@@ -20,6 +21,7 @@ export const FormInputsPlugin = {
         Vue.use(FormGroupPlugin)
         Vue.use(FormInputPlugin)
         Vue.use(FormCheckboxPlugin)
+        Vue.use(TooltipPlugin)
         for (const input of inputs) {
             Vue.component(input.name, input)
         }

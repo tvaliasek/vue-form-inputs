@@ -1,10 +1,27 @@
 <template>
     <b-form-group
-        :label="label"
         :description="hint"
         :label-for="id"
         :class="{ 'form-group-required': isRequired }"
     >
+        <template #label>
+            {{ label }}
+            <span v-if="hasTooltip">
+                <span
+                    ref="information-icon"
+                >
+                    <slot
+                        name="tooltip-icon"
+                    />
+                </span>
+                <b-tooltip
+                    :target="() => $refs['information-icon']"
+                    :triggers="['hover', 'click']"
+                >
+                    <slot name="tooltip-content"></slot>
+                </b-tooltip>
+            </span>
+        </template>
         <div
             v-if="renderAsGroup"
             :class="{ 'input-group': true, 'is-invalid': ((invalid !== null) ? !invalid : null), 'is-valid': ((invalid !== null) ? !!invalid : null) }"
@@ -130,6 +147,11 @@ export default {
         showAsRequired: {
             required: false,
             default: null
+        },
+        hasTooltip: {
+            type: Boolean,
+            required: false,
+            default: false
         }
     },
     computed: {
