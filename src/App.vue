@@ -22,6 +22,9 @@
                         :validation="$v.form.firstName"
                         :has-tooltip="true"
                     >
+                        <template #tooltip-icon>
+                            &#x1F6C8;
+                        </template>
                         <template #tooltip-content>
                             <b>Jméno</b>
                             <em>Jméno</em>
@@ -35,6 +38,9 @@
                         :validation="$v.form.lastName"
                         :has-tooltip="true"
                     >
+                        <template #tooltip-icon>
+                            &#x1F6C8;
+                        </template>
                         <template #tooltip-content>
                             <em>Test tooltip HTML</em><b>Test tooltip HTML</b>
                         </template>
@@ -82,6 +88,9 @@
                         :hint="birthDateHint"
                         :has-tooltip="true"
                     >
+                        <template #tooltip-icon>
+                            &#x1F6C8;
+                        </template>
                         <template #tooltip-content>
                             Datum narození
                         </template>
@@ -102,6 +111,9 @@
                         :options="genderOptions"
                         :has-tooltip="true"
                     >
+                        <template #tooltip-icon>
+                            &#x1F6C8;
+                        </template>
                         <template #tooltip-content>
                             Pohlaví
                         </template>
@@ -113,6 +125,9 @@
                         :options="genderOptions"
                         :has-tooltip="true"
                     >
+                        <template #tooltip-icon>
+                            &#x1F6C8;
+                        </template>
                         <template #tooltip-content>
                             Pohlaví
                         </template>
@@ -124,6 +139,9 @@
                         :options="genderOptions"
                         :has-tooltip="true"
                     >
+                        <template #tooltip-icon>
+                            &#x1F6C8;
+                        </template>
                         <template #tooltip-content>
                             Pohlaví
                         </template>
@@ -151,6 +169,9 @@
                         :options="countries"
                         :has-tooltip="true"
                     >
+                        <template #tooltip-icon>
+                            &#x1F6C8;
+                        </template>
                         <template #tooltip-content>
                             Občanství
                         </template>
@@ -180,6 +201,9 @@
                         v-model="form.note"
                         :has-tooltip="true"
                     >
+                        <template #tooltip-icon>
+                            &#x1F6C8;
+                        </template>
                         <template #tooltip-content>
                             Poznámka
                         </template>

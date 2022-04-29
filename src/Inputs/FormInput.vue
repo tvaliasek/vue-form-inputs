@@ -7,13 +7,16 @@
         <template #label>
             {{ label }}
             <span v-if="hasTooltip">
-                <b-icon
+                <span
                     ref="information-icon"
-                    icon="info-circle"
-                />
+                >
+                    <slot
+                        name="tooltip-icon"
+                    />
+                </span>
                 <b-tooltip
                     :target="() => $refs['information-icon']"
-                    triggers="hover"
+                    :triggers="['hover', 'click']"
                 >
                     <slot name="tooltip-content"></slot>
                 </b-tooltip>
