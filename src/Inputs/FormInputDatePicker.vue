@@ -1,10 +1,24 @@
 <template>
     <b-form-group
-        :label="label"
         :description="hint"
         :label-for="((id) ? `${id}_input` : undefined)"
         :class="{ 'form-group-required': isRequired }"
     >
+        <template #label>
+            {{ label }}
+            <span v-if="hasTooltip">
+                <b-icon
+                    ref="information-icon"
+                    icon="info-circle"
+                />
+                <b-tooltip
+                    :target="() => $refs['information-icon']"
+                    triggers="hover"
+                >
+                    <slot name="tooltip-content"></slot>
+                </b-tooltip>
+            </span>
+        </template>
         <b-input-group v-if="buttonOnly" :class="((invalid !== null) ? ((invalid ? 'is-invalid' : 'is-valid'))  : undefined)">
             <b-form-input
                 :id="((id) ? `${id}_input` : undefined)"

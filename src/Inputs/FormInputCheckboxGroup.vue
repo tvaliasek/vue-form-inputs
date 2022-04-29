@@ -1,10 +1,24 @@
 <template>
     <b-form-group
-        :label="label"
         :description="hint"
         :class="{ 'form-group-required': isRequired }"
         :label-for="id"
     >
+        <template #label>
+            {{ label }}
+            <span v-if="hasTooltip">
+                <b-icon
+                    ref="information-icon"
+                    icon="info-circle"
+                />
+                <b-tooltip
+                    :target="() => $refs['information-icon']"
+                    triggers="hover"
+                >
+                    <slot name="tooltip-content"></slot>
+                </b-tooltip>
+            </span>
+        </template>
         <b-form-checkbox-group
             v-model="model"
             :id="id"

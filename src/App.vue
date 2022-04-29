@@ -2,7 +2,6 @@
     <div class="container py-5">
         <h1>Usage example</h1>
         <hr/>
-
         <fieldset
             :class="{'is-invalid': !isValid, 'is-valid': isValid, 'mt-5': true}"
             v-if="!redraw"
@@ -21,14 +20,25 @@
                         label="Jméno"
                         v-model.trim="form.firstName"
                         :validation="$v.form.firstName"
-                    />
+                        :has-tooltip="true"
+                    >
+                        <template #tooltip-content>
+                            <b>Jméno</b>
+                            <em>Jméno</em>
+                        </template>
+                    </form-input>
                 </div>
                 <div class="col-12 col-md-4">
                     <form-input
                         label="Příjmení"
                         v-model.trim="form.lastName"
                         :validation="$v.form.lastName"
-                    />
+                        :has-tooltip="true"
+                    >
+                        <template #tooltip-content>
+                            <em>Test tooltip HTML</em><b>Test tooltip HTML</b>
+                        </template>
+                    </form-input>
                 </div>
                 <div class="col-12 col-md-2">
                     <form-input
@@ -48,11 +58,11 @@
                         :validation-messages="{ custom: 'RČ musí být alespoň 9 znaků dlouhé.' }"
                         @input="onBirthNumberInput"
                     />
-                    <b-form-group>
-                        <b-form-checkbox v-model="form.noBirthNumber">
-                            není přiděleno rodné číslo
-                        </b-form-checkbox>
-                    </b-form-group>
+                    <form-input-checkbox
+                        v-model="form.noBirthNumber"
+                    >
+                        není přiděleno rodné číslo
+                    </form-input-checkbox>
                 </div>
                 <div class="col-12 col-md-3">
                     <form-input-select
@@ -70,7 +80,11 @@
                         :validation="$v.form.dateOfBirth"
                         :max-date="new Date()"
                         :hint="birthDateHint"
+                        :has-tooltip="true"
                     >
+                        <template #tooltip-content>
+                            Datum narození
+                        </template>
                         <template #input-text>
                             <a href="javascript:void(0)"
                                 @click.prevent="onSetBirthDate"
@@ -86,13 +100,34 @@
                         v-model="form.gender"
                         :validation="$v.form.gender"
                         :options="genderOptions"
-                    />
+                        :has-tooltip="true"
+                    >
+                        <template #tooltip-content>
+                            Pohlaví
+                        </template>
+                    </form-input-select>
                     <form-input-checkbox-group
                         label="Pohlaví"
                         v-model="form.genderTest"
                         :validation="$v.form.genderTest"
                         :options="genderOptions"
-                    />
+                        :has-tooltip="true"
+                    >
+                        <template #tooltip-content>
+                            Pohlaví
+                        </template>
+                    </form-input-checkbox-group>
+                    <form-input-radio-group
+                        label="Pohlaví"
+                        v-model="form.genderTest"
+                        :validation="$v.form.genderTest"
+                        :options="genderOptions"
+                        :has-tooltip="true"
+                    >
+                        <template #tooltip-content>
+                            Pohlaví
+                        </template>
+                    </form-input-radio-group>
                 </div>
             </div>
 
@@ -114,7 +149,12 @@
                         v-model="form.citizenship"
                         :validation="$v.form.citizenship"
                         :options="countries"
-                    />
+                        :has-tooltip="true"
+                    >
+                        <template #tooltip-content>
+                            Občanství
+                        </template>
+                    </form-input-select>
                 </div>
                 <div class="col-12 col-md-4">
                     <form-input-select
@@ -126,14 +166,26 @@
                     />
                 </div>
             </div>
-
-            <b-form-group>
-                <b-form-checkbox
-                    v-model="form.politician"
-                >
-                    osoba je politicky exponovanou
-                </b-form-checkbox>
-            </b-form-group>
+            <div class="row">
+                <div class="col-12 col-md-4">
+                    <form-input-checkbox
+                        v-model="form.politician"
+                    >
+                        osoba je politicky exponovanou
+                    </form-input-checkbox>
+                </div>
+                <div class="col-12 col-md-4">
+                    <form-input-textarea
+                        label="Poznámka"
+                        v-model="form.note"
+                        :has-tooltip="true"
+                    >
+                        <template #tooltip-content>
+                            Poznámka
+                        </template>
+                    </form-input-textarea>
+                </div>
+            </div>
         </fieldset>
 
         <pre class="bg-light my-5 p-4">{{JSON.stringify(form, null, 4)}}</pre>
@@ -142,7 +194,9 @@
 
 <script>
 import { required, requiredIf } from 'vuelidate/lib/validators'
-import { BFormCheckbox } from 'bootstrap-vue'
+import FormInputRadioGroup from './Inputs/FormInputRadioGroup.vue'
+import FormInputCheckbox from './Inputs/FormInputCheckbox.vue'
+import FormInputTextarea from './Inputs/FormInputTextarea.vue'
 
 const countries = {
     CZE: 'Česká republika'
@@ -155,7 +209,9 @@ const genderOptions = {
 export default {
     name: 'App',
     components: {
-        BFormCheckbox
+        FormInputRadioGroup,
+        FormInputCheckbox,
+        FormInputTextarea
     },
     props: {
         heading: {
@@ -178,11 +234,12 @@ export default {
                     dateOfBirth: new Date(),
                     noBirthNumber: false,
                     birthNumberCountry: null,
-                    taxDomicile: null,
+                    taxDomicile: [],
                     placeOfBirth: null,
                     citizenship: null,
                     gender: null,
-                    politician: false
+                    politician: false,
+                    note: null
                 }
             }
         }
