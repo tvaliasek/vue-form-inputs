@@ -66,8 +66,15 @@
                     />
                     <form-input-checkbox
                         v-model="form.noBirthNumber"
+                        :has-tooltip="true"
                     >
-                        není přiděleno rodné číslo
+                        <span>není přiděleno rodné číslo</span>
+                        <template #tooltip-icon>
+                            &#x1F6C8;
+                        </template>
+                        <template #tooltip-content>
+                            Datum narození
+                        </template>
                     </form-input-checkbox>
                 </div>
                 <div class="col-12 col-md-3">
