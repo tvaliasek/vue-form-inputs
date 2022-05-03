@@ -17,7 +17,7 @@
                 </span>
                 <b-tooltip
                     :target="() => $refs['information-icon']"
-                    triggers="hover"
+                    :triggers="['hover', 'click']"
                 >
                     <slot name="tooltip-content"></slot>
                 </b-tooltip>
