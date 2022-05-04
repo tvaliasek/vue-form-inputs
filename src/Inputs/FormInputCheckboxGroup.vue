@@ -9,6 +9,7 @@
             <span v-if="hasTooltip">
                 <span
                     ref="information-icon"
+                    @click.prevent.stop="() => {}"
                 >
                     <slot
                         name="tooltip-icon"
