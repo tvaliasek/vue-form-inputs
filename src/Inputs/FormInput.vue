@@ -36,6 +36,7 @@
                 :formatter="formatValue"
                 :placeholder="placeholder"
                 :readonly="readOnly"
+                :autocomplete="autocomplete || undefined"
                 lazy-formatter
                 @change="onEvent('change')"
                 @update="onEvent('update')"
@@ -56,6 +57,7 @@
             :formatter="formatValue"
             :placeholder="placeholder"
             :readonly="readOnly"
+            :autocomplete="autocomplete || undefined"
             lazy-formatter
             @change="onEvent('change')"
             @update="onEvent('update')"
@@ -152,6 +154,11 @@ export default {
             type: Boolean,
             required: false,
             default: false
+        },
+        autocomplete: {
+            type: String,
+            required: false,
+            default: null
         }
     },
     computed: {
