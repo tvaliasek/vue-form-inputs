@@ -6,6 +6,7 @@
     >
         <template #label>
             {{ label }}
+            <!--
             <span v-if="hasTooltip">
                 <span
                     ref="information-icon"
@@ -21,6 +22,7 @@
                     <slot name="tooltip-content"></slot>
                 </b-tooltip>
             </span>
+            -->
         </template>
         <b-input-group v-if="buttonOnly" :class="((invalid !== null) ? ((invalid ? 'is-invalid' : 'is-valid'))  : undefined)">
             <b-form-input

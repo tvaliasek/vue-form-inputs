@@ -1,16 +1,11 @@
-import Vue from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
 
 import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
-import Vuelidate from 'vuelidate'
-import { FormInputsPlugin } from './index.js'
+import 'bootstrap-vue-3/dist/bootstrap-vue-3.css'
 
-Vue.config.productionTip = false
+// import { FormInputsPlugin } from './index.js'
 
-Vue.use(FormInputsPlugin)
-Vue.use(Vuelidate)
+const app = createApp(App)
 
-new Vue({
-    render: h => h(App)
-}).$mount('#app')
+app.mount('#app')

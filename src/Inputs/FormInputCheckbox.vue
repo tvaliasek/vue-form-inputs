@@ -18,22 +18,24 @@
             <slot>
                 {{label}}
             </slot>
-            <span v-if="hasTooltip">
-                <span
-                    ref="information-icon"
-                    @click.prevent.stop="() => {}"
-                >
-                    <slot
-                        name="tooltip-icon"
-                    />
+            <!--
+                <span v-if="hasTooltip">
+                    <span
+                        ref="information-icon"
+                        @click.prevent.stop="() => {}"
+                    >
+                        <slot
+                            name="tooltip-icon"
+                        />
+                    </span>
+                    <b-tooltip
+                        :target="() => $refs['information-icon']"
+                        triggers="hover"
+                    >
+                        <slot name="tooltip-content"></slot>
+                    </b-tooltip>
                 </span>
-                <b-tooltip
-                    :target="() => $refs['information-icon']"
-                    triggers="hover"
-                >
-                    <slot name="tooltip-content"></slot>
-                </b-tooltip>
-            </span>
+            -->
         </b-form-checkbox>
         <b-form-checkbox
             v-else
@@ -49,6 +51,7 @@
             <slot>
                 {{label}}
             </slot>
+            <!--
             <span v-if="hasTooltip">
                 <span
                     ref="information-icon"
@@ -65,6 +68,7 @@
                     <slot name="tooltip-content"></slot>
                 </b-tooltip>
             </span>
+            -->
         </b-form-checkbox>
         <b-form-invalid-feedback
             v-if="invalid"

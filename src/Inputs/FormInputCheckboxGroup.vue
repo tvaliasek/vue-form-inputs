@@ -6,6 +6,7 @@
     >
         <template #label>
             {{ label }}
+            <!--
             <span v-if="hasTooltip">
                 <span
                     ref="information-icon"
@@ -22,6 +23,7 @@
                     <slot name="tooltip-content"></slot>
                 </b-tooltip>
             </span>
+            -->
         </template>
         <b-form-checkbox-group
             v-model="model"

@@ -6,21 +6,23 @@
     >
         <template #label>
             {{ label }}
-            <span v-if="hasTooltip">
-                <span
-                    ref="information-icon"
-                >
-                    <slot
-                        name="tooltip-icon"
-                    />
+            <!--
+                <span v-if="hasTooltip">
+                    <span
+                        ref="information-icon"
+                    >
+                        <slot
+                            name="tooltip-icon"
+                        />
+                    </span>
+                    <b-tooltip
+                        :target="() => $refs['information-icon']"
+                        :triggers="['hover', 'click']"
+                    >
+                        <slot name="tooltip-content"></slot>
+                    </b-tooltip>
                 </span>
-                <b-tooltip
-                    :target="() => $refs['information-icon']"
-                    :triggers="['hover', 'click']"
-                >
-                    <slot name="tooltip-content"></slot>
-                </b-tooltip>
-            </span>
+            -->
         </template>
         <div
             v-if="renderAsGroup"

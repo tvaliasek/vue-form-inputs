@@ -19,7 +19,7 @@
                     <form-input
                         label="Jméno"
                         v-model.trim="form.firstName"
-                        :validation="$v.form.firstName"
+                        :validation="v$.form.firstName"
                         :has-tooltip="true"
                     >
                         <template #tooltip-icon>
@@ -35,7 +35,7 @@
                     <form-input
                         label="Příjmení"
                         v-model.trim="form.lastName"
-                        :validation="$v.form.lastName"
+                        :validation="v$.form.lastName"
                         :has-tooltip="true"
                     >
                         <template #tooltip-icon>
@@ -60,7 +60,7 @@
                         label="RČ"
                         :formatter="birthNumberFormatter"
                         v-model.trim="form.birthNumber"
-                        :validation="$v.form.birthNumber"
+                        :validation="v$.form.birthNumber"
                         :validation-messages="{ custom: 'RČ musí být alespoň 9 znaků dlouhé.' }"
                         @input="onBirthNumberInput"
                     />
@@ -81,7 +81,7 @@
                     <form-input-select
                         label="Země vydání RČ / narození"
                         v-model="form.birthNumberCountry"
-                        :validation="$v.form.birthNumberCountry"
+                        :validation="v$.form.birthNumberCountry"
                         :options="countries"
                         :read-only="true"
                     />
@@ -90,7 +90,7 @@
                     <form-input-date-picker
                         label="Datum narození"
                         v-model="form.dateOfBirth"
-                        :validation="$v.form.dateOfBirth"
+                        :validation="v$.form.dateOfBirth"
                         :max-date="new Date()"
                         :hint="birthDateHint"
                         :has-tooltip="true"
@@ -114,7 +114,7 @@
                     <form-input-select
                         label="Pohlaví"
                         v-model="form.gender"
-                        :validation="$v.form.gender"
+                        :validation="v$.form.gender"
                         :options="genderOptions"
                         :has-tooltip="true"
                     >
@@ -128,7 +128,7 @@
                     <form-input-checkbox-group
                         label="Pohlaví"
                         v-model="form.genderTest"
-                        :validation="$v.form.genderTest"
+                        :validation="v$.form.genderTest"
                         :options="genderOptions"
                         :has-tooltip="true"
                     >
@@ -142,7 +142,7 @@
                     <form-input-radio-group
                         label="Pohlaví"
                         v-model="form.genderTest"
-                        :validation="$v.form.genderTest"
+                        :validation="v$.form.genderTest"
                         :options="genderOptions"
                         :has-tooltip="true"
                     >
@@ -164,7 +164,7 @@
                         label="Místo narození"
                         id="placeofbirth"
                         v-model.trim="form.placeOfBirth"
-                        :validation="$v.form.placeOfBirth"
+                        :validation="v$.form.placeOfBirth"
                     />
                 </div>
                 <div class="col-12 col-md-4">
@@ -172,7 +172,7 @@
                         label="Občanství"
                         id="citizenship"
                         v-model="form.citizenship"
-                        :validation="$v.form.citizenship"
+                        :validation="v$.form.citizenship"
                         :options="countries"
                         :has-tooltip="true"
                     >
@@ -189,7 +189,7 @@
                         :multi="true"
                         label="Daňový domicil"
                         v-model="form.taxDomicile"
-                        :validation="$v.form.taxDomicile"
+                        :validation="v$.form.taxDomicile"
                         :options="countries"
                     />
                 </div>
@@ -224,7 +224,8 @@
 </template>
 
 <script>
-import { required, requiredIf } from 'vuelidate/lib/validators'
+import { useVuelidate } from '@vuelidate/core'
+import { required, requiredIf } from '@vuelidate/validators'
 import FormInputRadioGroup from './Inputs/FormInputRadioGroup.vue'
 import FormInputCheckbox from './Inputs/FormInputCheckbox.vue'
 import FormInputTextarea from './Inputs/FormInputTextarea.vue'
@@ -239,6 +240,11 @@ const genderOptions = {
 
 export default {
     name: 'App',
+    setup () {
+        return {
+            v$: useVuelidate()
+        }
+    },
     components: {
         FormInputRadioGroup,
         FormInputCheckbox,
@@ -309,7 +315,7 @@ export default {
     },
     methods: {
         onBirthNumberInput () {
-            if (!this.$v.form.birthNumber.$invalid && (this.birthDateFromBirthNumber() instanceof Date)) {
+            if (!this.v$.form.birthNumber.$invalid && (this.birthDateFromBirthNumber() instanceof Date)) {
                 this.onSetBirthDate()
             }
         },
@@ -320,11 +326,11 @@ export default {
         onSetBirthDate () {
             if (this.birthDateFromBirthNumber() instanceof Date) {
                 this.form.dateOfBirth = new Date(this.birthDateFromBirthNumber().valueOf())
-                this.$v.form.dateOfBirth.$touch()
+                this.v$.form.dateOfBirth.$touch()
             }
         },
         birthDateFromBirthNumber () {
-            if (this.$v.form.birthNumber.$invalid) {
+            if (this.v$.form.birthNumber.$invalid) {
                 return null
             }
             const birthNumber = `${this.form.birthNumber}`
@@ -346,39 +352,41 @@ export default {
             return birthDate
         }
     },
-    validations: {
-        form: {
-            firstName: {
-                required
-            },
-            lastName: {
-                required
-            },
-            birthNumber: {
-                required: requiredIf(function () {
-                    return !this.form.noBirthNumber
-                }),
-                custom (value) {
-                    return (!this.form.noBirthNumber) ? (`${value}`).replace(/\D/ig, '').trim().length >= 9 : true
+    validations () {
+        return {
+            form: {
+                firstName: {
+                    required
+                },
+                lastName: {
+                    required
+                },
+                birthNumber: {
+                    required: requiredIf(function () {
+                        return !this.form.noBirthNumber
+                    }),
+                    custom (value) {
+                        return (!this.form.noBirthNumber) ? (`${value}`).replace(/\D/ig, '').trim().length >= 9 : true
+                    }
+                },
+                dateOfBirth: {
+                    required
+                },
+                birthNumberCountry: {
+                    required
+                },
+                taxDomicile: {
+                    required
+                },
+                citizenship: {
+                    required
+                },
+                placeOfBirth: {
+                    required
+                },
+                gender: {
+                    required
                 }
-            },
-            dateOfBirth: {
-                required
-            },
-            birthNumberCountry: {
-                required
-            },
-            taxDomicile: {
-                required
-            },
-            citizenship: {
-                required
-            },
-            placeOfBirth: {
-                required
-            },
-            gender: {
-                required
             }
         }
     }
