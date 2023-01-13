@@ -6,24 +6,6 @@
     >
         <template #label>
             {{ label }}
-            <!--
-            <span v-if="hasTooltip">
-                <span
-                    ref="information-icon"
-                    @click.prevent.stop="() => {}"
-                >
-                    <slot
-                        name="tooltip-icon"
-                    />
-                </span>
-                <b-tooltip
-                    :target="() => $refs['information-icon']"
-                    :triggers="['hover', 'click']"
-                >
-                    <slot name="tooltip-content"></slot>
-                </b-tooltip>
-            </span>
-            -->
         </template>
         <b-form-checkbox-group
             v-model="model"

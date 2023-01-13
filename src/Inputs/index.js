@@ -8,7 +8,7 @@ import FormInputCheckbox from './FormInputCheckbox.vue'
 
 export default [
     FormInput,
-    FormInputDatePicker,
+    // FormInputDatePicker,
     FormInputTextarea,
     FormInputSelect,
     FormInputRadioGroup,

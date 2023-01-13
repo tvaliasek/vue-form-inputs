@@ -17,8 +17,7 @@ import {
     BFormTags,
     BFormText,
     BFormTextarea,
-    BFormValidFeedback,
-    vBTooltip
+    BFormValidFeedback
 } from 'bootstrap-vue-3'
 
 import inputs from './Inputs/index.js'
@@ -44,7 +43,6 @@ export const FormInputsPlugin = {
         app.component(BFormText)
         app.component(BFormTextarea)
         app.component(BFormValidFeedback)
-        app.directive(vBTooltip)
 
         for (const input of inputs) {
             app.component(input.name, input)

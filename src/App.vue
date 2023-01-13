@@ -87,6 +87,7 @@
                     />
                 </div>
                 <div class="col-12 col-md-3">
+                    <!--
                     <form-input-date-picker
                         label="Datum narození"
                         v-model="form.dateOfBirth"
@@ -109,6 +110,7 @@
                             </a>
                         </template>
                     </form-input-date-picker>
+                    -->
                 </div>
                 <div class="col-12 col-md-3">
                     <form-input-select
@@ -206,15 +208,8 @@
                     <form-input-textarea
                         label="Poznámka"
                         v-model="form.note"
-                        :has-tooltip="true"
-                    >
-                        <template #tooltip-icon>
-                            &#x1F6C8;
-                        </template>
-                        <template #tooltip-content>
-                            Poznámka
-                        </template>
-                    </form-input-textarea>
+                        :tooltip="'Vyplňte prosím poznámku.'"
+                    />
                 </div>
             </div>
         </fieldset>
@@ -226,9 +221,6 @@
 <script>
 import { useVuelidate } from '@vuelidate/core'
 import { required, requiredIf } from '@vuelidate/validators'
-import FormInputRadioGroup from './Inputs/FormInputRadioGroup.vue'
-import FormInputCheckbox from './Inputs/FormInputCheckbox.vue'
-import FormInputTextarea from './Inputs/FormInputTextarea.vue'
 
 const countries = {
     CZE: 'Česká republika'
@@ -244,11 +236,6 @@ export default {
         return {
             v$: useVuelidate()
         }
-    },
-    components: {
-        FormInputRadioGroup,
-        FormInputCheckbox,
-        FormInputTextarea
     },
     props: {
         heading: {

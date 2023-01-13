@@ -6,23 +6,6 @@
     >
         <template #label>
             {{ label }}
-            <!--
-                <span v-if="hasTooltip">
-                    <span
-                        ref="information-icon"
-                    >
-                        <slot
-                            name="tooltip-icon"
-                        />
-                    </span>
-                    <b-tooltip
-                        :target="() => $refs['information-icon']"
-                        :triggers="['hover', 'click']"
-                    >
-                        <slot name="tooltip-content"></slot>
-                    </b-tooltip>
-                </span>
-            -->
         </template>
         <div
             v-if="renderAsGroup"
@@ -117,7 +100,7 @@ export default {
             required: false,
             default: false
         },
-        value: {
+        modelValue: {
             required: false
         },
         hint: {
@@ -149,11 +132,6 @@ export default {
         showAsRequired: {
             required: false,
             default: null
-        },
-        hasTooltip: {
-            type: Boolean,
-            required: false,
-            default: false
         }
     },
     computed: {
@@ -171,10 +149,10 @@ export default {
         },
         model: {
             get () {
-                return this.value
+                return this.modelValue
             },
             set (value) {
-                this.$emit('input', value)
+                this.$emit('update:modelValue', value)
                 if (this.validation.$touch !== undefined && typeof this.validation.$touch === 'function') {
                     this.validation.$touch()
                 }

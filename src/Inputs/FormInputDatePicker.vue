@@ -6,23 +6,6 @@
     >
         <template #label>
             {{ label }}
-            <!--
-            <span v-if="hasTooltip">
-                <span
-                    ref="information-icon"
-                >
-                    <slot
-                        name="tooltip-icon"
-                    />
-                </span>
-                <b-tooltip
-                    :target="() => $refs['information-icon']"
-                    :triggers="['hover', 'click']"
-                >
-                    <slot name="tooltip-content"></slot>
-                </b-tooltip>
-            </span>
-            -->
         </template>
         <b-input-group v-if="buttonOnly" :class="((invalid !== null) ? ((invalid ? 'is-invalid' : 'is-valid'))  : undefined)">
             <b-form-input
@@ -39,6 +22,7 @@
                 lazy-formatter
             />
             <b-input-group-append>
+                <!--
                 <b-form-datepicker
                     :id="id"
                     :no-flip="true"
@@ -62,9 +46,10 @@
                     :aria-controls="`${id}_input`"
                     button-only
                 />
+                -->
             </b-input-group-append>
         </b-input-group>
-
+        <!--
         <b-form-datepicker
             v-else
             :id="id"
@@ -86,6 +71,7 @@
             @update="onEvent('update')"
             @blur="onEvent('blur')"
         />
+        -->
         <b-form-invalid-feedback
             v-if="invalid"
         >
