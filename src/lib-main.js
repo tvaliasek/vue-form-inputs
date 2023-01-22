@@ -18,7 +18,7 @@ import {
     BFormText,
     BFormTextarea,
     BFormValidFeedback
-} from 'bootstrap-vue-3'
+} from 'bootstrap-vue-next'
 
 import inputs from './Inputs/index.js'
 

@@ -7,7 +7,6 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    BFormDatepicker: typeof import('bootstrap-vue-3')['BFormDatepicker']
     BFormGroup: typeof import('bootstrap-vue-3')['BFormGroup']
     BFormCheckbox: typeof import('bootstrap-vue-3')['BFormCheckbox']
     BFormCheckboxGroup: typeof import('bootstrap-vue-3')['BFormCheckboxGroup']
@@ -18,9 +17,6 @@ declare module '@vue/runtime-core' {
     BFormTextarea: typeof import('bootstrap-vue-3')['BFormTextarea']
     BInputGroup: typeof import('bootstrap-vue-3')['BInputGroup']
     BInputGroupAppend: typeof import('bootstrap-vue-3')['BInputGroupAppend']
-    IBiQuestionCircle: typeof import('~icons/bi/question-circle')['default']
-  }
-  export interface ComponentCustomProperties {
-    vBTooltip: typeof import('bootstrap-vue-3')['VBTooltip']
+    InputTester: typeof import('./src/components/InputTester.vue')['default']
   }
 }

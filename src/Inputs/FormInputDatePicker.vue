@@ -49,6 +49,21 @@
                 -->
             </b-input-group-append>
         </b-input-group>
+        <b-form-input
+            v-else
+            v-model="localDate"
+            :id="id"
+            :size="size"
+            :type="type"
+            :state="(invalid !== null) ? !invalid : null"
+            :disabled="disabled"
+            :placeholder="placeholder"
+            :readonly="readOnly"
+            @change="onEvent('change')"
+            @update="onEvent('update')"
+            @blur="onEvent('blur')"
+            ref="dateInput"
+        />
         <!--
         <b-form-datepicker
             v-else
@@ -86,66 +101,46 @@
 
 <script>
 import FormInput from './FormInput.vue'
+import { TempusDominus, Namespace, extend } from '@eonasdan/tempus-dominus'
+import '@eonasdan/tempus-dominus/dist/css/tempus-dominus.min.css'
+import tempusDominusVueModelPlugin from './tempusDominusVueModelPlugin'
 
-function parseFormatDate (value) {
-    if (value instanceof Date) {
-        return `${value.getDate()}. ${value.getMonth() + 1}. ${value.getFullYear()}`
-    }
-    if (typeof value === 'string') {
-        if (/(\d{4}-\d{2}-\d{2})/ig.test(value.replace(/\s/ig, ''))) {
-            const parts = value.split('-').map(item => parseInt(item))
-            const date = new Date()
-            date.setFullYear(parts[0])
-            date.setMonth(parts[1] - 1)
-            date.setDate(parts[2])
-            return `${date.getDate()}. ${date.getMonth() + 1}. ${date.getFullYear()}`
-        }
-        if (/(\d{1,2}\.\d{1,2}\.\d{4})/ig.test(value.replace(/\s/ig, ''))) {
-            const parts = value.split('.').map(item => parseInt(item))
-            const date = new Date()
-            date.setFullYear(parts[2])
-            date.setMonth(parts[1] - 1)
-            date.setDate(parts[0])
-            return `${date.getDate()}. ${date.getMonth() + 1}. ${date.getFullYear()}`
-        }
-    }
-    return ''
+const localization = {
+    today: 'Dnes',
+    clear: 'Vymazat',
+    close: 'Zavřít',
+    selectMonth: 'Vybrat měsíc',
+    previousMonth: 'Předchozí měsíc',
+    nextMonth: 'Následující měsíc',
+    selectYear: 'Vybrat rok',
+    previousYear: 'Předchozí rok',
+    nextYear: 'Následující rok',
+    selectDecade: 'Vybrat desetiletí',
+    previousDecade: 'Předchozí desetiletí',
+    nextDecade: 'Další desetiletí',
+    previousCentury: 'Předchozí století',
+    nextCentury: 'Další století',
+    pickHour: 'Vybrat hodinu',
+    incrementHour: 'Přidat hodinu',
+    decrementHour: 'Ubrat hodinu',
+    pickMinute: 'Vybrat minutu',
+    incrementMinute: 'Přidat minutu',
+    decrementMinute: 'Ubrat minutu',
+    pickSecond: 'Vybrat vteřinu',
+    incrementSecond: 'Přidat vteřinu',
+    decrementSecond: 'Ubrat vteřinu',
+    toggleMeridiem: 'Přepnout denní dobu',
+    selectTime: 'Vybrat čas',
+    selectDate: 'Vybrat datum',
+    dayViewHeaderFormat: { month: 'long', year: '2-digit' },
+    locale: 'cs',
+    startOfTheWeek: 1,
+    ordinal: (n) => `${n}.`
 }
 
 export default {
     name: 'FormInputDatePicker',
     extends: FormInput,
-    data () {
-        return {
-            formatted: '',
-            selected: ''
-        }
-    },
-    computed: {
-        localDate: {
-            get () {
-                return (this.model) ? parseFormatDate(this.model) : ''
-            },
-            set (value) {
-                const localValue = `${value}`.replace(/\s/ig, '')
-                if (/(\d{1,2}\.\d{1,2}\.\d{4})/ig.test(localValue)) {
-                    const parts = value.split('.').map(item => parseInt(item))
-                    let date = new Date()
-                    date.setFullYear(parts[2])
-                    date.setMonth(parts[1] - 1)
-                    date.setDate(parts[0])
-                    date.setHours(12, 0, 0, 0)
-                    if (this.maxDate instanceof Date && date > this.maxDate) {
-                        date = new Date(this.maxDate.valueOf())
-                    }
-                    if (this.minDate instanceof Date && date < this.minDate) {
-                        date = new Date(this.minDate.valueOf())
-                    }
-                    this.model = date.toISOString().split('T')[0]
-                }
-            }
-        }
-    },
     props: {
         locale: {
             type: String,
@@ -168,39 +163,54 @@ export default {
         maxDate: {
             type: Date,
             required: false
-        },
-        labels: {
-            type: Object,
-            required: false,
-            default () {
-                return {
-                    labelCalendar: 'Kalendář',
-                    labelCloseButton: 'Zavřít',
-                    labelCurrentMonth: 'Tento mešíc',
-                    labelHelp: 'Použijte šipky na klávesnici pro navigaci mezi daty.',
-                    labelNav: 'Navigace v kalendáři',
-                    labelNextDecade: 'Další dekáda',
-                    labelNextMonth: 'Další měsíc',
-                    labelNextYear: 'Další rok',
-                    labelNoDateSelected: 'Nevybráno žádné datum',
-                    labelPrevDecade: 'Předchozí dekáda',
-                    labelPrevMonth: 'Předchozí měsíc',
-                    labelPrevYear: 'Předchozí rok',
-                    labelResetButton: 'Reset',
-                    labelSelected: 'Vybraný den',
-                    labelToday: 'Dnes',
-                    labelTodayButton: 'Vybrat dnešek'
+        }
+    },
+    data () {
+        return {
+            formatted: '',
+            selected: '',
+            tempusDominusInstance: null,
+            localDate: ''
+        }
+    },
+    mounted () {
+        this.$nextTick(() => {
+            extend(
+                tempusDominusVueModelPlugin,
+                {
+                    setVueModelValue: (value) => {
+                        this.model = (value ? new Date(value) : null) || null
+                    },
+                    getVueModelValue: () => {
+                        if (this.model) {
+                            const value = new Date(`${this.model}`)
+                            if (value instanceof Date && !isNaN(value.valueOf())) {
+                                return value
+                            }
+                        }
+                        return undefined
+                    }
                 }
-            }
+            )
+            const instance = new TempusDominus(
+                this.$refs.dateInput.$el,
+                {
+                    localization
+                }
+            )
+            instance.subscribe(Namespace.events.change, (event) => {
+                this.model = new Date(event.date).toISOString()
+            })
+            this.tempusDominusInstance = instance
+        })
+    },
+    beforeUnmount () {
+        if (this.tempusDominusInstance !== null) {
+            this.tempusDominusInstance.dispose()
+            this.tempusDominusInstance = null
         }
     },
     methods: {
-        parseFormatDate (value) {
-            return parseFormatDate(value)
-        },
-        onContext (ctx) {
-            this.selected = ctx.selectedYMD
-        },
         onTextInputBlur () {
             const value = `${this.model}`
             this.model = ''

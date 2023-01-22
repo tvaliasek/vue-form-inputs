@@ -136,16 +136,16 @@ export default {
     },
     computed: {
         isRequired () {
-            if (this.showAsRequired === false) {
-                return false
+            if (this.showAsRequired === false || this.showAsRequired === true) {
+                return !!this.showAsRequired
             }
-            if (this.showAsRequired === true) {
-                return true
+            if (this.validation !== undefined) {
+                const validationValue = JSON.parse(JSON.stringify(this.validation))
+                if (validationValue && typeof validationValue === 'object') {
+                    return Object.keys(validationValue).filter(propName => !`${propName}`.startsWith('$')).length > 0
+                }
             }
-            if (!this.validation || Object.keys(this.validation).length === 0) {
-                return false
-            }
-            return Object.keys(this.validation).filter(propName => !`${propName}`.startsWith('$')).length > 0
+            return false
         },
         model: {
             get () {
@@ -181,3 +181,9 @@ export default {
     }
 }
 </script>
+
+<style lang="scss">
+[aria-invalid="true"] + .invalid-feedback {
+    display: block;
+}
+</style>
