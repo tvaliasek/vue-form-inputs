@@ -101,7 +101,7 @@
 
 <script>
 import FormInput from './FormInput.vue'
-import { TempusDominus, Namespace, extend } from '@eonasdan/tempus-dominus'
+import { TempusDominus, extend } from '@eonasdan/tempus-dominus'
 import '@eonasdan/tempus-dominus/dist/css/tempus-dominus.min.css'
 import tempusDominusVueModelPlugin from './tempusDominusVueModelPlugin'
 
@@ -192,15 +192,16 @@ export default {
                     }
                 }
             )
+            this.$refs.dateInput.$el.addEventListener('beforeinput', (event) => {
+                event.preventDefault()
+                event.stopPropagation()
+            })
             const instance = new TempusDominus(
                 this.$refs.dateInput.$el,
                 {
                     localization
                 }
             )
-            instance.subscribe(Namespace.events.change, (event) => {
-                this.model = new Date(event.date).toISOString()
-            })
             this.tempusDominusInstance = instance
         })
     },
