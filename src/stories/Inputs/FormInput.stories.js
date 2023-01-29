@@ -1,14 +1,11 @@
 import FormInput from '../../Inputs/FormInput.vue'
-// import { BFormGroup, BFormInvalidFeedback, BFormInput } from 'bootstrap-vue-next'
+import textInputArgTypes from './textInputArgTypes'
 
 export default {
     title: 'FormInput',
     component: FormInput,
     argTypes: {
-        size: {
-            options: ['lg', 'md', 'sm'],
-            control: { type: 'radio' }
-        }
+        ...textInputArgTypes
     }
 }
 

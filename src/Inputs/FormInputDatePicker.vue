@@ -7,86 +7,34 @@
         <template #label>
             {{ label }}
         </template>
-        <b-input-group v-if="buttonOnly" :class="((invalid !== null) ? ((invalid ? 'is-invalid' : 'is-valid'))  : undefined)">
-            <b-form-input
-                :id="((id) ? `${id}_input` : undefined)"
-                v-model.trim="localDate"
-                type="text"
-                :placeholder="datePlaceholder"
-                :size="size"
-                :state="(invalid !== null) ? !invalid : null"
-                :disabled="disabled"
-                :readonly="readOnly"
-                @blur="onTextInputBlur"
-                :formatter="parseFormatDate"
-                lazy-formatter
-            />
-            <b-input-group-append>
-                <!--
-                <b-form-datepicker
-                    :id="id"
-                    :no-flip="true"
-                    :show-decade-nav="true"
-                    :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-                    :locale="locale"
-                    v-model.trim="model"
+        <date-picker
+            v-model="model"
+            text-input
+            :auto-apply="true"
+            :close-on-auto-apply="!enableTime"
+            :disabled="disabled"
+            :enable-time-picker="enableTime"
+            :min-date="minDate || undefined"
+            :max-date="maxDate || undefined"
+            :prevent-min-max-navigation="!!(minDate || maxDate)"
+            :ignore-time-validation="ignoreTimeValidation"
+            :format="dateFormatter"
+            :locale="locale"
+            :uid="(id) ? `dtpkr_${id}` : undefined"
+        >
+            <template #dp-input>
+                <b-form-input
+                    type="text"
+                    :id="((id) ? `${id}_input` : undefined)"
+                    :placeholder="placeholder"
                     :size="size"
                     :state="(invalid !== null) ? !invalid : null"
                     :disabled="disabled"
-                    lazy-formatter
-                    :min="minDate"
-                    :max="maxDate"
-                    :start-weekday="1"
-                    v-bind="labels"
-                    :readonly="readOnly"
-                    @change="onEvent('change')"
-                    @update="onEvent('update')"
-                    @blur="onEvent('blur')"
-                    @context="onContext"
-                    :aria-controls="`${id}_input`"
-                    button-only
+                    :model-value="displayValue"
+                    :readonly="true"
                 />
-                -->
-            </b-input-group-append>
-        </b-input-group>
-        <b-form-input
-            v-else
-            v-model="localDate"
-            :id="id"
-            :size="size"
-            :type="type"
-            :state="(invalid !== null) ? !invalid : null"
-            :disabled="disabled"
-            :placeholder="placeholder"
-            :readonly="readOnly"
-            @change="onEvent('change')"
-            @update="onEvent('update')"
-            @blur="onEvent('blur')"
-            ref="dateInput"
-        />
-        <!--
-        <b-form-datepicker
-            v-else
-            :id="id"
-            :no-flip="true"
-            :show-decade-nav="true"
-            :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-            :locale="locale"
-            v-model.trim="model"
-            :size="size"
-            :state="(invalid !== null) ? !invalid : null"
-            :disabled="disabled"
-            lazy-formatter
-            :min="minDate"
-            :max="maxDate"
-            :start-weekday="1"
-            v-bind="labels"
-            :readonly="readOnly"
-            @change="onEvent('change')"
-            @update="onEvent('update')"
-            @blur="onEvent('blur')"
-        />
-        -->
+            </template>
+        </date-picker>
         <b-form-invalid-feedback
             v-if="invalid"
         >
@@ -101,60 +49,21 @@
 
 <script>
 import FormInput from './FormInput.vue'
-import { TempusDominus, extend } from '@eonasdan/tempus-dominus'
-import '@eonasdan/tempus-dominus/dist/css/tempus-dominus.min.css'
-import tempusDominusVueModelPlugin from './tempusDominusVueModelPlugin'
-
-const localization = {
-    today: 'Dnes',
-    clear: 'Vymazat',
-    close: 'Zavřít',
-    selectMonth: 'Vybrat měsíc',
-    previousMonth: 'Předchozí měsíc',
-    nextMonth: 'Následující měsíc',
-    selectYear: 'Vybrat rok',
-    previousYear: 'Předchozí rok',
-    nextYear: 'Následující rok',
-    selectDecade: 'Vybrat desetiletí',
-    previousDecade: 'Předchozí desetiletí',
-    nextDecade: 'Další desetiletí',
-    previousCentury: 'Předchozí století',
-    nextCentury: 'Další století',
-    pickHour: 'Vybrat hodinu',
-    incrementHour: 'Přidat hodinu',
-    decrementHour: 'Ubrat hodinu',
-    pickMinute: 'Vybrat minutu',
-    incrementMinute: 'Přidat minutu',
-    decrementMinute: 'Ubrat minutu',
-    pickSecond: 'Vybrat vteřinu',
-    incrementSecond: 'Přidat vteřinu',
-    decrementSecond: 'Ubrat vteřinu',
-    toggleMeridiem: 'Přepnout denní dobu',
-    selectTime: 'Vybrat čas',
-    selectDate: 'Vybrat datum',
-    dayViewHeaderFormat: { month: 'long', year: '2-digit' },
-    locale: 'cs',
-    startOfTheWeek: 1,
-    ordinal: (n) => `${n}.`
-}
+import { dateFormat, dateTimeFormat } from './datePickerUtils.js'
+import DatePicker from '@vuepic/vue-datepicker'
+import '@vuepic/vue-datepicker/dist/main.css'
 
 export default {
     name: 'FormInputDatePicker',
     extends: FormInput,
+    components: {
+        DatePicker
+    },
     props: {
         locale: {
             type: String,
             required: false,
             default: 'cs-CZ'
-        },
-        buttonOnly: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
-        datePlaceholder: {
-            type: String,
-            required: false
         },
         minDate: {
             type: Date,
@@ -163,62 +72,82 @@ export default {
         maxDate: {
             type: Date,
             required: false
+        },
+        enableTime: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
+        ignoreTimeValidation: {
+            type: Boolean,
+            required: false,
+            default: true
+        },
+        dateFormat: {
+            type: Function,
+            required: false
         }
+        /*
+        textToDate: {
+            type: Function,
+            required: false
+        }
+        */
     },
     data () {
         return {
-            formatted: '',
-            selected: '',
-            tempusDominusInstance: null,
-            localDate: ''
+            localDate: null
         }
     },
-    mounted () {
-        this.$nextTick(() => {
-            extend(
-                tempusDominusVueModelPlugin,
-                {
-                    setVueModelValue: (value) => {
-                        this.model = (value ? new Date(value) : null) || null
-                    },
-                    getVueModelValue: () => {
-                        if (this.model) {
-                            const value = new Date(`${this.model}`)
-                            if (value instanceof Date && !isNaN(value.valueOf())) {
-                                return value
-                            }
-                        }
-                        return undefined
-                    }
+    computed: {
+        dateFormatter () {
+            return (this.dateFormat) ? this.dateFormat : ((this.enableTime) ? dateTimeFormat : dateFormat)
+        },
+        displayValue () {
+            if (this.model) {
+                return this.dateFormatter(this.model)
+            }
+            return null
+        },
+        model: {
+            get () {
+                if (!this.modelValue) {
+                    return null
                 }
-            )
-            this.$refs.dateInput.$el.addEventListener('beforeinput', (event) => {
-                event.preventDefault()
-                event.stopPropagation()
-            })
-            const instance = new TempusDominus(
-                this.$refs.dateInput.$el,
-                {
-                    localization
+                if (this.modelValue instanceof Date) {
+                    return this.modelValue
                 }
-            )
-            this.tempusDominusInstance = instance
-        })
-    },
-    beforeUnmount () {
-        if (this.tempusDominusInstance !== null) {
-            this.tempusDominusInstance.dispose()
-            this.tempusDominusInstance = null
-        }
-    },
-    methods: {
-        onTextInputBlur () {
-            const value = `${this.model}`
-            this.model = ''
-            this.$nextTick(() => {
-                this.model = value
-            })
+                const dateValue = new Date(this.modelValue)
+                if (dateValue && !isNaN(dateValue.valueOf())) {
+                    return dateValue
+                }
+                return null
+            },
+            set (value) {
+                let dateValue = value
+                if (!(value instanceof Date) && value) {
+                    dateValue = new Date(value)
+                }
+                if (dateValue && !this.enableTime) {
+                    dateValue = new Date(`${dateValue.toISOString().split('T')[0]}T00:00:00.000Z`)
+                }
+                this.$emit('update:modelValue', dateValue)
+                if (this.validation.$touch !== undefined && typeof this.validation.$touch === 'function') {
+                    this.validation.$touch()
+                }
+            }
         }
     }
+    /*
+    methods: {
+        onUpdateModelValue (value) {
+            this.localDate = `${value}`
+            const date = (typeof this.textToDate === 'function') ? this.textToDate(this.localDate) : textToDate(this.localDate)
+            if (date instanceof Date) {
+                this.model = date
+            }
+        }
+    }
+    */
 }
 </script>

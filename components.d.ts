@@ -15,8 +15,6 @@ declare module '@vue/runtime-core' {
     BFormRadioGroup: typeof import('bootstrap-vue-3')['BFormRadioGroup']
     BFormSelect: typeof import('bootstrap-vue-3')['BFormSelect']
     BFormTextarea: typeof import('bootstrap-vue-3')['BFormTextarea']
-    BInputGroup: typeof import('bootstrap-vue-3')['BInputGroup']
-    BInputGroupAppend: typeof import('bootstrap-vue-3')['BInputGroupAppend']
     InputTester: typeof import('./src/components/InputTester.vue')['default']
   }
 }
