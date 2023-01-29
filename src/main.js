@@ -1,16 +1,16 @@
-import Vue from 'vue'
+import { createApp } from 'vue'
+import { createI18n } from 'vue-i18n'
 import App from './App.vue'
 
 import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
-import Vuelidate from 'vuelidate'
-import { FormInputsPlugin } from './index.js'
+import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'
 
-Vue.config.productionTip = false
+import { FormInputsPlugin } from './lib-main.js'
 
-Vue.use(FormInputsPlugin)
-Vue.use(Vuelidate)
+const app = createApp(App)
+const i18n = createI18n()
 
-new Vue({
-    render: h => h(App)
-}).$mount('#app')
+app.use(FormInputsPlugin)
+app.use(i18n)
+
+app.mount('#app')

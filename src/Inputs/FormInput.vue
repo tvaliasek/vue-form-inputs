@@ -6,21 +6,6 @@
     >
         <template #label>
             {{ label }}
-            <span v-if="hasTooltip">
-                <span
-                    ref="information-icon"
-                >
-                    <slot
-                        name="tooltip-icon"
-                    />
-                </span>
-                <b-tooltip
-                    :target="() => $refs['information-icon']"
-                    :triggers="['hover', 'click']"
-                >
-                    <slot name="tooltip-content"></slot>
-                </b-tooltip>
-            </span>
         </template>
         <div
             v-if="renderAsGroup"
@@ -117,7 +102,7 @@ export default {
             required: false,
             default: false
         },
-        value: {
+        modelValue: {
             required: false
         },
         hint: {
@@ -149,37 +134,27 @@ export default {
         showAsRequired: {
             required: false,
             default: null
-        },
-        hasTooltip: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
-        autocomplete: {
-            type: String,
-            required: false,
-            default: null
         }
     },
     computed: {
         isRequired () {
-            if (this.showAsRequired === false) {
-                return false
+            if (this.showAsRequired === false || this.showAsRequired === true) {
+                return !!this.showAsRequired
             }
-            if (this.showAsRequired === true) {
-                return true
+            if (this.validation !== undefined) {
+                const validationValue = JSON.parse(JSON.stringify(this.validation))
+                if (validationValue && typeof validationValue === 'object') {
+                    return Object.keys(validationValue).filter(propName => !`${propName}`.startsWith('$')).length > 0
+                }
             }
-            if (!this.validation || Object.keys(this.validation).length === 0) {
-                return false
-            }
-            return Object.keys(this.validation).filter(propName => !`${propName}`.startsWith('$')).length > 0
+            return false
         },
         model: {
             get () {
-                return this.value
+                return this.modelValue
             },
             set (value) {
-                this.$emit('input', value)
+                this.$emit('update:modelValue', value)
                 if (this.validation.$touch !== undefined && typeof this.validation.$touch === 'function') {
                     this.validation.$touch()
                 }
@@ -208,3 +183,9 @@ export default {
     }
 }
 </script>
+
+<style lang="scss">
+[aria-invalid="true"] + .invalid-feedback {
+    display: block;
+}
+</style>
