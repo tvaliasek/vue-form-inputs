@@ -87,7 +87,7 @@
 
 <script>
 import { useVuelidate } from '@vuelidate/core'
-import { required } from '@vuelidate/validators'
+import { required, minLength } from '@vuelidate/validators'
 import InputTester from './components/InputTester.vue'
 
 export default {
@@ -134,7 +134,7 @@ export default {
     },
     validations () {
         return {
-            textInput: { required },
+            textInput: { required, minLength: minLength(8) },
             textareaInput: { required },
             selectInput: { required },
             checkboxInput: { required },

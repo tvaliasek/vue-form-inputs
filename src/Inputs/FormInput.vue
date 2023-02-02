@@ -21,7 +21,6 @@
                 :formatter="formatValue"
                 :placeholder="placeholder"
                 :readonly="readOnly"
-                :autocomplete="autocomplete || undefined"
                 lazy-formatter
                 @change="onEvent('change')"
                 @update="onEvent('update')"
@@ -42,7 +41,6 @@
             :formatter="formatValue"
             :placeholder="placeholder"
             :readonly="readOnly"
-            :autocomplete="autocomplete || undefined"
             lazy-formatter
             @change="onEvent('change')"
             @update="onEvent('update')"

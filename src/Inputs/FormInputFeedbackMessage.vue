@@ -24,16 +24,18 @@ export default {
                     'between', 'alpha', 'alphaNum', 'numeric',
                     'integer', 'decimal', 'email', 'ipAddress',
                     'macAddress', 'sameAs', 'url', 'validated_email'
-                ].concat((this.messages !== undefined) ? Object.keys(this.messages) : []))
+                ].concat((this.messages) ? Object.keys(this.messages) : []))
             ]
         },
         message () {
-            for (const ruleName in this.validationModel) {
-                if (this.ruleNames.indexOf(ruleName) > -1 && !this.validationModel[ruleName]) {
-                    if (this.messages !== undefined && this.messages.hasOwnProperty(ruleName)) {
+            const rules = Object.keys(this.validationModel).filter(item => !`${item}`.startsWith('$'))
+            for (const ruleName of rules) {
+                console.log(ruleName, this.ruleNames.includes(ruleName), this.validationModel[ruleName].$invalid)
+                if (this.ruleNames.includes(ruleName) && this.validationModel[ruleName].$invalid) {
+                    if (this.messages && this.messages[ruleName]) {
                         return this.messages[ruleName]
                     } else {
-                        return this.getDefaultMessage(ruleName, this.validationModel.$params)
+                        return this.getDefaultMessage(ruleName, this.validationModel[ruleName].$params || {})
                     }
                 }
             }
@@ -50,19 +52,19 @@ export default {
                     case 'requiredUnless':
                         return this.$t('vueFormInputs.feedback.required')
                     case 'minLength':
-                        return this.$t('vueFormInputs.feedback.minLength', { minLength: params.minLength.min })
+                        return this.$t('vueFormInputs.feedback.minLength', { minLength: params.min })
                     case 'maxLength':
-                        return this.$t('vueFormInputs.feedback.maxLength', { maxLength: params.maxLength.max })
+                        return this.$t('vueFormInputs.feedback.maxLength', { maxLength: params.max })
                     case 'minValue':
                         // eslint-disable-next-line no-case-declarations
-                        parameter = (params.minValue.min instanceof Date) ? params.minValue.min.toLocaleDateString() : params.minValue.min
+                        parameter = (params.min instanceof Date) ? params.min.toLocaleDateString() : params.min
                         return this.$t('vueFormInputs.feedback.minValue', { minValue: parameter })
                     case 'maxValue':
                         // eslint-disable-next-line no-case-declarations
-                        parameter = (params.maxValue.max instanceof Date) ? params.maxValue.max.toLocaleDateString() : params.maxValue.max
+                        parameter = (params.max instanceof Date) ? params.max.toLocaleDateString() : params.max
                         return this.$t('vueFormInputs.feedback.maxValue', { maxValue: parameter })
                     case 'between':
-                        return this.$t('vueFormInputs.feedback.between', { betweenMin: params.between.min, betweenMax: params.between.max })
+                        return this.$t('vueFormInputs.feedback.between', { betweenMin: params.min, betweenMax: params.max })
                     case 'alpha':
                         return this.$t('vueFormInputs.feedback.alpha')
                     case 'alphaNum':
@@ -84,6 +86,7 @@ export default {
                     case 'url':
                         return this.$t('vueFormInputs.feedback.url')
                     case 'validated_email':
+                    case 'validatedEmail':
                         return this.$t('vueFormInputs.feedback.validatedEmail')
                     default:
                         return this.$t('vueFormInputs.feedback.invalidValue')
@@ -95,19 +98,19 @@ export default {
                 case 'requiredUnless':
                     return 'Toto pole je nutné vyplnit.'
                 case 'minLength':
-                    return `Hodnota musí být minimálně ${params.minLength.min} znaků dlouhá.`
+                    return `Hodnota musí být minimálně ${params.min} znaků dlouhá.`
                 case 'maxLength':
-                    return `Hodnota musí být maximálně ${params.maxLength.max} znaků dlouhá.`
+                    return `Hodnota musí být maximálně ${params.max} znaků dlouhá.`
                 case 'minValue':
                     // eslint-disable-next-line no-case-declarations
-                    parameter = (params.minValue.min instanceof Date) ? params.minValue.min.toLocaleDateString() : params.minValue.min
+                    parameter = (params.min instanceof Date) ? params.min.toLocaleDateString() : params.min
                     return `Hodnota musí být minimálně ${parameter}.`
                 case 'maxValue':
                     // eslint-disable-next-line no-case-declarations
-                    parameter = (params.maxValue.max instanceof Date) ? params.maxValue.max.toLocaleDateString() : params.maxValue.max
+                    parameter = (params.max instanceof Date) ? params.max.toLocaleDateString() : params.max
                     return `Hodnota musí být maximálně ${parameter}.`
                 case 'between':
-                    return `Hodnota musí být mezi ${params.between.min} a ${params.between.max}.`
+                    return `Hodnota musí být mezi ${params.min} a ${params.max}.`
                 case 'alpha':
                     return 'Jsou povoleny pouze písmena.'
                 case 'alphaNum':
@@ -129,6 +132,7 @@ export default {
                 case 'url':
                     return 'Chybný formát URL adresy.'
                 case 'validated_email':
+                case 'validatedEmail':
                     return 'Nefunkční nebo chybná emailová adresa.'
                 default:
                     return 'Chybně vyplněná hodnota.'

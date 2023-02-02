@@ -7,14 +7,14 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    BFormGroup: typeof import('bootstrap-vue-3')['BFormGroup']
-    BFormCheckbox: typeof import('bootstrap-vue-3')['BFormCheckbox']
-    BFormCheckboxGroup: typeof import('bootstrap-vue-3')['BFormCheckboxGroup']
-    BFormInput: typeof import('bootstrap-vue-3')['BFormInput']
-    BFormInvalidFeedback: typeof import('bootstrap-vue-3')['BFormInvalidFeedback']
-    BFormRadioGroup: typeof import('bootstrap-vue-3')['BFormRadioGroup']
-    BFormSelect: typeof import('bootstrap-vue-3')['BFormSelect']
-    BFormTextarea: typeof import('bootstrap-vue-3')['BFormTextarea']
+    BFormGroup: typeof import('bootstrap-vue-next')['BFormGroup']
+    BFormCheckbox: typeof import('bootstrap-vue-next')['BFormCheckbox']
+    BFormCheckboxGroup: typeof import('bootstrap-vue-next')['BFormCheckboxGroup']
+    BFormInput: typeof import('bootstrap-vue-next')['BFormInput']
+    BFormInvalidFeedback: typeof import('bootstrap-vue-next')['BFormInvalidFeedback']
+    BFormRadioGroup: typeof import('bootstrap-vue-next')['BFormRadioGroup']
+    BFormSelect: typeof import('bootstrap-vue-next')['BFormSelect']
+    BFormTextarea: typeof import('bootstrap-vue-next')['BFormTextarea']
     InputTester: typeof import('./src/components/InputTester.vue')['default']
   }
 }
