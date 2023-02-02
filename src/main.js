@@ -9,6 +9,7 @@ import { FormInputsPlugin } from './lib-main.js'
 
 const app = createApp(App)
 const i18n = createI18n({
+    legacy: false,
     locale: 'en',
     messages: {
         cs: {

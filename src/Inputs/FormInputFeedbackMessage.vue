@@ -30,7 +30,6 @@ export default {
         message () {
             const rules = Object.keys(this.validationModel).filter(item => !`${item}`.startsWith('$'))
             for (const ruleName of rules) {
-                console.log(ruleName, this.ruleNames.includes(ruleName), this.validationModel[ruleName].$invalid)
                 if (this.ruleNames.includes(ruleName) && this.validationModel[ruleName].$invalid) {
                     if (this.messages && this.messages[ruleName]) {
                         return this.messages[ruleName]
