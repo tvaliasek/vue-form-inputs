@@ -1,5 +1,5 @@
 <template>
-    <b-form-group
+    <BFormGroup
         :description="hint"
         :label-for="id"
         :class="{ 'form-group-required': isRequired }"
@@ -11,7 +11,7 @@
             v-if="renderAsGroup"
             :class="{ 'input-group': true, 'is-invalid': ((invalid !== null) ? !invalid : null), 'is-valid': ((invalid !== null) ? !!invalid : null) }"
         >
-            <b-form-input
+            <BFormInput
                 v-model.trim="model"
                 :id="id"
                 :size="size"
@@ -30,7 +30,7 @@
                 <slot></slot>
             </div>
         </div>
-        <b-form-input
+        <BFormInput
             v-else
             v-model.trim="model"
             :id="id"
@@ -46,140 +46,79 @@
             @update="onEvent('update')"
             @blur="onEvent('blur')"
         />
-        <b-form-invalid-feedback
+        <BFormInvalidFeedback
             v-if="invalid"
         >
-            <form-input-feedback-message
+            <FormInputFeedbackMessage
                 :validation-model="validation"
                 :messages="validationMessages"
             />
-        </b-form-invalid-feedback>
+        </BFormInvalidFeedback>
         <slot name="input-text"></slot>
-    </b-form-group>
+    </BFormGroup>
 </template>
 
-<script>
+<script setup lang="ts">
+import type { Validation } from '@vuelidate/core'
+import type { InputType, Size } from 'bootstrap-vue-next'
+import { computed, unref } from 'vue'
+import { useInput } from './Composables/useInput.ts'
+
 import FormInputFeedbackMessage from './FormInputFeedbackMessage.vue'
 
-export default {
-    name: 'FormInput',
-    components: {
-        FormInputFeedbackMessage
-    },
-    props: {
-        label: {
-            type: String,
-            required: false
-        },
-        type: {
-            type: String,
-            required: false,
-            default: 'text'
-        },
-        size: {
-            type: String,
-            required: false,
-            default: 'md'
-        },
-        validationMessages: {
-            type: Object,
-            required: false,
-            default () {
-                return {}
-            }
-        },
-        validation: {
-            type: Object,
-            required: false,
-            default () {
-                return {}
-            }
-        },
-        disabled: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
-        modelValue: {
-            required: false
-        },
-        hint: {
-            type: String,
-            required: false
-        },
-        placeholder: {
-            type: String,
-            required: false
-        },
-        formatter: {
-            type: Function,
-            required: false
-        },
-        renderAsGroup: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
-        id: {
-            type: String,
-            required: false
-        },
-        readOnly: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
-        showAsRequired: {
-            required: false,
-            default: null
+export interface ComponentProps {
+    label?: string
+    type?: InputType
+    size?: Size
+    validationMessages?: Record<string, any>
+    validation?: Validation
+    disabled?: boolean
+    modelValue: unknown
+    hint?: string
+    placeholder?: string
+    formatter?: CallableFunction
+    renderAsGroup?: boolean
+    id?: string
+    readOnly?: boolean
+    showAsRequired?: boolean
+}
+
+const props = withDefaults(
+    defineProps<ComponentProps>(),
+    {
+        type: 'text',
+        disabled: false,
+        renderAsGroup: false,
+        readOnly: false
+    }
+)
+
+const $emit = defineEmits(['update:modelValue', 'change', 'update', 'blur'])
+
+type modelType = string | number | undefined
+const model = computed({
+    get (): modelType {
+        const modelValue = unref(props.modelValue)
+        if (typeof modelValue === 'string' || typeof modelValue === 'number') {
+            return modelValue
         }
+        return undefined
     },
-    computed: {
-        isRequired () {
-            if (this.showAsRequired === false || this.showAsRequired === true) {
-                return !!this.showAsRequired
-            }
-            if (this.validation !== undefined) {
-                const validationValue = JSON.parse(JSON.stringify(this.validation))
-                if (validationValue && typeof validationValue === 'object') {
-                    return Object.keys(validationValue).filter(propName => !`${propName}`.startsWith('$')).length > 0
-                }
-            }
-            return false
-        },
-        model: {
-            get () {
-                return this.modelValue
-            },
-            set (value) {
-                this.$emit('update:modelValue', value)
-                if (this.validation.$touch !== undefined && typeof this.validation.$touch === 'function') {
-                    this.validation.$touch()
-                }
-            }
-        },
-        invalid () {
-            if (this.validation.$invalid !== undefined) {
-                return (this.validation.$dirty) ? this.validation.$invalid : null
-            }
-            return null
-        }
-    },
-    methods: {
-        onEvent (eventName) {
-            const _this = this
-            return (eventData) => {
-                _this.$emit(eventName, eventData)
-            }
-        },
-        formatValue (value) {
-            if (typeof this.formatter === 'function') {
-                return this.formatter(value)
-            }
-            return value
+    set (value: modelType): void {
+        $emit('update:modelValue', value)
+        const validation = unref(props.validation)
+        if (typeof validation?.$touch === 'function') {
+            validation.$touch()
         }
     }
-}
+})
+
+const {
+    isRequired,
+    invalid,
+    onEvent,
+    formatValue
+} = useInput(props)
 </script>
 
 <style lang="scss">

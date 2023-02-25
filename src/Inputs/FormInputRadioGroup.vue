@@ -1,5 +1,5 @@
 <template>
-    <b-form-group
+    <BFormGroup
         :description="hint"
         :class="{ 'form-group-required': isRequired }"
         :label-for="id"
@@ -7,68 +7,86 @@
         <template #label>
             {{ label }}
         </template>
-        <b-form-radio-group
+        <BFormRadioGroup
             v-model="model"
             :id="id"
             :size="size"
             :state="(invalid !== null) ? !invalid : null"
             :disabled="disabled || readOnly"
-            :options="arrayOptions"
+            :options="options"
             :stacked="stacked"
             @change="onEvent('change')"
             @update="onEvent('update')"
             @blur="onEvent('blur')"
         />
-        <b-form-invalid-feedback
+        <BFormInvalidFeedback
             v-if="invalid"
         >
-            <form-input-feedback-message
+            <FormInputFeedbackMessage
                 :validation-model="validation"
                 :messages="validationMessages"
             />
-        </b-form-invalid-feedback>
-    </b-form-group>
+        </BFormInvalidFeedback>
+    </BFormGroup>
 </template>
 
-<script>
-import FormInput from './FormInput.vue'
+<script setup lang="ts">
+import type { Validation } from '@vuelidate/core'
+import type { InputType, Size } from 'bootstrap-vue-next'
+import { computed, unref } from 'vue'
+import { useInput } from './Composables/useInput.ts'
 
-export default {
-    name: 'FormInputRadioGroup',
-    extends: FormInput,
-    props: {
-        options: {
-            required: true,
-            validator (value) {
-                return (typeof value === 'object' || Array.isArray(value))
-            }
-        },
-        stacked: {
-            type: Boolean,
-            required: false,
-            default: true
+import FormInputFeedbackMessage from './FormInputFeedbackMessage.vue'
+
+export interface ComponentProps {
+    label?: string
+    type?: InputType
+    size?: Size
+    validationMessages?: Record<string, any>
+    validation?: Validation
+    disabled?: boolean
+    modelValue: modelType
+    hint?: string
+    id?: string
+    readOnly?: boolean
+    showAsRequired?: boolean
+    options?: Array<{ value: any, text: string }>
+    stacked?: boolean
+}
+
+const props = withDefaults(
+    defineProps<ComponentProps>(),
+    {
+        disabled: false,
+        readOnly: false,
+        stacked: true,
+        options: () => []
+    }
+)
+
+const $emit = defineEmits(['update:modelValue', 'change', 'update', 'blur'])
+
+type modelType = string | number | undefined
+const model = computed({
+    get (): modelType {
+        const modelValue = unref(props.modelValue)
+        if (Array.isArray(modelValue)) {
+            return modelValue
         }
+        return undefined
     },
-    computed: {
-        arrayOptions () {
-            if (this.options === null) {
-                return []
-            }
-            if (Array.isArray(this.options)) {
-                return this.options
-            }
-            if (typeof this.options === 'object') {
-                const options = []
-                for (const index in this.options) {
-                    options.push({
-                        value: index,
-                        text: `${this.options[index]}`
-                    })
-                }
-                return options
-            }
-            return []
+    set (value: modelType): void {
+        $emit('update:modelValue', value)
+        const validation = unref(props.validation)
+        if (typeof validation?.$touch === 'function') {
+            validation.$touch()
         }
     }
-}
+})
+
+const {
+    isRequired,
+    invalid,
+    onEvent
+} = useInput(props)
 </script>

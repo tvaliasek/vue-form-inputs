@@ -1,9 +1,11 @@
 <template>
-    <span>{{message}}</span>
+    <span>{{ message }}</span>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+export default defineComponent({
     name: 'FormInputFeedbackMessage',
     props: {
         messages: {
@@ -24,16 +26,20 @@ export default {
                     'between', 'alpha', 'alphaNum', 'numeric',
                     'integer', 'decimal', 'email', 'ipAddress',
                     'macAddress', 'sameAs', 'url', 'validated_email'
+                // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
                 ].concat((this.messages) ? Object.keys(this.messages) : []))
             ]
         },
         message () {
             const rules = Object.keys(this.validationModel).filter(item => !`${item}`.startsWith('$'))
             for (const ruleName of rules) {
+                // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
                 if (this.ruleNames.includes(ruleName) && this.validationModel[ruleName].$invalid) {
+                    // eslint-disable-next-line @typescript-eslint/prefer-optional-chain, @typescript-eslint/strict-boolean-expressions
                     if (this.messages && this.messages[ruleName]) {
                         return this.messages[ruleName]
                     } else {
+                        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
                         return this.getDefaultMessage(ruleName, this.validationModel[ruleName].$params || {})
                     }
                 }
@@ -42,7 +48,7 @@ export default {
         }
     },
     methods: {
-        getDefaultMessage (ruleType, params) {
+        getDefaultMessage (ruleType: string, params?: Record<string, any>) {
             let parameter
             if (this.$i18n !== undefined && this.$t !== undefined) {
                 switch (ruleType) {
@@ -97,18 +103,23 @@ export default {
                 case 'requiredUnless':
                     return 'Toto pole je nutné vyplnit.'
                 case 'minLength':
+                    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
                     return `Hodnota musí být minimálně ${params.min} znaků dlouhá.`
                 case 'maxLength':
+                    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
                     return `Hodnota musí být maximálně ${params.max} znaků dlouhá.`
                 case 'minValue':
                     // eslint-disable-next-line no-case-declarations
                     parameter = (params.min instanceof Date) ? params.min.toLocaleDateString() : params.min
+                    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
                     return `Hodnota musí být minimálně ${parameter}.`
                 case 'maxValue':
                     // eslint-disable-next-line no-case-declarations
                     parameter = (params.max instanceof Date) ? params.max.toLocaleDateString() : params.max
+                    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
                     return `Hodnota musí být maximálně ${parameter}.`
                 case 'between':
+                    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
                     return `Hodnota musí být mezi ${params.min} a ${params.max}.`
                 case 'alpha':
                     return 'Jsou povoleny pouze písmena.'
@@ -138,6 +149,5 @@ export default {
             }
         }
     }
-
-}
+})
 </script>

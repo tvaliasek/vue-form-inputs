@@ -1,5 +1,5 @@
 <template>
-    <b-form-group
+    <BFormGroup
         :description="hint"
         :class="{ 'form-group-required': isRequired }"
         :label-for="id"
@@ -11,25 +11,25 @@
             v-if="renderAsGroup"
             :class="{ 'input-group': true, 'is-invalid': ((invalid !== null) ? !invalid : null), 'is-valid': ((invalid !== null) ? !!invalid : null) }"
         >
-            <b-form-select
+            <BFormSelect
                 v-model="model"
                 :size="size"
                 :id="id"
                 :state="(invalid !== null) ? !invalid : null"
                 :disabled="disabled || readOnly"
                 :placeholder="placeholder"
-                :options="arrayOptions"
+                :options="options"
                 @change="onEvent('change')"
                 @update="onEvent('update')"
                 @blur="onEvent('blur')"
                 :multiple="multi"
-                :select-size="selectSize"
+                :select-size="(multi === true) ? selectSize : undefined"
             />
             <div class="input-group-append">
                 <slot></slot>
             </div>
         </div>
-        <b-form-select
+        <BFormSelect
             v-else
             v-model="model"
             :size="size"
@@ -37,66 +37,83 @@
             :state="(invalid !== null) ? !invalid : null"
             :disabled="disabled || readOnly"
             :placeholder="placeholder"
-            :options="arrayOptions"
+            :options="options"
             @change="onEvent('change')"
             @update="onEvent('update')"
             @blur="onEvent('blur')"
             :multiple="multi"
-            :select-size="selectSize"
+            :select-size="(multi === true) ? selectSize : undefined"
         />
-        <b-form-invalid-feedback
+        <BFormInvalidFeedback
             v-if="invalid"
         >
-            <form-input-feedback-message
+            <FormInputFeedbackMessage
                 :validation-model="validation"
                 :messages="validationMessages"
             />
-        </b-form-invalid-feedback>
-    </b-form-group>
+        </BFormInvalidFeedback>
+    </BFormGroup>
 </template>
 
-<script>
-import FormInput from './FormInput.vue'
+<script setup lang="ts">
+import type { Validation } from '@vuelidate/core'
+import type { Size } from 'bootstrap-vue-next'
+import { computed, unref } from 'vue'
+import { useInput } from './Composables/useInput.ts'
 
-export default {
-    name: 'FormInputSelect',
-    extends: FormInput,
-    props: {
-        options: {
-            required: true,
-            validator (value) {
-                return (typeof value === 'object' || Array.isArray(value))
-            }
-        },
-        multi: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
-        selectSize: {
-            required: false
+import FormInputFeedbackMessage from './FormInputFeedbackMessage.vue'
+
+export interface ComponentProps {
+    label?: string
+    size?: Size
+    validationMessages?: Record<string, any>
+    validation?: Validation
+    disabled?: boolean
+    modelValue?: string | number | undefined
+    hint?: string
+    placeholder?: string
+    renderAsGroup?: boolean
+    id?: string
+    readOnly?: boolean
+    showAsRequired?: boolean
+    options?: Array<{ value: any, text: string }>
+    multi?: boolean
+    selectSize?: number
+}
+
+const props = withDefaults(
+    defineProps<ComponentProps>(),
+    {
+        disabled: false,
+        renderAsGroup: false,
+        readOnly: false,
+        options: () => []
+    }
+)
+
+const $emit = defineEmits(['update:modelValue', 'change', 'update', 'blur'])
+
+type modelType = string | number | undefined
+const model = computed({
+    get (): modelType {
+        const modelValue = unref(props.modelValue)
+        if (typeof modelValue === 'string' || typeof modelValue === 'number') {
+            return modelValue
         }
+        return undefined
     },
-    computed: {
-        arrayOptions () {
-            if (this.options === null) {
-                return []
-            }
-            if (Array.isArray(this.options)) {
-                return this.options
-            }
-            if (typeof this.options === 'object') {
-                const options = []
-                for (const index in this.options) {
-                    options.push({
-                        value: index,
-                        text: `${this.options[index]}`
-                    })
-                }
-                return options
-            }
-            return []
+    set (value: modelType): void {
+        $emit('update:modelValue', value)
+        const validation = unref(props.validation)
+        if (typeof validation?.$touch === 'function') {
+            validation.$touch()
         }
     }
-}
+})
+
+const {
+    isRequired,
+    invalid,
+    onEvent
+} = useInput(props)
 </script>

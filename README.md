@@ -67,25 +67,35 @@ const validations = useVuelidate(computed(() => ({ example: { required } })), { 
 
 ### Props
 
-#### Text, Textarea
-
-and common props for all components
+#### Common props for all components
 
 | prop | type | required | default | description |
 |------|------|----------|---------|-------------|
 | label | string | false | empty string | Input label text |
-| type | string | false | 'text' | Input html attribute type |
-| size | string | false | 'md' | Size of input - sm, md, lg |
+| size | string | false | undefined | Size of input - sm, lg or not set |
 | validationMessages | object | false | empty object | key - value pairs for validation messages |
 | validation | object | false | empty object | vuelidate validation entry instance |
 | disabled | boolean | false | false | Input html disabled attribute |
 | modelValue | undefined | false | undefined | v-model value |
 | hint | string | false | undefined | hint text for input displayed under form input |
+| id | string | false | undefined | Input html id attribute |
+| readOnly | boolean | false | false | toggle for readonly attribute |
+
+#### Text
+
+| prop | type | required | default | description |
+|------|------|----------|---------|-------------|
+| type | string | false | 'text' | Input html attribute type |
 | placeholder | string | false | undefined | input placeholder html attribute |
 | formatter | function | false | undefined | function to apply on value as formatter | 
 | renderAsGroup | boolean | false | false | toggle for input group rendering |
-| id | string | false | undefined | Input html id attribute |
-| readOnly | boolean | false | false | toggle for readonly attribute |
+
+#### Textarea
+
+| prop | type | required | default | description |
+|------|------|----------|---------|-------------|
+| placeholder | string | false | undefined | input placeholder html attribute |
+| formatter | function | false | undefined | function to apply on value as formatter | 
 
 #### Select
 
@@ -94,6 +104,7 @@ and common props for all components
 | options | array | true | undefined | [{ value: 'someValue', text: 'Some value' }] |
 | multi | boolean | false | false | toggle for multiselect rendering |
 | selectSize | number | false | undefined | set number of rows for multiselect |
+| placeholder | string | false | undefined | input placeholder html attribute |
 
 #### Radio group, Checkbox group
 
@@ -120,6 +131,7 @@ Datepicker is wrapped [@vuepic/vue-datepicker](https://vue3datepicker.com/)
 | enableTime | boolean | false | false | toggle for date and time selection |
 | ignoreTimeValidation | boolean | false | true | validate only date part |
 | dateFormat | function | false | undefined | custom date formatter function |
+| placeholder | string | false | undefined | input placeholder html attribute |
 
 ## i18n
 
@@ -154,7 +166,7 @@ If vue i18n is detected, please add these translations:
     "en": {
         "vueFormInputs": {
             "feedback": {
-                "required": "This field must be completed.",
+                "required": "This field must be filled.",
                 "minLength": "The value must be at least {minLength} characters long.",
                 "maxLength": "The value must be at most {maxLength} characters long.",
                 "minValue": "The value must be at least {minValue}.",

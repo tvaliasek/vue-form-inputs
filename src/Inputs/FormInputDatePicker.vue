@@ -1,5 +1,5 @@
 <template>
-    <b-form-group
+    <BFormGroup
         :description="hint"
         :label-for="((id) ? `${id}_input` : undefined)"
         :class="{ 'form-group-required': isRequired }"
@@ -7,7 +7,7 @@
         <template #label>
             {{ label }}
         </template>
-        <date-picker
+        <DatePicker
             v-model="model"
             text-input
             :auto-apply="true"
@@ -23,7 +23,7 @@
             :uid="(id) ? `dtpkr_${id}` : undefined"
         >
             <template #dp-input>
-                <b-form-input
+                <BFormInput
                     type="text"
                     :id="((id) ? `${id}_input` : undefined)"
                     :placeholder="placeholder"
@@ -34,120 +34,115 @@
                     :readonly="true"
                 />
             </template>
-        </date-picker>
-        <b-form-invalid-feedback
+        </DatePicker>
+        <BFormInvalidFeedback
             v-if="invalid"
         >
-            <form-input-feedback-message
+            <FormInputFeedbackMessage
                 :validation-model="validation"
                 :messages="validationMessages"
             />
-        </b-form-invalid-feedback>
+        </BFormInvalidFeedback>
         <slot name="input-text"></slot>
-    </b-form-group>
+    </BFormGroup>
 </template>
 
-<script>
-import FormInput from './FormInput.vue'
-import { dateFormat, dateTimeFormat } from './datePickerUtils.js'
+<script setup lang="ts">
+import { dateFormat, dateTimeFormat } from './datePickerUtils'
 import DatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
+import type { Validation } from '@vuelidate/core'
+import type { Size } from 'bootstrap-vue-next'
+import { computed, unref } from 'vue'
+import { useInput } from './Composables/useInput.ts'
 
-export default {
-    name: 'FormInputDatePicker',
-    extends: FormInput,
-    components: {
-        DatePicker
-    },
-    props: {
-        locale: {
-            type: String,
-            required: false,
-            default: 'cs-CZ'
-        },
-        minDate: {
-            type: Date,
-            required: false
-        },
-        maxDate: {
-            type: Date,
-            required: false
-        },
-        enableTime: {
-            type: Boolean,
-            required: false,
-            default: false
-        },
-        ignoreTimeValidation: {
-            type: Boolean,
-            required: false,
-            default: true
-        },
-        dateFormat: {
-            type: Function,
-            required: false
-        }
-        /*
-        textToDate: {
-            type: Function,
-            required: false
-        }
-        */
-    },
-    data () {
-        return {
-            localDate: null
-        }
-    },
-    computed: {
-        dateFormatter () {
-            return (this.dateFormat) ? this.dateFormat : ((this.enableTime) ? dateTimeFormat : dateFormat)
-        },
-        displayValue () {
-            if (this.model) {
-                return this.dateFormatter(this.model)
-            }
-            return null
-        },
-        model: {
-            get () {
-                if (!this.modelValue) {
-                    return null
-                }
-                if (this.modelValue instanceof Date) {
-                    return this.modelValue
-                }
-                const dateValue = new Date(this.modelValue)
-                if (dateValue && !isNaN(dateValue.valueOf())) {
-                    return dateValue
-                }
-                return null
-            },
-            set (value) {
-                let dateValue = value
-                if (!(value instanceof Date) && value) {
-                    dateValue = new Date(value)
-                }
-                if (dateValue && !this.enableTime) {
-                    dateValue = new Date(`${dateValue.toISOString().split('T')[0]}T00:00:00.000Z`)
-                }
-                this.$emit('update:modelValue', dateValue)
-                if (this.validation.$touch !== undefined && typeof this.validation.$touch === 'function') {
-                    this.validation.$touch()
-                }
-            }
-        }
-    }
-    /*
-    methods: {
-        onUpdateModelValue (value) {
-            this.localDate = `${value}`
-            const date = (typeof this.textToDate === 'function') ? this.textToDate(this.localDate) : textToDate(this.localDate)
-            if (date instanceof Date) {
-                this.model = date
-            }
-        }
-    }
-    */
+import FormInputFeedbackMessage from './FormInputFeedbackMessage.vue'
+
+export interface ComponentProps {
+    label?: string
+    size?: Size
+    validationMessages?: Record<string, any>
+    validation?: Validation
+    disabled?: boolean
+    modelValue: string | Date | undefined
+    hint?: string
+    placeholder?: string
+    id?: string
+    readOnly?: boolean
+    showAsRequired?: boolean
+    locale?: string
+    minDate?: Date
+    maxDate?: Date
+    enableTime?: boolean
+    ignoreTimeValidation?: boolean
+    dateFormat?: CallableFunction
 }
+
+const props = withDefaults(
+    defineProps<ComponentProps>(),
+    {
+        disabled: false,
+        renderAsGroup: false,
+        readOnly: false,
+        ignoreTimeValidation: true,
+        enableTime: false,
+        locale: 'cs-CZ'
+    }
+)
+
+const $emit = defineEmits(['update:modelValue', 'change', 'update', 'blur'])
+
+type modelType = string | Date | undefined
+const model = computed({
+    get (): modelType {
+        const modelValue = unref(props.modelValue)
+        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+        if (!modelValue) {
+            return undefined
+        }
+        if (modelValue instanceof Date) {
+            return modelValue
+        }
+        const dateValue = new Date(modelValue)
+        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+        if (dateValue && !isNaN(dateValue.valueOf())) {
+            return dateValue
+        }
+        return undefined
+    },
+    set (value: modelType): void {
+        let dateValue = unref(value)
+        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+        if (!(dateValue instanceof Date) && dateValue) {
+            dateValue = new Date(value)
+        }
+        if (dateValue instanceof Date && !unref(props.enableTime)) {
+            dateValue = new Date(`${dateValue.toISOString().split('T')[0]}T00:00:00.000Z`)
+        }
+        $emit('update:modelValue', dateValue)
+        const validation = unref(props.validation)
+        if (typeof validation?.$touch === 'function') {
+            validation.$touch()
+        }
+    }
+})
+
+// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+const dateFormatter = computed(() => {
+    const dateFormatFn = unref(props.dateFormat)
+    return (typeof dateFormatFn === 'function') ? dateFormatFn : unref((unref(props.enableTime) ? dateTimeFormat : dateFormat))
+})
+
+const displayValue = computed(() => {
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+    if (unref(model)) {
+        return unref(dateFormatter)(unref(model))
+    }
+    return null
+})
+
+const {
+    isRequired,
+    invalid
+} = useInput(props)
 </script>

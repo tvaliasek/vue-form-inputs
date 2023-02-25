@@ -3,18 +3,18 @@
         <h1>Usage example</h1>
         <hr/>
 
-        <input-tester
+        <InputTester
             :title="'Basic text input'"
             :input-value="textInput"
         >
-            <form-input
+            <FormInput
                 label="Text input"
                 v-model.trim="textInput"
                 :validation="v$.textInput"
             />
-        </input-tester>
+        </InputTester>
 
-        <input-tester
+        <InputTester
             :title="'Basic textarea input'"
             :input-value="textareaInput"
         >
@@ -23,9 +23,9 @@
                 v-model.trim="textareaInput"
                 :validation="v$.textareaInput"
             />
-        </input-tester>
+        </InputTester>
 
-        <input-tester
+        <InputTester
             :title="'Select input'"
             :input-value="selectInput"
         >
@@ -35,9 +35,9 @@
                 :validation="v$.selectInput"
                 :options="options"
             />
-        </input-tester>
+        </InputTester>
 
-        <input-tester
+        <InputTester
             :title="'Checkbox input'"
             :input-value="checkboxInput"
         >
@@ -46,9 +46,9 @@
             >
                 Checkbox
             </form-input-checkbox>
-        </input-tester>
+        </InputTester>
 
-        <input-tester
+        <InputTester
             :title="'Checkbox group'"
             :input-value="checkboxGroup"
         >
@@ -58,9 +58,9 @@
                 :validation="v$.checkboxGroup"
                 :options="options"
             />
-        </input-tester>
+        </InputTester>
 
-        <input-tester
+        <InputTester
             :title="'Radio group'"
             :input-value="radioGroup"
         >
@@ -70,9 +70,9 @@
                 :validation="v$.radioGroup"
                 :options="options"
             />
-        </input-tester>
+        </InputTester>
 
-        <input-tester
+        <InputTester
             :title="'Date picker input'"
             :input-value="dateInput"
         >
@@ -81,67 +81,54 @@
                 v-model.trim="dateInput"
                 :validation="v$.dateInput"
             />
-        </input-tester>
+        </InputTester>
     </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { useVuelidate } from '@vuelidate/core'
 import { required, minLength } from '@vuelidate/validators'
+import { ref, computed } from 'vue'
 import InputTester from './components/InputTester.vue'
 
-export default {
-    name: 'App',
-    components: {
-        InputTester
-    },
-    setup () {
-        return {
-            v$: useVuelidate()
-        }
-    },
-    data () {
-        return {
-            textInput: null,
-            textareaInput: null,
-            selectInput: null,
-            checkboxInput: null,
-            checkboxGroup: [],
-            radioGroup: null,
-            dateInput: null
-        }
-    },
-    computed: {
-        options () {
-            return [
-                {
-                    value: 1,
-                    text: 'First'
-                },
-                {
-                    value: 2,
-                    text: 'Second'
-                },
-                {
-                    value: 3,
-                    text: 'Third'
-                }
-            ]
-        }
-    },
-    methods: {
+const textInput = ref(null)
+const textareaInput = ref(null)
+const selectInput = ref(null)
+const checkboxInput = ref(null)
+const checkboxGroup = ref([])
+const radioGroup = ref(null)
+const dateInput = ref(null)
 
+const options = computed(() => [
+    {
+        value: 1,
+        text: 'First'
     },
-    validations () {
-        return {
-            textInput: { required, minLength: minLength(8) },
-            textareaInput: { required },
-            selectInput: { required },
-            checkboxInput: { required },
-            checkboxGroup: { required },
-            radioGroup: { required },
-            dateInput: { required }
-        }
+    {
+        value: 2,
+        text: 'Second'
+    },
+    {
+        value: 3,
+        text: 'Third'
     }
-}
+])
+
+const v$ = useVuelidate({
+    textInput: { required, minLength: minLength(8) },
+    textareaInput: { required },
+    selectInput: { required },
+    checkboxInput: { required },
+    checkboxGroup: { required },
+    radioGroup: { required },
+    dateInput: { required }
+}, {
+    textInput,
+    textareaInput,
+    selectInput,
+    checkboxInput,
+    checkboxGroup,
+    radioGroup,
+    dateInput
+})
 </script>

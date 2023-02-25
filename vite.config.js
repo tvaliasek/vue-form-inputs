@@ -1,8 +1,7 @@
 /* eslint-disable import/no-unresolved */
 import { fileURLToPath, URL } from 'node:url'
 import Components from 'unplugin-vue-components/vite'
-// import { BootstrapVueNextResolver } from 'unplugin-vue-components/resolvers'
-import { BootstrapVueNextResolver } from './bsVueNextResolver'
+import { BootstrapVueNextResolver } from 'unplugin-vue-components/resolvers'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve } from 'node:path'
@@ -14,7 +13,10 @@ export default defineConfig({
     plugins: [
         vue(),
         Components({
-            resolvers: [BootstrapVueNextResolver(), IconsResolve()],
+            resolvers: [
+                BootstrapVueNextResolver(),
+                IconsResolve()
+            ],
             dts: true
         }),
         Icons({
@@ -29,7 +31,7 @@ export default defineConfig({
     },
     build: {
         lib: {
-            entry: resolve(__dirname, 'src/lib-main.js'),
+            entry: resolve(__dirname, 'src/lib-main.ts'),
             name: 'VueFormInputs',
             fileName: 'vue-form-inputs'
         },

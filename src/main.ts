@@ -5,7 +5,7 @@ import App from './App.vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'
 
-import { FormInputsPlugin } from './lib-main.js'
+import { FormInputsPlugin } from './lib-main'
 
 const app = createApp(App)
 const i18n = createI18n({
@@ -39,7 +39,7 @@ const i18n = createI18n({
         en: {
             vueFormInputs: {
                 feedback: {
-                    required: 'This field must be completed.',
+                    required: 'This field must be filled.',
                     minLength: 'The value must be at least {minLength} characters long.',
                     maxLength: 'The value must be at most {maxLength} characters long.',
                     minValue: 'The value must be at least {minValue}.',
