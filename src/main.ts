@@ -5,7 +5,7 @@ import App from './App.vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'
 
-import { FormInputsPlugin } from './lib-main'
+import { FormInputsPlugin } from '.'
 
 const app = createApp(App)
 const i18n = createI18n({

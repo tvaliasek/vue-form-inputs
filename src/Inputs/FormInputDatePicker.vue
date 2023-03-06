@@ -30,13 +30,13 @@
                     :size="size"
                     :state="(invalid !== null) ? !invalid : null"
                     :disabled="disabled"
-                    :model-value="displayValue"
+                    :model-value="displayValue ?? ''"
                     :readonly="true"
                 />
             </template>
         </DatePicker>
         <BFormInvalidFeedback
-            v-if="invalid"
+            v-if="invalid && validation"
         >
             <FormInputFeedbackMessage
                 :validation-model="validation"
@@ -54,7 +54,7 @@ import '@vuepic/vue-datepicker/dist/main.css'
 import type { Validation } from '@vuelidate/core'
 import type { Size } from 'bootstrap-vue-next'
 import { computed, unref } from 'vue'
-import { useInput } from './Composables/useInput.ts'
+import { useInput } from './Composables/useInput'
 
 import FormInputFeedbackMessage from './FormInputFeedbackMessage.vue'
 
@@ -75,7 +75,7 @@ export interface ComponentProps {
     maxDate?: Date
     enableTime?: boolean
     ignoreTimeValidation?: boolean
-    dateFormat?: CallableFunction
+    dateFormat?: string | ((params: Date | Date[]) => string)
 }
 
 const props = withDefaults(
@@ -92,9 +92,8 @@ const props = withDefaults(
 
 const $emit = defineEmits(['update:modelValue', 'change', 'update', 'blur'])
 
-type modelType = string | Date | undefined
 const model = computed({
-    get (): modelType {
+    get (): string | Date | undefined {
         const modelValue = unref(props.modelValue)
         // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
         if (!modelValue) {
@@ -110,11 +109,11 @@ const model = computed({
         }
         return undefined
     },
-    set (value: modelType): void {
+    set (value: string | Date | undefined): void {
         let dateValue = unref(value)
         // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-        if (!(dateValue instanceof Date) && dateValue) {
-            dateValue = new Date(value)
+        if (!(dateValue instanceof Date) && (typeof dateValue === 'string' || typeof dateValue === 'number')) {
+            dateValue = new Date(dateValue)
         }
         if (dateValue instanceof Date && !unref(props.enableTime)) {
             dateValue = new Date(`${dateValue.toISOString().split('T')[0]}T00:00:00.000Z`)
@@ -135,14 +134,15 @@ const dateFormatter = computed(() => {
 
 const displayValue = computed(() => {
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-    if (unref(model)) {
-        return unref(dateFormatter)(unref(model))
+    const value = unref(model)
+    if (value instanceof Date) {
+        return unref(dateFormatter)(value)
     }
-    return null
+    return value
 })
 
 const {
     isRequired,
     invalid
-} = useInput(props)
+} = useInput(props, $emit)
 </script>

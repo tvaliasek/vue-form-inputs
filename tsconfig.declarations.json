@@ -1,0 +1,20 @@
+{
+  "extends": "./tsconfig.app.json",
+  "include": [
+    "./src/index.ts",
+    "./types.d.ts"
+  ],
+  "exclude": [
+    "src/**/*.spec.ts",
+    "src/**/*.stories.ts",
+    "src/components/**/*",
+    "src/main.ts",
+    "src/App.vue"
+  ],
+  "compilerOptions": {
+    "declaration": true,
+    "composite": false,
+    "lib": [],
+    "types": ["node", "jsdom"]
+  }
+}

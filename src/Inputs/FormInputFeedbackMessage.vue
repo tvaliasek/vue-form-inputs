@@ -3,17 +3,19 @@
 </template>
 
 <script lang="ts">
+import type { Validation } from '@vuelidate/core'
+import type { PropType } from 'vue'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
     name: 'FormInputFeedbackMessage',
     props: {
         messages: {
-            type: Object,
+            type: Object as PropType<Record<string, any> | undefined>,
             required: false
         },
         validationModel: {
-            type: Object,
+            type: Object as PropType<Validation>,
             required: true
         }
     },
@@ -30,7 +32,7 @@ export default defineComponent({
                 ].concat((this.messages) ? Object.keys(this.messages) : []))
             ]
         },
-        message () {
+        message (): string {
             const rules = Object.keys(this.validationModel).filter(item => !`${item}`.startsWith('$'))
             for (const ruleName of rules) {
                 // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
@@ -48,9 +50,12 @@ export default defineComponent({
         }
     },
     methods: {
-        getDefaultMessage (ruleType: string, params?: Record<string, any>) {
+        getDefaultMessage (ruleType?: string, params?: Record<string, any>) {
             let parameter
-            if (this.$i18n !== undefined && this.$t !== undefined) {
+            if (params === undefined) {
+                params = {}
+            }
+            if (this.$t !== undefined && typeof this.$t === 'function') {
                 switch (ruleType) {
                     case 'required':
                     case 'requiredIf':

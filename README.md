@@ -1,6 +1,6 @@
 # Customized bootstrap vue form inputs for BS 5 and Vue 3
 
-Wrapper components over most commonly used bootstrap vue form input components, with support for vuelidate, vue i18n and vue 3 datepicker. Input plugin automatically register required components from bootstrap-vue-next.2
+Wrapper components over most commonly used bootstrap vue form input components, with support for vuelidate, vue i18n and vue 3 datepicker. Input plugin can automatically register required components from bootstrap-vue-next.
 
 Main goal is to simplify common bootstrap form design in my own projects.
 
@@ -11,6 +11,8 @@ npm install @tvaliasek/vue-form-inputs
 # peer dependencies
 npm install bootstrap
 npm install bootstrap-vue-next
+# for datepicker
+npm install @vuepic/vue-datepicker
 ```
 
 ``` js
@@ -24,9 +26,9 @@ import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'
 
 const app = createApp(App)
 
-app.use(FormInputsPlugin)
+app.use(FormInputsPlugin({ includeBootstrapNextComponents: true }))
 
-// or import individual components, beware, using this method, no additional components from bs vue is registered
+// or import individual components
 
 /*
     FormInput

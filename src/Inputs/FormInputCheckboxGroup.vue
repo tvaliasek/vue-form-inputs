@@ -20,7 +20,7 @@
             @blur="onEvent('blur')"
         />
         <BFormInvalidFeedback
-            v-if="invalid"
+            v-if="invalid && validation"
         >
             <FormInputFeedbackMessage
                 :validation-model="validation"
@@ -34,7 +34,7 @@
 import type { Validation } from '@vuelidate/core'
 import type { InputType, Size } from 'bootstrap-vue-next'
 import { computed, unref } from 'vue'
-import { useInput } from './Composables/useInput.ts'
+import { useInput } from './Composables/useInput'
 
 import FormInputFeedbackMessage from './FormInputFeedbackMessage.vue'
 
@@ -88,5 +88,5 @@ const {
     isRequired,
     invalid,
     onEvent
-} = useInput(props)
+} = useInput(props, $emit)
 </script>

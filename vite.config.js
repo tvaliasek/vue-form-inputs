@@ -31,7 +31,7 @@ export default defineConfig({
     },
     build: {
         lib: {
-            entry: resolve(__dirname, 'src/lib-main.ts'),
+            entry: resolve(__dirname, 'src/index.ts'),
             name: 'VueFormInputs',
             fileName: 'vue-form-inputs'
         },
@@ -39,9 +39,10 @@ export default defineConfig({
             external: [
                 'vue',
                 'bootstrap',
-                'bootstrap-vue-next',
+                { 'bootstrap-vue-next': 'bootstrap-vue-next' },
                 'vue',
-                'vuelidate'
+                'vuelidate',
+                { '@vuepic/vue-datepicker': '@vuepic/vue-datepicker' }
             ],
             output: {
                 globals: {

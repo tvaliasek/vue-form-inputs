@@ -1,21 +1,18 @@
 export const prefixWithZero = (part: number): string => `${(part < 10) ? '0' : ''}${part}`
 
-export const dateFormat = (input: Date | unknown): string | null => {
+export const dateFormat = (input: string | Date): string => {
     if (input instanceof Date) {
         return `${input.getDate()}.${input.getMonth() + 1}. ${input.getFullYear()}`
     }
-    return null
+    return input
 }
 
-export const dateTimeFormat = (input: Date | unknown): string | null => {
+export const dateTimeFormat = (input: string | Date): string => {
     if (input instanceof Date) {
         const datePart = dateFormat(input)
-        if (datePart === null) {
-            return null
-        }
         return `${datePart} - ${input.getHours()}:${prefixWithZero(input.getMinutes())}`
     }
-    return null
+    return input
 }
 
 export const textToDate = (input: string | Date): Date | null => {

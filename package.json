@@ -1,10 +1,28 @@
 {
   "name": "@tvaliasek/vue-form-inputs",
-  "version": "3.0.1",
+  "version": "3.1.0",
   "private": false,
   "files": [
-    "dist"
+    "src",
+    "dist",
+    "!src/stories",
+    "!src/components/__tests__",
+    "!src/main.ts",
+    "!src/App.vue",
+    "!dist/index.html",
+    "!dist/favicon.ico"    
   ],
+  "exports": {
+    ".": {
+      "import": "./dist/vue-form-inputs.mjs",
+      "require": "./dist/vue-form-inputs.umd.js"
+    },
+    "./dist/vue-form-inputs.css": {
+      "import": "./dist/vue-form-inputs.css",
+      "require": "./dist/vue-form-inputs.css"
+    }
+  },
+  "types": "./dist/types/index.d.ts",
   "main": "dist/vue-form-inputs.umd.js",
   "module": "dist/vue-form-inputs.mjs",
   "homepage": "https://github.com/tvaliasek/vue-form-inputs#readme",
@@ -24,22 +42,28 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && npm run declarations:generate && npm run declarations:move",
     "preview": "vite preview",
     "test:unit": "vitest --environment jsdom --root src/",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts --fix --ignore-path .gitignore",
     "storybook": "cross-env NODE_OPTIONS=--openssl_legacy_provider start-storybook -p 6006",
-    "build-storybook": "cross-env NODE_OPTIONS=--openssl_legacy_provider build-storybook"
+    "build-storybook": "cross-env NODE_OPTIONS=--openssl_legacy_provider build-storybook",
+    "declarations:generate": "vue-tsc --emitDeclarationOnly -p tsconfig.declarations.json",
+    "declarations:move": "node ./.bin/moveDeclarations.js"
   },
   "dependencies": {
+    "vue": "^3.2.45"
+  },
+  "peerDependencies": {
+    "@vuepic/vue-datepicker": "^4.2.0",
+    "bootstrap-vue-next": "^0.7.4"
+  },
+  "devDependencies": {
     "@popperjs/core": "^2.11.6",
-    "@vuepic/vue-datepicker": "^4.0.1",
     "bootstrap": "^5.2.3",
     "bootstrap-vue-next": "^0.7.3",
     "unplugin-vue-components": "^0.24.0",
-    "vue": "^3.2.45"
-  },
-  "devDependencies": {
+    "@vuepic/vue-datepicker": "^4.2.0",
     "@babel/core": "^7.20.12",
     "@iconify-json/bi": "^1.1.14",
     "@rushstack/eslint-patch": "^1.2.0",
