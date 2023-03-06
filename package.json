@@ -1,6 +1,6 @@
 {
   "name": "@tvaliasek/vue-form-inputs",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "private": false,
   "files": [
     "src",
@@ -56,7 +56,7 @@
   },
   "peerDependencies": {
     "@vuepic/vue-datepicker": "^4.2.0",
-    "bootstrap-vue-next": "^0.7.4"
+    "bootstrap-vue-next": "^0.7.3"
   },
   "devDependencies": {
     "@popperjs/core": "^2.11.6",
