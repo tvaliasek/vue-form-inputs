@@ -38,6 +38,7 @@ app.use(FormInputsPlugin({ includeBootstrapNextComponents: true }))
     FormInputRadioGroup
     FormInputCheckbox
     FormInputCheckboxGroup
+    FormInputFile
 */
 ```
 
@@ -134,6 +135,13 @@ Datepicker is wrapped [@vuepic/vue-datepicker](https://vue3datepicker.com/)
 | ignoreTimeValidation | boolean | false | true | validate only date part |
 | dateFormat | function | false | undefined | custom date formatter function |
 | placeholder | string | false | undefined | input placeholder html attribute |
+
+#### File
+
+| prop | type | required | default | description |
+|------|------|----------|---------|-------------|
+| multiple | boolean | false | false | set to true to enable multiple file selection |
+| accept | string | string[] | false | [] | define list of extensions or mime type patterns allowed for selection, model value is automatically filtered using these patterns |
 
 ## i18n
 

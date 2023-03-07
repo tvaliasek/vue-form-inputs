@@ -63,7 +63,7 @@ const i18n = createI18n({
     }
 })
 
-app.use(FormInputsPlugin)
+app.use(FormInputsPlugin())
 app.use(i18n)
 
 app.mount('#app')

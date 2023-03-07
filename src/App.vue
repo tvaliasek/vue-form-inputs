@@ -82,6 +82,27 @@
                 :validation="v$.dateInput"
             />
         </InputTester>
+
+        <InputTester
+            :title="'File input'"
+            :input-value="computedFileInputValue"
+        >
+            <form-input-file
+                label="File input"
+                v-model="fileInput"
+                :validation="v$.fileInput"
+                :accept="['image/*', '.pdf', '.pDF']"
+                :multiple="true"
+            />
+            <p>
+                <b-button
+                    variant="primary"
+                    @click="fileInput = undefined"
+                >
+                    Clear
+                </b-button>
+            </p>
+        </InputTester>
     </div>
 </template>
 
@@ -98,6 +119,7 @@ const checkboxInput = ref(null)
 const checkboxGroup = ref([])
 const radioGroup = ref(null)
 const dateInput = ref(null)
+const fileInput = ref<File | File[] | undefined | null>(null)
 
 const options = computed(() => [
     {
@@ -114,6 +136,24 @@ const options = computed(() => [
     }
 ])
 
+const computedFileInputValue = computed(() => {
+    const fileToObject = (file: File): Record<string, any> => {
+        return {
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            lastModified: file.lastModified
+        }
+    }
+    if (fileInput.value instanceof File) {
+        return fileToObject(fileInput.value)
+    }
+    if (Array.isArray(fileInput.value)) {
+        return fileInput.value.map(file => fileToObject(file))
+    }
+    return null
+})
+
 const v$ = useVuelidate({
     textInput: { required, minLength: minLength(8) },
     textareaInput: { required },
@@ -121,7 +161,8 @@ const v$ = useVuelidate({
     checkboxInput: { required },
     checkboxGroup: { required },
     radioGroup: { required },
-    dateInput: { required }
+    dateInput: { required },
+    fileInput: { required }
 }, {
     textInput,
     textareaInput,
@@ -129,6 +170,7 @@ const v$ = useVuelidate({
     checkboxInput,
     checkboxGroup,
     radioGroup,
-    dateInput
+    dateInput,
+    fileInput
 })
 </script>

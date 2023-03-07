@@ -28,6 +28,7 @@ import radioGroupInput from './Inputs/FormInputRadioGroup.vue'
 import selectInput from './Inputs/FormInputSelect.vue'
 import textareaInput from './Inputs/FormInputTextarea.vue'
 import datePickerInput from './Inputs/FormInputDatePicker.vue'
+import fileInput from './Inputs/FormInputFile.vue'
 
 export const FormInput = input
 export const FormInputCheckbox = checkboxInput
@@ -36,6 +37,7 @@ export const FormInputRadioGroup = radioGroupInput
 export const FormInputSelect = selectInput
 export const FormInputTextarea = textareaInput
 export const FormInputDatePicker = datePickerInput
+export const FormInputFile = fileInput
 
 export const FormInputsPlugin = (options: { includeBootstrapNextComponents: boolean } = { includeBootstrapNextComponents: true }): Plugin => {
     return {
@@ -70,6 +72,7 @@ export const FormInputsPlugin = (options: { includeBootstrapNextComponents: bool
             app.component('FormInputRadioGroup', FormInputRadioGroup)
             app.component('FormInputSelect', FormInputSelect)
             app.component('FormInputDatePicker', FormInputDatePicker)
+            app.component('FormInputFile', FormInputFile)
         }
     }
 }
