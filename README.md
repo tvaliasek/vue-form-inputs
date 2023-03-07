@@ -141,7 +141,7 @@ Datepicker is wrapped [@vuepic/vue-datepicker](https://vue3datepicker.com/)
 | prop | type | required | default | description |
 |------|------|----------|---------|-------------|
 | multiple | boolean | false | false | set to true to enable multiple file selection |
-| accept | string | string[] | false | [] | define list of extensions or mime type patterns allowed for selection, model value is automatically filtered using these patterns |
+| accept | string or string[] | false | [] | define list of extensions or mime type patterns allowed for selection, model value is automatically filtered using these patterns |
 
 ## i18n
 
