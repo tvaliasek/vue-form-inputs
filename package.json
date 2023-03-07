@@ -1,6 +1,6 @@
 {
   "name": "@tvaliasek/vue-form-inputs",
-  "version": "3.1.1",
+  "version": "3.2.0",
   "private": false,
   "files": [
     "src",
@@ -10,7 +10,7 @@
     "!src/main.ts",
     "!src/App.vue",
     "!dist/index.html",
-    "!dist/favicon.ico"    
+    "!dist/favicon.ico"
   ],
   "exports": {
     ".": {
