@@ -69,11 +69,7 @@ const $emit = defineEmits(['update:modelValue', 'change', 'update', 'blur'])
 type modelType = string | number | undefined
 const model = computed({
     get (): modelType {
-        const modelValue = unref(props.modelValue)
-        if (Array.isArray(modelValue)) {
-            return modelValue
-        }
-        return undefined
+        return props.modelValue
     },
     set (value: modelType): void {
         $emit('update:modelValue', value)
