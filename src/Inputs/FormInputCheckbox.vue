@@ -10,9 +10,9 @@
             :state="(invalid !== null) ? !invalid : null"
             :switch="renderAsSwitch === true ? true : undefined"
             :disabled="disabled || readOnly"
-            @change="onEvent('change')"
-            @update="onEvent('update')"
-            @blur="onEvent('blur')"
+            @change="onChange"
+            @update="onUpdate"
+            @blur="onBlur"
         >
             <slot>
                 {{label}}
@@ -82,6 +82,8 @@ const model = computed({
 const {
     isRequired,
     invalid,
-    onEvent
+    onUpdate,
+    onBlur,
+    onChange
 } = useInput(props, $emit)
 </script>

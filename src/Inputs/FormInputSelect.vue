@@ -19,9 +19,9 @@
                 :disabled="disabled || readOnly"
                 :placeholder="placeholder"
                 :options="options"
-                @change="onEvent('change')"
-                @update="onEvent('update')"
-                @blur="onEvent('blur')"
+                @change="onChange"
+                @update="onUpdate"
+                @blur="onBlur"
                 :multiple="multi"
                 :select-size="(multi === true) ? selectSize : undefined"
             />
@@ -38,9 +38,9 @@
             :disabled="disabled || readOnly"
             :placeholder="placeholder"
             :options="options"
-            @change="onEvent('change')"
-            @update="onEvent('update')"
-            @blur="onEvent('blur')"
+            @change="onChange"
+            @update="onUpdate"
+            @blur="onBlur"
             :multiple="multi"
             :select-size="(multi === true) ? selectSize : undefined"
         />
@@ -114,6 +114,8 @@ const model = computed({
 const {
     isRequired,
     invalid,
-    onEvent
+    onChange,
+    onUpdate,
+    onBlur
 } = useInput(props, $emit)
 </script>

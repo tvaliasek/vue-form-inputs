@@ -17,9 +17,9 @@
             :formatter="formatValue"
             :placeholder="placeholder"
             lazy-formatter
-            @change="onEvent('change')"
-            @update="onEvent('update')"
-            @blur="onEvent('blur')"
+            @change="onChange"
+            @update="onUpdate"
+            @blur="onBlur"
             :readonly="readOnly"
         />
         <BFormInvalidFeedback
@@ -90,7 +90,9 @@ const model = computed({
 const {
     isRequired,
     invalid,
-    onEvent,
+    onChange,
+    onUpdate,
+    onBlur,
     formatValue
 } = useInput(props, $emit)
 </script>

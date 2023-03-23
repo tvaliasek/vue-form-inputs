@@ -15,9 +15,9 @@
             :disabled="disabled || readOnly"
             :options="options"
             :stacked="stacked"
-            @change="onEvent('change')"
-            @update="onEvent('update')"
-            @blur="onEvent('blur')"
+            @change="onChange"
+            @update="onUpdate"
+            @blur="onBlur"
         />
         <BFormInvalidFeedback
             v-if="invalid && validation"
@@ -83,6 +83,8 @@ const model = computed({
 const {
     isRequired,
     invalid,
-    onEvent
+    onChange,
+    onUpdate,
+    onBlur
 } = useInput(props, $emit)
 </script>

@@ -27,11 +27,15 @@ export function useInput (props: Record<string, any>, $emit: (event: any, ...arg
         return null
     })
 
-    const onEvent = function (eventName: 'change' | 'update' | 'blur') {
+    const onEvent = (eventName: 'change' | 'update' | 'blur') => {
         return (eventData: unknown) => {
             $emit(eventName, eventData)
         }
     }
+
+    const onChange = onEvent('change')
+    const onUpdate = onEvent('update')
+    const onBlur = onEvent('blur')
 
     const formatValue = function (value: unknown): unknown {
         const formatter = unref(props.formatter)
@@ -44,6 +48,9 @@ export function useInput (props: Record<string, any>, $emit: (event: any, ...arg
     return {
         isRequired,
         invalid,
+        onChange,
+        onUpdate,
+        onBlur,
         onEvent,
         formatValue
     }

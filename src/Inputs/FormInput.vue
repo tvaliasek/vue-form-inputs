@@ -22,9 +22,9 @@
                 :placeholder="placeholder"
                 :readonly="readOnly"
                 lazy-formatter
-                @change="onEvent('change')"
-                @update="onEvent('update')"
-                @blur="onEvent('blur')"
+                @change="onChange"
+                @update="onUpdate"
+                @blur="onBlur"
             />
             <div class="input-group-append">
                 <slot></slot>
@@ -42,9 +42,9 @@
             :placeholder="placeholder"
             :readonly="readOnly"
             lazy-formatter
-            @change="onEvent('change')"
-            @update="onEvent('update')"
-            @blur="onEvent('blur')"
+            @change="onChange"
+            @update="onUpdate"
+            @blur="onBlur"
         />
         <BFormInvalidFeedback
             v-if="invalid && validation"
@@ -116,7 +116,9 @@ const model = computed({
 const {
     isRequired,
     invalid,
-    onEvent,
+    onUpdate,
+    onChange,
+    onBlur,
     formatValue
 } = useInput(props, $emit)
 </script>
