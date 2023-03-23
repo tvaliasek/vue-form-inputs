@@ -1,6 +1,9 @@
 <template>
     <div class="container py-5">
         <h1>Usage example</h1>
+        <p>
+            Vuelidate detected: {{ vuelidateDetected }}, Vue I18n detected: {{ vueI18nDetected }}
+        </p>
         <hr/>
         <div class="row">
             <div class="col-12 col-md-8">
@@ -146,7 +149,7 @@
 <script setup lang="ts">
 import { useVuelidate } from '@vuelidate/core'
 import { required, minLength } from '@vuelidate/validators'
-import { ref, computed } from 'vue'
+import { ref, computed, onBeforeMount } from 'vue'
 import InputTester from './components/InputTester.vue'
 
 const textInput = ref(null)
@@ -173,7 +176,12 @@ const options = computed(() => [
     }
 ])
 
+const vuelidateDetected = ref(false)
+const vueI18nDetected = ref(false)
 const events = ref<Array<Record<string, any>>>([])
+
+onBeforeMount(() => {
+})
 
 const onEvent = (inputName: string, eventName: string, ...args: any): void => {
     events.value.push({ inputName, eventName, args })

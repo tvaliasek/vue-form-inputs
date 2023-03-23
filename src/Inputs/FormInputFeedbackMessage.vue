@@ -5,7 +5,7 @@
 <script lang="ts">
 import type { Validation } from '@vuelidate/core'
 import type { PropType } from 'vue'
-import { defineComponent } from 'vue'
+import { defineComponent, getCurrentInstance } from 'vue'
 
 export default defineComponent({
     name: 'FormInputFeedbackMessage',
@@ -18,6 +18,11 @@ export default defineComponent({
             type: Object as PropType<Validation>,
             required: true
         }
+    },
+    setup () {
+        const instance = getCurrentInstance()
+        const translator = (): unknown => instance?.appContext.config.globalProperties?.$t ?? null
+        return { translator }
     },
     computed: {
         ruleNames () {
@@ -55,51 +60,52 @@ export default defineComponent({
             if (params === undefined) {
                 params = {}
             }
-            if (this.$t !== undefined && typeof this.$t === 'function') {
+            const $t = this.translator()
+            if (typeof $t === 'function') {
                 switch (ruleType) {
                     case 'required':
                     case 'requiredIf':
                     case 'requiredUnless':
-                        return this.$t('vueFormInputs.feedback.required')
+                        return $t('vueFormInputs.feedback.required')
                     case 'minLength':
-                        return this.$t('vueFormInputs.feedback.minLength', { minLength: params.min })
+                        return $t('vueFormInputs.feedback.minLength', { minLength: params.min })
                     case 'maxLength':
-                        return this.$t('vueFormInputs.feedback.maxLength', { maxLength: params.max })
+                        return $t('vueFormInputs.feedback.maxLength', { maxLength: params.max })
                     case 'minValue':
                         // eslint-disable-next-line no-case-declarations
                         parameter = (params.min instanceof Date) ? params.min.toLocaleDateString() : params.min
-                        return this.$t('vueFormInputs.feedback.minValue', { minValue: parameter })
+                        return $t('vueFormInputs.feedback.minValue', { minValue: parameter })
                     case 'maxValue':
                         // eslint-disable-next-line no-case-declarations
                         parameter = (params.max instanceof Date) ? params.max.toLocaleDateString() : params.max
-                        return this.$t('vueFormInputs.feedback.maxValue', { maxValue: parameter })
+                        return $t('vueFormInputs.feedback.maxValue', { maxValue: parameter })
                     case 'between':
-                        return this.$t('vueFormInputs.feedback.between', { betweenMin: params.min, betweenMax: params.max })
+                        return $t('vueFormInputs.feedback.between', { betweenMin: params.min, betweenMax: params.max })
                     case 'alpha':
-                        return this.$t('vueFormInputs.feedback.alpha')
+                        return $t('vueFormInputs.feedback.alpha')
                     case 'alphaNum':
-                        return this.$t('vueFormInputs.feedback.alphaNum')
+                        return $t('vueFormInputs.feedback.alphaNum')
                     case 'numeric':
-                        return this.$t('vueFormInputs.feedback.numeric')
+                        return $t('vueFormInputs.feedback.numeric')
                     case 'integer':
-                        return this.$t('vueFormInputs.feedback.integer')
+                        return $t('vueFormInputs.feedback.integer')
                     case 'decimal':
-                        return this.$t('vueFormInputs.feedback.decimal')
+                        return $t('vueFormInputs.feedback.decimal')
                     case 'email':
-                        return this.$t('vueFormInputs.feedback.email')
+                        return $t('vueFormInputs.feedback.email')
                     case 'ipAddress':
-                        return this.$t('vueFormInputs.feedback.ipAddress')
+                        return $t('vueFormInputs.feedback.ipAddress')
                     case 'macAddress':
-                        return this.$t('vueFormInputs.feedback.macAddress')
+                        return $t('vueFormInputs.feedback.macAddress')
                     case 'sameAs':
-                        return this.$t('vueFormInputs.feedback.sameAs')
+                        return $t('vueFormInputs.feedback.sameAs')
                     case 'url':
-                        return this.$t('vueFormInputs.feedback.url')
+                        return $t('vueFormInputs.feedback.url')
                     case 'validated_email':
                     case 'validatedEmail':
-                        return this.$t('vueFormInputs.feedback.validatedEmail')
+                        return $t('vueFormInputs.feedback.validatedEmail')
                     default:
-                        return this.$t('vueFormInputs.feedback.invalidValue')
+                        return $t('vueFormInputs.feedback.invalidValue')
                 }
             }
             switch (ruleType) {
