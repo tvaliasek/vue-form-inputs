@@ -63,7 +63,6 @@ export interface ComponentProps {
 const props = withDefaults(
     defineProps<ComponentProps>(),
     {
-        rows: 2,
         disabled: false,
         renderAsGroup: false,
         readOnly: false
