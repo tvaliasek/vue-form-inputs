@@ -21,6 +21,7 @@
             @update="onUpdate"
             @blur="onBlur"
             :readonly="readOnly"
+            :rows="rows"
         />
         <BFormInvalidFeedback
             v-if="invalid && validation"
@@ -44,6 +45,7 @@ import FormInputFeedbackMessage from './FormInputFeedbackMessage.vue'
 
 export interface ComponentProps {
     label?: string
+    rows?: number
     size?: Size
     validationMessages?: Record<string, any>
     validation?: Validation
