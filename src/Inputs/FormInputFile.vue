@@ -9,7 +9,7 @@
         </template>
         <div
             v-if="renderAsGroup"
-            :class="{ 'input-group': true, 'is-invalid': ((invalid !== null) ? !invalid : null), 'is-valid': ((invalid !== null) ? !!invalid : null) }"
+            :class="{ 'input-group': true, 'is-invalid': ((invalid !== null) ? !invalid : undefined), 'is-valid': ((invalid !== null) ? !!invalid : undefined) }"
         >
             <input
                 ref="fileInput"

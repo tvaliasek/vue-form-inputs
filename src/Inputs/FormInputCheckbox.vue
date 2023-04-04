@@ -7,7 +7,7 @@
             v-model="model"
             :id="id"
             :size="size"
-            :state="(invalid !== null) ? !invalid : null"
+            :state="(invalid !== null) ? !invalid : undefined"
             :switch="renderAsSwitch === true ? true : undefined"
             :disabled="disabled || readOnly"
             @change="onChange"

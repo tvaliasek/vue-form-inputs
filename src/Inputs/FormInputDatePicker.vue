@@ -28,7 +28,7 @@
                     :id="((id) ? `${id}_input` : undefined)"
                     :placeholder="placeholder"
                     :size="size"
-                    :state="(invalid !== null) ? !invalid : null"
+                    :state="(invalid !== null) ? !invalid : undefined"
                     :disabled="disabled"
                     :model-value="displayValue ?? ''"
                     :readonly="true"

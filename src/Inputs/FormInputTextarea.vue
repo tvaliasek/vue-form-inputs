@@ -12,7 +12,7 @@
             v-model.trim="model"
             :size="size"
             :id="id"
-            :state="(invalid !== null) ? !invalid : null"
+            :state="(invalid !== null) ? !invalid : undefined"
             :disabled="disabled"
             :formatter="formatValue"
             :placeholder="placeholder"

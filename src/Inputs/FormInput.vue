@@ -9,14 +9,14 @@
         </template>
         <div
             v-if="renderAsGroup"
-            :class="{ 'input-group': true, 'is-invalid': ((invalid !== null) ? !invalid : null), 'is-valid': ((invalid !== null) ? !!invalid : null) }"
+            :class="{ 'input-group': true, 'is-invalid': ((invalid !== null) ? !invalid : undefined), 'is-valid': ((invalid !== null) ? !!invalid : undefined) }"
         >
             <BFormInput
                 v-model.trim="model"
                 :id="id"
                 :size="size"
                 :type="type"
-                :state="(invalid !== null) ? !invalid : null"
+                :state="(invalid !== null) ? !invalid : undefined"
                 :disabled="disabled"
                 :formatter="formatValue"
                 :placeholder="placeholder"
@@ -36,7 +36,7 @@
             :id="id"
             :size="size"
             :type="type"
-            :state="(invalid !== null) ? !invalid : null"
+            :state="(invalid !== null) ? !invalid : undefined"
             :disabled="disabled"
             :formatter="formatValue"
             :placeholder="placeholder"

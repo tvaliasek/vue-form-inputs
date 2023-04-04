@@ -11,7 +11,7 @@
             v-model="model"
             :id="id"
             :size="size"
-            :state="(invalid !== null) ? !invalid : null"
+            :state="(invalid !== null) ? !invalid : undefined"
             :disabled="disabled || readOnly"
             :options="options"
             :stacked="stacked"
@@ -45,7 +45,7 @@ export interface ComponentProps {
     validationMessages?: Record<string, any>
     validation?: Validation
     disabled?: boolean
-    modelValue?: unknown[]
+    modelValue?: Array<string | number | boolean | unknown[] | Record<string, unknown> | Set<unknown>> | undefined
     hint?: string
     id?: string
     readOnly?: boolean
@@ -66,7 +66,7 @@ const props = withDefaults(
 
 const $emit = defineEmits(['update:modelValue', 'change', 'update', 'blur'])
 
-type modelType = unknown[] | undefined
+type modelType = Array<string | number | boolean | unknown[] | Record<string, unknown> | Set<unknown>> | undefined
 const model = computed({
     get (): modelType {
         const modelValue = unref(props.modelValue)

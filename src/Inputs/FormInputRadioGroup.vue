@@ -11,7 +11,7 @@
             v-model="model"
             :id="id"
             :size="size"
-            :state="(invalid !== null) ? !invalid : null"
+            :state="(invalid !== null) ? !invalid : undefined"
             :disabled="disabled || readOnly"
             :options="options"
             :stacked="stacked"
