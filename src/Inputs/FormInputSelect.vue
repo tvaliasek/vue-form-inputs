@@ -17,7 +17,7 @@
                 :id="id"
                 :state="(invalid !== null) ? !invalid : undefined"
                 :disabled="disabled || readOnly"
-                :options="finalOptions"
+                :options="computedOptions"
                 @change="onChange"
                 @update="onUpdate"
                 @blur="onBlur"
@@ -35,7 +35,7 @@
             :id="id"
             :state="(invalid !== null) ? !invalid : undefined"
             :disabled="disabled || readOnly"
-            :options="finalOptions"
+            :options="computedOptions"
             @change="onChange"
             @update="onUpdate"
             @blur="onBlur"
@@ -93,10 +93,9 @@ const props = withDefaults(
  * Computed property which adds  `placeholder` prop as first "empty" option.
  * But only if there is no option with empty string directly passed from user in `options` prop.
  */
-const finalOptions = computed(() => {
+const computedOptions = computed(() => {
     const options = unref(props.options)
     const placeholder = unref(props.placeholder)
-    console.log(placeholder)
 
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (placeholder && !options.some((option) => (option.value === ''))) {
@@ -128,8 +127,6 @@ const model = computed({
         }
     }
 })
-
-console.log(model.value)
 
 const {
     isRequired,

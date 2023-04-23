@@ -146,3 +146,9 @@ const {
     invalid
 } = useInput(props, $emit)
 </script>
+
+<style>
+    .dp__main .dp__clear_icon {
+        transform: translate(-50%,-50%);
+    }
+</style>

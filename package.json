@@ -52,11 +52,11 @@
     "declarations:move": "node ./.bin/moveDeclarations.js"
   },
   "dependencies": {
+    "bootstrap-vue-next": "^0.8.6",
     "vue": "^3.2.45"
   },
   "peerDependencies": {
     "@vuepic/vue-datepicker": "^4.2.0",
-    "bootstrap-vue-next": "^0.8.0",
     "bootstrap": "^5.2.3"
   },
   "devDependencies": {
@@ -85,7 +85,6 @@
     "@vuelidate/validators": "^2.0.0",
     "@vuepic/vue-datepicker": "^4.2.0",
     "bootstrap": "^5.2.3",
-    "bootstrap-vue-next": "^0.8.0",
     "cross-env": "^7.0.3",
     "eslint": "^8.31.0",
     "eslint-import-resolver-typescript": "^3.5.3",
