@@ -2,7 +2,7 @@
     <BFormGroup
         :description="hint"
         :label-for="id"
-        :class="{ 'form-group-required': isRequired }"
+        :class="{ 'form-group-required': isRequired, 'bs-form-group': true }"
     >
         <template #label>
             {{ label }}

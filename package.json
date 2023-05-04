@@ -52,7 +52,7 @@
     "declarations:move": "node ./.bin/moveDeclarations.js"
   },
   "dependencies": {
-    "bootstrap-vue-next": "^0.8.6",
+    "bootstrap-vue-next": "^0.8.8",
     "vue": "^3.2.45"
   },
   "peerDependencies": {

@@ -1,7 +1,7 @@
 <template>
     <BFormGroup
         :description="hint"
-        :class="{ 'form-group-required': isRequired }"
+        :class="{ 'form-group-required': isRequired, 'bs-form-group': true }"
         :label-for="id"
     >
         <template #label>
