@@ -1,7 +1,7 @@
 <template>
     <BFormGroup
         :description="hint"
-        :label-for="((id) ? `${id}_input` : undefined)"
+        :label-for="((id) ? `dp-input-${id}` : undefined)"
         :class="{ 'form-group-required': isRequired, 'bs-form-group': true }"
     >
         <template #label>
@@ -18,22 +18,15 @@
             :max-date="maxDate || undefined"
             :prevent-min-max-navigation="!!(minDate || maxDate)"
             :ignore-time-validation="ignoreTimeValidation"
-            :format="dateFormatter"
+            :format="dateFormat"
+            :placeholder="placeholder"
+            hideInputIcon
+            :showNowButton="showNowButton"
+            :readonly="readOnly"
+            :inputClassName="`form-control form-control-${size}`"
             :locale="locale"
-            :uid="(id) ? `dtpkr_${id}` : undefined"
+            :uid="id ?? undefined"
         >
-            <template #dp-input>
-                <BFormInput
-                    type="text"
-                    :id="((id) ? `${id}_input` : undefined)"
-                    :placeholder="placeholder"
-                    :size="size"
-                    :state="(invalid !== null) ? !invalid : undefined"
-                    :disabled="disabled"
-                    :model-value="displayValue ?? ''"
-                    :readonly="true"
-                />
-            </template>
         </DatePicker>
         <BFormInvalidFeedback
             v-if="invalid && validation"
@@ -48,7 +41,6 @@
 </template>
 
 <script setup lang="ts">
-import { dateFormat, dateTimeFormat } from './datePickerUtils'
 import DatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import type { Validation } from '@vuelidate/core'
@@ -70,12 +62,13 @@ export interface ComponentProps {
     id?: string
     readOnly?: boolean
     showAsRequired?: boolean
+    showNowButton?: boolean
     locale?: string
     minDate?: Date
     maxDate?: Date
     enableTime?: boolean
     ignoreTimeValidation?: boolean
-    dateFormat?: string | ((params: Date | Date[]) => string)
+    dateFormat?: string
 }
 
 const props = withDefaults(
@@ -126,29 +119,8 @@ const model = computed({
     }
 })
 
-// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-const dateFormatter = computed(() => {
-    const dateFormatFn = unref(props.dateFormat)
-    return (typeof dateFormatFn === 'function') ? dateFormatFn : unref((unref(props.enableTime) ? dateTimeFormat : dateFormat))
-})
-
-const displayValue = computed(() => {
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-    const value = unref(model)
-    if (value instanceof Date) {
-        return unref(dateFormatter)(value)
-    }
-    return value
-})
-
 const {
     isRequired,
     invalid
 } = useInput(props, $emit)
 </script>
-
-<style>
-    .dp__main .dp__clear_icon {
-        transform: translate(-50%,-50%);
-    }
-</style>
