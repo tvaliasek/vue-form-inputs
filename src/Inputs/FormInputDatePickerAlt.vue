@@ -3,7 +3,7 @@
         :description="hint"
         :label-for="((id) ? `dp-input-${id}` : undefined)"
         class="bs-form-group"
-        :class="{ 'form-group-required': isRequired }"
+        :class="{ 'form-group-required': isRequired, 'bs-form-group': true, 'is-datepicker-invalid': ((invalid !== null) ? invalid : false) }"
     >
         <template #label>
             {{ label }}
@@ -27,6 +27,7 @@
             :inputClassName="`form-control form-control-${size}`"
             :locale="locale"
             :uid="id ?? undefined"
+            :class="{ 'is-datepicker-invalid': ((invalid !== null) ? invalid : false) }"
         >
         </DatePicker>
         <BFormInvalidFeedback

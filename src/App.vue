@@ -15,6 +15,9 @@
                         label="Text input"
                         v-model.trim="textInput"
                         :validation="v$.textInput"
+                        :validation-messages="{
+                            custom: 'musí být napsán string custom',
+                        }"
                         @blur="(...args: any) => onEvent('textInput', 'blur', ...args)"
                         @change="(...args: any) => onEvent('textInput', 'change', ...args)"
                         @update="(...args: any) => onEvent('textInput', 'update', ...args)"
@@ -206,7 +209,13 @@ const computedFileInputValue = computed(() => {
 })
 
 const v$ = useVuelidate({
-    textInput: { required, minLength: minLength(8) },
+    textInput: {
+        required,
+        minLength: minLength(4),
+        custom: (value) => {
+            return value === 'custom'
+        }
+    },
     textareaInput: { required },
     selectInput: { required },
     checkboxInput: { required },

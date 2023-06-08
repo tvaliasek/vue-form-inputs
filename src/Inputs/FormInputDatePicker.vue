@@ -21,6 +21,7 @@
             :format="dateFormatter"
             :locale="locale"
             :uid="(id) ? `dtpkr_${id}` : undefined"
+            :class="{ 'is-datepicker-invalid': ((invalid !== null) ? invalid : false) }"
         >
             <template #dp-input>
                 <BFormInput
@@ -150,5 +151,8 @@ const {
 <style>
     .dp__main .dp__clear_icon {
         transform: translate(-50%,-50%);
+    }
+    .is-datepicker-invalid + .invalid-feedback {
+        display: block;
     }
 </style>
