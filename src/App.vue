@@ -105,6 +105,22 @@
                         label="Datepicker input"
                         v-model.trim="dateInput"
                         :validation="v$.dateInput"
+                        enable-time
+                        @blur="(...args: any) => onEvent('datePicker', 'blur', ...args)"
+                        @change="(...args: any) => onEvent('datePicker', 'change', ...args)"
+                        @update="(...args: any) => onEvent('datePicker', 'update', ...args)"
+                    />
+                </InputTester>
+
+                <InputTester
+                    :title="'Date picker input with enforced UTC'"
+                    :input-value="dateInputEnforcedUTC"
+                >
+                    <form-input-date-picker
+                        label="Datepicker input"
+                        v-model.trim="dateInputEnforcedUTC"
+                        enable-time
+                        enforce-utc
                         @blur="(...args: any) => onEvent('datePicker', 'blur', ...args)"
                         @change="(...args: any) => onEvent('datePicker', 'change', ...args)"
                         @update="(...args: any) => onEvent('datePicker', 'update', ...args)"
@@ -163,6 +179,7 @@ const checkboxGroup = ref([])
 const radioGroup = ref(null)
 const dateInput = ref(null)
 const fileInput = ref<File | File[] | undefined | null>(null)
+const dateInputEnforcedUTC = ref(null)
 
 const options = computed(() => [
     {
@@ -212,7 +229,7 @@ const v$ = useVuelidate({
     textInput: {
         required,
         minLength: minLength(4),
-        custom: (value) => {
+        custom: (value: string) => {
             return value === 'custom'
         }
     },

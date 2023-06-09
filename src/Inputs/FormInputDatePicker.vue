@@ -21,6 +21,7 @@
             :format="dateFormatter"
             :locale="locale"
             :uid="(id) ? `dtpkr_${id}` : undefined"
+            :utc="enforceUtc ? 'preserve' : false"
             :class="{ 'is-datepicker-invalid': ((invalid !== null) ? invalid : false) }"
         >
             <template #dp-input>
@@ -77,6 +78,7 @@ export interface ComponentProps {
     enableTime?: boolean
     ignoreTimeValidation?: boolean
     dateFormat?: string | ((params: Date | Date[]) => string)
+    enforceUtc?: boolean
 }
 
 const props = withDefaults(
@@ -87,7 +89,8 @@ const props = withDefaults(
         readOnly: false,
         ignoreTimeValidation: true,
         enableTime: false,
-        locale: 'cs-CZ'
+        locale: 'cs-CZ',
+        enforceUtc: false
     }
 )
 
@@ -137,7 +140,7 @@ const displayValue = computed(() => {
     // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     const value = unref(model)
     if (value instanceof Date) {
-        return unref(dateFormatter)(value)
+        return unref(dateFormatter)(value, unref(props.locale), unref(props.enforceUtc))
     }
     return value
 })
