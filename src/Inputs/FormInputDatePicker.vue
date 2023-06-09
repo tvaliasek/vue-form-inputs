@@ -18,7 +18,6 @@
             :max-date="maxDate || undefined"
             :prevent-min-max-navigation="!!(minDate || maxDate)"
             :ignore-time-validation="ignoreTimeValidation"
-            :format="dateFormatter"
             :locale="locale"
             :uid="(id) ? `dtpkr_${id}` : undefined"
             :utc="enforceUtc ? 'preserve' : false"
