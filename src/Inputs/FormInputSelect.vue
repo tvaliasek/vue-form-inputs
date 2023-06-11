@@ -11,6 +11,7 @@
             v-if="renderAsGroup"
             :class="{ 'input-group': true, 'is-invalid': ((invalid !== null) ? !invalid : undefined), 'is-valid': ((invalid !== null) ? !!invalid : undefined) }"
         >
+            <slot name="prepend"></slot>
             <BFormSelect
                 v-model="model"
                 :size="size"
@@ -24,9 +25,8 @@
                 :multiple="multi"
                 :select-size="(multi === true) ? selectSize : undefined"
             />
-            <div class="input-group-append">
-                <slot></slot>
-            </div>
+            <slot></slot>
+            <slot name="append"></slot>
         </div>
         <BFormSelect
             v-else

@@ -11,6 +11,7 @@
             v-if="renderAsGroup"
             :class="{ 'input-group': true, 'is-invalid': ((invalid !== null) ? !invalid : undefined), 'is-valid': ((invalid !== null) ? !!invalid : undefined) }"
         >
+            <slot name="prepend"></slot>
             <BFormInput
                 v-model.trim="model"
                 :id="id"
@@ -26,9 +27,8 @@
                 @update="onUpdate"
                 @blur="onBlur"
             />
-            <div class="input-group-append">
-                <slot></slot>
-            </div>
+            <slot></slot>
+            <slot name="append"></slot>
         </div>
         <BFormInput
             v-else

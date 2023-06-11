@@ -91,7 +91,7 @@ const validations = useVuelidate(computed(() => ({ example: { required } })), { 
 | type | string | false | 'text' | Input html attribute type |
 | placeholder | string | false | undefined | input placeholder html attribute |
 | formatter | function | false | undefined | function to apply on value as formatter | 
-| renderAsGroup | boolean | false | false | toggle for input group rendering |
+| renderAsGroup | boolean | false | false | toggle for input group rendering, use slots default / append and prepend |
 
 #### Textarea
 
@@ -108,6 +108,7 @@ const validations = useVuelidate(computed(() => ({ example: { required } })), { 
 | multi | boolean | false | false | toggle for multiselect rendering |
 | selectSize | number | false | undefined | set number of rows for multiselect |
 | placeholder | string | false | undefined | input placeholder html attribute |
+| renderAsGroup | boolean | false | false | toggle for input group rendering, use slots default / append and prepend |
 
 #### Radio group, Checkbox group
 
