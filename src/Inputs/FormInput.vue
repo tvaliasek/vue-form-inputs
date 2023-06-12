@@ -9,7 +9,7 @@
         </template>
         <div
             v-if="renderAsGroup"
-            :class="{ 'input-group': true, 'is-invalid': ((invalid !== null) ? !invalid : undefined), 'is-valid': ((invalid !== null) ? !!invalid : undefined) }"
+            :class="{ 'input-group': true, 'is-invalid': ((invalid !== null) ? !!invalid : undefined), 'is-valid': ((invalid !== null) ? !invalid : undefined) }"
         >
             <slot name="prepend"></slot>
             <BFormInput
