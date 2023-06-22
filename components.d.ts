@@ -9,10 +9,9 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    BButton: typeof import('bootstrap-vue-next')['BButton']
+    BFormGroup: typeof import('bootstrap-vue-next')['BFormGroup']
     BFormCheckbox: typeof import('bootstrap-vue-next')['BFormCheckbox']
     BFormCheckboxGroup: typeof import('bootstrap-vue-next')['BFormCheckboxGroup']
-    BFormGroup: typeof import('bootstrap-vue-next')['BFormGroup']
     BFormInput: typeof import('bootstrap-vue-next')['BFormInput']
     BFormInvalidFeedback: typeof import('bootstrap-vue-next')['BFormInvalidFeedback']
     BFormRadioGroup: typeof import('bootstrap-vue-next')['BFormRadioGroup']
