@@ -92,13 +92,15 @@ const validations = useVuelidate(computed(() => ({ example: { required } })), { 
 | placeholder | string | false | undefined | input placeholder html attribute |
 | formatter | function | false | undefined | function to apply on value as formatter | 
 | renderAsGroup | boolean | false | false | toggle for input group rendering, use slots default / append and prepend |
+| lazyFormatter | boolean | false | true | control behaviour of formatter function |
 
 #### Textarea
 
 | prop | type | required | default | description |
 |------|------|----------|---------|-------------|
 | placeholder | string | false | undefined | input placeholder html attribute |
-| formatter | function | false | undefined | function to apply on value as formatter | 
+| formatter | function | false | undefined | function to apply on value as formatter |
+| lazyFormatter | boolean | false | true | control behaviour of formatter function | 
 
 #### Select
 
