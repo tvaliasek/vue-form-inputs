@@ -22,7 +22,7 @@
                 :formatter="formatValue"
                 :placeholder="placeholder"
                 :readonly="readOnly"
-                lazy-formatter
+                :lazy-formatter="lazy-formatter ? true : undefined"
                 @change="onChange"
                 @update="onUpdate"
                 @blur="onBlur"
@@ -41,7 +41,7 @@
             :formatter="formatValue"
             :placeholder="placeholder"
             :readonly="readOnly"
-            lazy-formatter
+            :lazy-formatter="lazy-formatter ? true : undefined"
             @change="onChange"
             @update="onUpdate"
             @blur="onBlur"

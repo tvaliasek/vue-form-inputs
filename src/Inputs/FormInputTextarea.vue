@@ -16,7 +16,7 @@
             :disabled="disabled"
             :formatter="formatValue"
             :placeholder="placeholder"
-            lazy-formatter
+            :lazy-formatter="lazy-formatter ? true : undefined"
             @change="onChange"
             @update="onUpdate"
             @blur="onBlur"
