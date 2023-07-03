@@ -16,7 +16,7 @@
             :disabled="disabled"
             :formatter="formatValue"
             :placeholder="placeholder"
-            lazy-formatter
+            :lazy-formatter="(lazyFormatter === false ? undefined : true)"
             @change="onChange"
             @update="onUpdate"
             @blur="onBlur"
@@ -58,6 +58,7 @@ export interface ComponentProps {
     id?: string
     readOnly?: boolean
     showAsRequired?: boolean
+    lazyFormatter?: boolean
 }
 
 const props = withDefaults(
@@ -65,7 +66,8 @@ const props = withDefaults(
     {
         disabled: false,
         renderAsGroup: false,
-        readOnly: false
+        readOnly: false,
+        lazyFormatter: true
     }
 )
 

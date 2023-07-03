@@ -5,7 +5,7 @@
         :class="{ 'form-group-required': isRequired, 'bs-form-group': true }"
     >
         <template #label>
-            {{ label }}
+            {{ label }} {{ lazyFormatter }}
         </template>
         <div
             v-if="renderAsGroup"
@@ -22,7 +22,7 @@
                 :formatter="formatValue"
                 :placeholder="placeholder"
                 :readonly="readOnly"
-                lazy-formatter
+                :lazy-formatter="(lazyFormatter === false ? undefined : true)"
                 @change="onChange"
                 @update="onUpdate"
                 @blur="onBlur"
@@ -41,7 +41,7 @@
             :formatter="formatValue"
             :placeholder="placeholder"
             :readonly="readOnly"
-            lazy-formatter
+            :lazy-formatter="(lazyFormatter === false ? undefined : true)"
             @change="onChange"
             @update="onUpdate"
             @blur="onBlur"
@@ -81,6 +81,7 @@ export interface ComponentProps {
     id?: string
     readOnly?: boolean
     showAsRequired?: boolean
+    lazyFormatter?: boolean
 }
 
 const props = withDefaults(
@@ -89,7 +90,8 @@ const props = withDefaults(
         type: 'text',
         disabled: false,
         renderAsGroup: false,
-        readOnly: false
+        readOnly: false,
+        lazyFormatter: true
     }
 )
 
