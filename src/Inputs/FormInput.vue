@@ -5,7 +5,7 @@
         :class="{ 'form-group-required': isRequired, 'bs-form-group': true }"
     >
         <template #label>
-            {{ label }} {{ lazyFormatter }}
+            {{ label }}
         </template>
         <div
             v-if="renderAsGroup"
