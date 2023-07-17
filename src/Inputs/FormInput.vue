@@ -23,6 +23,7 @@
                 :placeholder="placeholder"
                 :readonly="readOnly"
                 :lazy-formatter="(lazyFormatter === false ? undefined : true)"
+                :autocomplete="autocomplete"
                 @change="onChange"
                 @update="onUpdate"
                 @blur="onBlur"
@@ -42,6 +43,7 @@
             :placeholder="placeholder"
             :readonly="readOnly"
             :lazy-formatter="(lazyFormatter === false ? undefined : true)"
+            :autocomplete="autocomplete"
             @change="onChange"
             @update="onUpdate"
             @blur="onBlur"
@@ -82,6 +84,7 @@ export interface ComponentProps {
     readOnly?: boolean
     showAsRequired?: boolean
     lazyFormatter?: boolean
+    autocomplete?: string
 }
 
 const props = withDefaults(
