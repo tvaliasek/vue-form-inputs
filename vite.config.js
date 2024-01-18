@@ -7,11 +7,16 @@ import vue from '@vitejs/plugin-vue'
 import { resolve } from 'node:path'
 import Icons from 'unplugin-icons/vite'
 import IconsResolve from 'unplugin-icons/resolver'
+import dts from 'vite-plugin-dts'
+import typescript2 from 'rollup-plugin-typescript2'
 
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [
         vue(),
+        dts({
+            insertTypesEntry: true
+        }),
         Components({
             resolvers: [
                 BootstrapVueNextResolver(),
@@ -22,6 +27,22 @@ export default defineConfig({
         Icons({
             compiler: 'vue3',
             autoInstall: true
+        }),
+        typescript2({
+            check: false,
+            include: [
+                'src/Inputs/**/*.vue',
+                'src/index.ts'
+            ],
+            tsconfigOverride: {
+                compilerOptions: {
+                    outDir: 'dist',
+                    sourceMap: true,
+                    declaration: true,
+                    declarationMap: true
+                }
+            },
+            exclude: ['vite.config.ts']
         })
     ],
     resolve: {
