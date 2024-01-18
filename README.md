@@ -138,6 +138,8 @@ Datepicker is wrapped [@vuepic/vue-datepicker](https://vue3datepicker.com/)
 | ignoreTimeValidation | boolean | false | true | validate only date part |
 | dateFormat | function | false | undefined | custom date formatter function |
 | placeholder | string | false | undefined | input placeholder html attribute |
+| enforceUtc | boolean | false | undefined | enforces UTC format |
+| defaultTime | { hours: string \| number, minutes: string \| number, seconds: string \| number  } | false | undefined | sets default time |
 
 #### File
 

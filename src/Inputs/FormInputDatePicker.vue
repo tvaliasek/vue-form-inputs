@@ -22,6 +22,7 @@
             :uid="(id) ? `dtpkr_${id}` : undefined"
             :utc="enforceUtc ? 'preserve' : false"
             :class="{ 'is-datepicker-invalid': ((invalid !== null) ? invalid : false) }"
+            :start-time="defaultTime"
         >
             <template #dp-input>
                 <BFormInput
@@ -49,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-import { dateFormat, dateTimeFormat } from './datePickerUtils'
+import { dateFormat as dateFormatFunction, dateTimeFormat } from './datePickerUtils'
 import DatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import type { Validation } from '@vuelidate/core'
@@ -78,6 +79,11 @@ export interface ComponentProps {
     ignoreTimeValidation?: boolean
     dateFormat?: string | ((params: Date | Date[]) => string)
     enforceUtc?: boolean
+    defaultTime?: {
+        hours?: number | string
+        minutes?: number | string
+        seconds?: number | string
+    }
 }
 
 const props = withDefaults(
@@ -132,7 +138,7 @@ const model = computed({
 // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
 const dateFormatter = computed(() => {
     const dateFormatFn = unref(props.dateFormat)
-    return (typeof dateFormatFn === 'function') ? dateFormatFn : unref((unref(props.enableTime) ? dateTimeFormat : dateFormat))
+    return (typeof dateFormatFn === 'function') ? dateFormatFn : unref((unref(props.enableTime) ? dateTimeFormat : dateFormatFunction))
 })
 
 const displayValue = computed(() => {

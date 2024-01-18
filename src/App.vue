@@ -128,6 +128,21 @@
                 </InputTester>
 
                 <InputTester
+                    :title="'Date picker with default time 12:00'"
+                    :input-value="dateInputDefaultTime"
+                >
+                    <form-input-date-picker
+                        label="Datepicker input"
+                        v-model="dateInputDefaultTime"
+                        enable-time
+                        :default-time="{ hours: 12, minutes: 0 }"
+                        @blur="(...args: any) => onEvent('datePicker', 'blur', ...args)"
+                        @change="(...args: any) => onEvent('datePicker', 'change', ...args)"
+                        @update="(...args: any) => onEvent('datePicker', 'update', ...args)"
+                    />
+                </InputTester>
+
+                <InputTester
                     :title="'File input'"
                     :input-value="computedFileInputValue"
                 >
@@ -180,6 +195,7 @@ const radioGroup = ref(null)
 const dateInput = ref(null)
 const fileInput = ref<File | File[] | undefined | null>(null)
 const dateInputEnforcedUTC = ref(null)
+const dateInputDefaultTime = ref(null)
 
 const options = computed(() => [
     {
