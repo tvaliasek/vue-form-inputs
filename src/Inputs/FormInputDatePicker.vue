@@ -1,11 +1,14 @@
 <template>
-    <BFormGroup
+    <VfiFormGroup
         :description="hint"
-        :label-for="((id) ? `${id}_input` : undefined)"
-        :class="{ 'form-group-required': isRequired, 'bs-form-group': true }"
+        :id="toValue(computedId)"
+        :class="{ 'form-group-required': isRequired }"
+        :label="label"
+        :disabled="disabled"
+        :state="invalid === null ? invalid : !invalid"
     >
         <template #label>
-            {{ label }}
+            <slot name="label"></slot>
         </template>
         <DatePicker
             v-model="model"
@@ -19,15 +22,15 @@
             :prevent-min-max-navigation="!!(minDate || maxDate)"
             :ignore-time-validation="ignoreTimeValidation"
             :locale="locale"
-            :uid="(id) ? `dtpkr_${id}` : undefined"
+            :uid="`dtpkr_${toValue(computedId)}`"
             :utc="enforceUtc ? 'preserve' : false"
             :class="{ 'is-datepicker-invalid': ((invalid !== null) ? invalid : false) }"
             :start-time="defaultTime"
         >
             <template #dp-input>
-                <BFormInput
+                <VfiFormInput
                     type="text"
-                    :id="((id) ? `${id}_input` : undefined)"
+                    :id="`${toValue(computedId)}_input`"
                     :placeholder="placeholder"
                     :size="size"
                     :state="(invalid !== null) ? !invalid : undefined"
@@ -37,16 +40,16 @@
                 />
             </template>
         </DatePicker>
-        <BFormInvalidFeedback
+        <template #invalid-feedback
             v-if="invalid && validation"
         >
             <FormInputFeedbackMessage
                 :validation-model="validation"
                 :messages="validationMessages"
             />
-        </BFormInvalidFeedback>
+        </template>
         <slot name="input-text"></slot>
-    </BFormGroup>
+    </VfiFormGroup>
 </template>
 
 <script setup lang="ts">
@@ -54,15 +57,17 @@ import { dateFormat as dateFormatFunction, dateTimeFormat } from './datePickerUt
 import DatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import type { Validation } from '@vuelidate/core'
-import type { Size } from 'bootstrap-vue-next'
-import { computed, unref } from 'vue'
+import { computed, unref, toValue } from 'vue'
 import { useInput } from './Composables/useInput'
 
 import FormInputFeedbackMessage from './FormInputFeedbackMessage.vue'
+import VfiFormGroup from './Bootstrap/VfiFormGroup.vue'
+import VfiFormInput from './Bootstrap/VfiFormInput.vue'
+import useId from './Composables/useId'
 
 export interface ComponentProps {
     label?: string
-    size?: Size
+    size?: 'sm' | 'lg'
     validationMessages?: Record<string, any>
     validation?: Validation
     disabled?: boolean
@@ -98,6 +103,8 @@ const props = withDefaults(
         enforceUtc: false
     }
 )
+
+const computedId = computed(() => useId(props.id))
 
 const $emit = defineEmits(['update:modelValue', 'change', 'update', 'blur'])
 

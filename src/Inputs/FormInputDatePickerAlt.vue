@@ -1,12 +1,14 @@
 <template>
-    <BFormGroup
+    <VfiFormGroup
         :description="hint"
-        :label-for="((id) ? `dp-input-${id}` : undefined)"
-        class="bs-form-group"
-        :class="{ 'form-group-required': isRequired, 'bs-form-group': true, 'is-datepicker-invalid': ((invalid !== null) ? invalid : false) }"
+        :id="toValue(computedId)"
+        :class="{ 'form-group-required': isRequired }"
+        :label="label"
+        :disabled="disabled"
+        :state="invalid === null ? invalid : !invalid"
     >
         <template #label>
-            {{ label }}
+            <slot name="label"></slot>
         </template>
         <DatePicker
             v-model="model"
@@ -30,32 +32,33 @@
             :class="{ 'is-datepicker-invalid': ((invalid !== null) ? invalid : false) }"
         >
         </DatePicker>
-        <BFormInvalidFeedback
+        <template #invalid-feedback
             v-if="invalid && validation"
         >
             <FormInputFeedbackMessage
                 :validation-model="validation"
                 :messages="validationMessages"
             />
-        </BFormInvalidFeedback>
+        </template>
         <slot name="input-text"></slot>
-    </BFormGroup>
+    </VfiFormGroup>
 </template>
 
 <script setup lang="ts">
 import DatePicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
 import type { Validation } from '@vuelidate/core'
-import type { Size } from 'bootstrap-vue-next'
-import { computed, unref } from 'vue'
+import { computed, unref, toValue } from 'vue'
 import { useInput } from './Composables/useInput'
 
 import FormInputFeedbackMessage from './FormInputFeedbackMessage.vue'
+import VfiFormGroup from './Bootstrap/VfiFormGroup.vue'
+import useId from './Composables/useId'
 
 export interface ComponentProps {
     modelValue: string | Date | undefined
     label?: string
-    size?: Size
+    size?: 'sm' | 'lg'
     validationMessages?: Record<string, any>
     validation?: Validation
     disabled?: boolean
@@ -70,7 +73,7 @@ export interface ComponentProps {
     maxDate?: Date
     enableTime?: boolean
     ignoreTimeValidation?: boolean
-    dateFormat?: string
+    dateFormat?: string | ((params: Date | Date[]) => string)
 }
 
 const props = withDefaults(
@@ -84,6 +87,8 @@ const props = withDefaults(
         locale: 'cs-CZ'
     }
 )
+
+const computedId = computed(() => useId(props.id))
 
 const $emit = defineEmits(['update:modelValue', 'change', 'update', 'blur'])
 

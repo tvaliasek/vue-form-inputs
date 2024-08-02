@@ -1,5 +1,5 @@
 <template>
-    <span>{{ message }}</span>
+    <div class="invalid-feedback">{{ message }}</div>
 </template>
 
 <script lang="ts">
@@ -11,7 +11,7 @@ export default defineComponent({
     name: 'FormInputFeedbackMessage',
     props: {
         messages: {
-            type: Object as PropType<Record<string, any> | undefined>,
+            type: Object as PropType<Record<string, string> | undefined>,
             required: false
         },
         validationModel: {
@@ -25,29 +25,17 @@ export default defineComponent({
         return { translator }
     },
     computed: {
-        ruleNames () {
-            return [...new Set(
-                [
-                    'required', 'requiredIf', 'requiredUnless',
-                    'minLength', 'maxLength', 'minValue', 'maxValue',
-                    'between', 'alpha', 'alphaNum', 'numeric',
-                    'integer', 'decimal', 'email', 'ipAddress',
-                    'macAddress', 'sameAs', 'url', 'validated_email'
-                // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-                ].concat((this.messages) ? Object.keys(this.messages) : []))
-            ]
-        },
         message (): string {
             const rules = Object.keys(this.validationModel).filter(item => !`${item}`.startsWith('$'))
             for (const ruleName of rules) {
                 // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-                if (this.ruleNames.includes(ruleName) && this.validationModel[ruleName].$invalid) {
+                if (this.validationModel[ruleName].$invalid) {
                     // eslint-disable-next-line @typescript-eslint/prefer-optional-chain, @typescript-eslint/strict-boolean-expressions
-                    if (this.messages && this.messages[ruleName]) {
+                    if (this.messages !== undefined && this.messages[ruleName]) {
                         return this.messages[ruleName]
                     } else {
                         // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-                        return this.getDefaultMessage(ruleName, this.validationModel[ruleName].$params || {})
+                        return this.getDefaultMessage(ruleName, this.validationModel[ruleName])
                     }
                 }
             }
@@ -55,10 +43,11 @@ export default defineComponent({
         }
     },
     methods: {
-        getDefaultMessage (ruleType?: string, params?: Record<string, any>) {
+        getDefaultMessage (ruleType?: string, validationRule?: any) {
             let parameter
-            if (params === undefined) {
-                params = {}
+            let params: Record<string, any> = {}
+            if (validationRule?.$params !== undefined) {
+                params = { ...validationRule.$params }
             }
             const $t = this.translator()
             if (typeof $t === 'function') {
@@ -105,6 +94,9 @@ export default defineComponent({
                     case 'validatedEmail':
                         return $t('vueFormInputs.feedback.validatedEmail')
                     default:
+                        if (typeof validationRule?.$message === 'string') {
+                            return (validationRule.$message.startsWith('$t:') === true) ? $t(validationRule.$message.replace('$t:', '')) : validationRule.$message
+                        }
                         return $t('vueFormInputs.feedback.invalidValue')
                 }
             }
@@ -156,6 +148,9 @@ export default defineComponent({
                 case 'validatedEmail':
                     return 'Nefunkční nebo chybná emailová adresa.'
                 default:
+                    if (typeof validationRule?.$message === 'string') {
+                        return validationRule.$message
+                    }
                     return 'Chybně vyplněná hodnota.'
             }
         }

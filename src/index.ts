@@ -1,24 +1,3 @@
-import {
-    BForm,
-    BFormCheckbox,
-    BFormCheckboxGroup,
-    BFormFloatingLabel,
-    BFormGroup,
-    BFormInput,
-    BFormInvalidFeedback,
-    BFormRadio,
-    BFormRadioGroup,
-    BFormRow,
-    BFormSelect,
-    BFormSelectOption,
-    BFormSelectOptionGroup,
-    BFormSpinButton,
-    BFormTag,
-    BFormTags,
-    BFormText,
-    BFormTextarea,
-    BFormValidFeedback
-} from 'bootstrap-vue-next'
 import type { Plugin, App } from 'vue'
 
 import input from './Inputs/FormInput.vue'
@@ -41,32 +20,9 @@ export const FormInputDatePicker = datePickerInput
 export const FormInputFile = fileInput
 export const FormInputDatePickerAlt = datePickerAltInput
 
-export const FormInputsPlugin = (options: { includeBootstrapNextComponents: boolean } = { includeBootstrapNextComponents: true }): Plugin => {
+export const FormInputsPlugin = (): Plugin => {
     return {
         install (app: App) {
-            if (options.includeBootstrapNextComponents) {
-                app.component('BForm', BForm)
-                app.component('BFormCheckbox', BFormCheckbox)
-                app.component('BFormCheckboxGroup', BFormCheckboxGroup)
-                app.component('BFormFloatingLabel', BFormFloatingLabel)
-                app.component('BFormGroup', BFormGroup)
-                app.component('BFormInput', BFormInput)
-                app.component('BFormInvalidFeedback', BFormInvalidFeedback)
-                app.component('BFormRadio', BFormRadio)
-                app.component('BFormRadioGroup', BFormRadioGroup)
-                app.component('BFormRow', BFormRow)
-                app.component('BFormSelect', BFormSelect)
-                app.component('BFormSelectOption', BFormSelectOption)
-                app.component('BFormSelectOptionGroup', BFormSelectOptionGroup)
-                app.component('BFormSpinButton', BFormSpinButton)
-                app.component('BFormTag', BFormTag)
-                app.component('BFormTags', BFormTags)
-                app.component('BFormText', BFormText)
-                app.component('BFormTextarea', BFormTextarea)
-                app.component('BFormValidFeedback', BFormValidFeedback)
-            }
-
-            // own inputs
             app.component('FormInput', FormInput)
             app.component('FormInputTextarea', FormInputTextarea)
             app.component('FormInputCheckbox', FormInputCheckbox)

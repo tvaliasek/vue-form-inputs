@@ -1,24 +1,37 @@
 <template>
-    <BFormGroup
+    <VfiFormGroup
         :description="hint"
-        :class="{ 'form-group-required': isRequired, 'bs-form-group': true }"
-        :label-for="id"
+        :id="toValue(computedId)"
+        :class="{ 'form-group-required': isRequired }"
+        :label="label"
+        :disabled="disabled"
+        :state="invalid === null ? invalid : !invalid"
     >
         <template #label>
-            {{ label }}
+            <slot name="label"></slot>
         </template>
         <div
             v-if="renderAsGroup"
-            :class="{ 'input-group': true, 'is-invalid': ((invalid !== null) ? !!invalid : undefined), 'is-valid': ((invalid !== null) ? !invalid : undefined) }"
+            :class="[
+                'input-group',
+                {
+                    'is-invalid': ((invalid !== null) ? !!invalid : undefined),
+                    'is-valid': ((invalid !== null) ? !invalid : undefined)
+                }
+            ]"
         >
             <slot name="prepend"></slot>
-            <BFormSelect
-                v-model="model"
+            <VfiFormSelect
+                :id="toValue(computedId)"
                 :size="size"
-                :id="id"
                 :state="(invalid !== null) ? !invalid : undefined"
                 :disabled="disabled || readOnly"
                 :options="computedOptions"
+                :placeholder="placeholder"
+                :readonly="readOnly"
+                :name="name"
+                :model-value="model"
+                @update:model-value="onUpdateModelValue"
                 @change="onChange"
                 @update="onUpdate"
                 @blur="onBlur"
@@ -28,55 +41,62 @@
             <slot></slot>
             <slot name="append"></slot>
         </div>
-        <BFormSelect
+        <VfiFormSelect
             v-else
-            v-model="model"
+            :id="toValue(computedId)"
             :size="size"
-            :id="id"
             :state="(invalid !== null) ? !invalid : undefined"
             :disabled="disabled || readOnly"
             :options="computedOptions"
+            :placeholder="placeholder"
+            :readonly="readOnly"
+            :name="name"
+            :model-value="model"
+            @update:model-value="onUpdateModelValue"
             @change="onChange"
             @update="onUpdate"
             @blur="onBlur"
             :multiple="multi"
             :select-size="(multi === true) ? selectSize : undefined"
         />
-        <BFormInvalidFeedback
+        <template #invalid-feedback
             v-if="invalid && validation"
         >
             <FormInputFeedbackMessage
                 :validation-model="validation"
                 :messages="validationMessages"
             />
-        </BFormInvalidFeedback>
-    </BFormGroup>
+        </template>
+        <slot name="input-text"></slot>
+    </VfiFormGroup>
 </template>
 
 <script setup lang="ts">
 import type { Validation } from '@vuelidate/core'
-import type { Size } from 'bootstrap-vue-next'
-import { computed, unref } from 'vue'
+import { computed, unref, toValue } from 'vue'
 import { useInput } from './Composables/useInput'
-
+import VfiFormGroup from './Bootstrap/VfiFormGroup.vue'
+import VfiFormSelect from './Bootstrap/VfiFormSelect.vue'
+import useId from './Composables/useId'
 import FormInputFeedbackMessage from './FormInputFeedbackMessage.vue'
 
 export interface ComponentProps {
     label?: string
-    size?: Size
+    size?: 'sm' | 'lg'
     validationMessages?: Record<string, any>
     validation?: Validation
     disabled?: boolean
-    modelValue?: string | number | undefined
+    modelValue?: string | number | null | boolean | undefined | Array<string | number | null | boolean | undefined>
     hint?: string
     placeholder?: string
     renderAsGroup?: boolean
     id?: string
     readOnly?: boolean
     showAsRequired?: boolean
-    options?: Array<{ value: any, text: string }>
+    options?: Array<{ value: string | number | boolean | null, text: string, disabled?: boolean }>
     multi?: boolean
     selectSize?: number
+    name?: string
 }
 
 const props = withDefaults(
@@ -88,6 +108,8 @@ const props = withDefaults(
         options: () => []
     }
 )
+
+const computedId = computed(() => useId(props.id))
 
 /**
  * Computed property which adds  `placeholder` prop as first "empty" option.
@@ -110,14 +132,10 @@ const computedOptions = computed(() => {
 
 const $emit = defineEmits(['update:modelValue', 'change', 'update', 'blur'])
 
-type modelType = string | number | undefined
+type modelType = string | number | undefined | null | boolean | Array<string | number | null | undefined | boolean>
 const model = computed({
     get (): modelType {
-        const modelValue = unref(props.modelValue)
-        if (typeof modelValue === 'string' || typeof modelValue === 'number') {
-            return modelValue
-        }
-        return undefined
+        return props.modelValue
     },
     set (value: modelType): void {
         $emit('update:modelValue', value)
@@ -127,6 +145,10 @@ const model = computed({
         }
     }
 })
+
+function onUpdateModelValue (value: modelType): void {
+    model.value = value
+}
 
 const {
     isRequired,

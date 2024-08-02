@@ -1,20 +1,28 @@
 <template>
-    <BFormGroup
+    <VfiFormGroup
         :description="hint"
-        :label-for="id"
-        :class="{ 'form-group-required': isRequired, 'bs-form-group': true }"
+        :id="toValue(computedId)"
+        :class="{ 'form-group-required': isRequired }"
+        :label="label"
+        :disabled="disabled"
+        :state="invalid === null ? invalid : !invalid"
     >
         <template #label>
-            {{ label }}
+            <slot name="label"></slot>
         </template>
         <div
             v-if="renderAsGroup"
-            :class="{ 'input-group': true, 'is-invalid': ((invalid !== null) ? !!invalid : undefined), 'is-valid': ((invalid !== null) ? !invalid : undefined) }"
+            :class="[
+                'input-group',
+                {
+                    'is-invalid': ((invalid !== null) ? !!invalid : undefined),
+                    'is-valid': ((invalid !== null) ? !invalid : undefined)
+                }
+            ]"
         >
             <slot name="prepend"></slot>
-            <BFormInput
-                v-model.trim="model"
-                :id="id"
+            <VfiFormInput
+                :id="toValue(computedId)"
                 :size="size"
                 :type="type"
                 :state="(invalid !== null) ? !invalid : undefined"
@@ -24,17 +32,19 @@
                 :readonly="readOnly"
                 :lazy-formatter="(lazyFormatter === false ? undefined : true)"
                 :autocomplete="autocomplete"
+                :name="name"
+                :model-modifiers="modelModifiers"
+                :model-value="model"
+                @update:model-value="onUpdateModelValue"
                 @change="onChange"
                 @update="onUpdate"
                 @blur="onBlur"
             />
-            <slot></slot>
             <slot name="append"></slot>
         </div>
-        <BFormInput
+        <VfiFormInput
             v-else
-            v-model.trim="model"
-            :id="id"
+            :id="toValue(computedId)"
             :size="size"
             :type="type"
             :state="(invalid !== null) ? !invalid : undefined"
@@ -44,47 +54,55 @@
             :readonly="readOnly"
             :lazy-formatter="(lazyFormatter === false ? undefined : true)"
             :autocomplete="autocomplete"
+            :model-modifiers="modelModifiers"
+            :model-value="model"
+            :name="name"
+            @update:model-value="onUpdateModelValue"
             @change="onChange"
             @update="onUpdate"
             @blur="onBlur"
         />
-        <BFormInvalidFeedback
+        <template #invalid-feedback
             v-if="invalid && validation"
         >
             <FormInputFeedbackMessage
                 :validation-model="validation"
                 :messages="validationMessages"
             />
-        </BFormInvalidFeedback>
+        </template>
         <slot name="input-text"></slot>
-    </BFormGroup>
+    </VfiFormGroup>
 </template>
 
 <script setup lang="ts">
 import type { Validation } from '@vuelidate/core'
-import type { InputType, Size } from 'bootstrap-vue-next'
-import { computed, unref } from 'vue'
+import { computed, toValue, unref } from 'vue'
 import { useInput } from './Composables/useInput'
 
 import FormInputFeedbackMessage from './FormInputFeedbackMessage.vue'
+import VfiFormGroup from './Bootstrap/VfiFormGroup.vue'
+import VfiFormInput from './Bootstrap/VfiFormInput.vue'
+import useId from './Composables/useId'
 
 export interface ComponentProps {
     label?: string
-    type?: InputType
-    size?: Size
+    type?: string
+    size?: 'sm' | 'lg'
     validationMessages?: Record<string, any>
     validation?: Validation
     disabled?: boolean
-    modelValue: unknown
+    modelValue?: string | number | null
     hint?: string
     placeholder?: string
-    formatter?: CallableFunction
+    formatter?: (value: string, event: Event) => string
     renderAsGroup?: boolean
     id?: string
     readOnly?: boolean
     showAsRequired?: boolean
     lazyFormatter?: boolean
     autocomplete?: string
+    name?: string
+    modelModifiers?: Record<'number' | 'lazy' | 'trim', boolean | undefined>
 }
 
 const props = withDefaults(
@@ -97,6 +115,8 @@ const props = withDefaults(
         lazyFormatter: true
     }
 )
+
+const computedId = computed(() => useId(props.id))
 
 const $emit = defineEmits(['update:modelValue', 'change', 'update', 'blur'])
 
@@ -118,6 +138,10 @@ const model = computed({
     }
 })
 
+function onUpdateModelValue (value: modelType): void {
+    model.value = value
+}
+
 const {
     isRequired,
     invalid,
@@ -127,9 +151,3 @@ const {
     formatValue
 } = useInput(props, $emit)
 </script>
-
-<style lang="scss">
-[aria-invalid="true"] + .invalid-feedback {
-    display: block;
-}
-</style>

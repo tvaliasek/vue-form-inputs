@@ -3,7 +3,6 @@ import { createI18n } from 'vue-i18n'
 import App from './App.vue'
 
 import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'
 
 import { FormInputsPlugin } from '.'
 

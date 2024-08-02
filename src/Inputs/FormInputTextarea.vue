@@ -1,75 +1,82 @@
 <template>
-    <BFormGroup
-        :label="label"
+    <VfiFormGroup
         :description="hint"
-        :label-for="id"
-        :class="{ 'form-group-required': isRequired, 'bs-form-group': true }"
+        :id="toValue(computedId)"
+        :class="{ 'form-group-required': isRequired }"
+        :label="label"
+        :disabled="disabled"
+        :state="invalid === null ? invalid : !invalid"
     >
         <template #label>
-            {{ label }}
+            <slot name="label"></slot>
         </template>
-        <BFormTextarea
-            v-model.trim="model"
+        <VfiFormTextarea
             :size="size"
-            :id="id"
+            :id="toValue(computedId)"
             :state="(invalid !== null) ? !invalid : undefined"
             :disabled="disabled"
             :formatter="formatValue"
             :placeholder="placeholder"
             :lazy-formatter="(lazyFormatter === false ? undefined : true)"
+            :model-modifiers="modelModifiers"
+            :model-value="model"
+            @update:model-value="onUpdateModelValue"
             @change="onChange"
             @update="onUpdate"
             @blur="onBlur"
             :readonly="readOnly"
             :rows="rows"
         />
-        <BFormInvalidFeedback
+        <template #invalid-feedback
             v-if="invalid && validation"
         >
             <FormInputFeedbackMessage
                 :validation-model="validation"
                 :messages="validationMessages"
             />
-        </BFormInvalidFeedback>
+        </template>
         <slot name="input-text"></slot>
-    </BFormGroup>
+    </VfiFormGroup>
 </template>
 
 <script setup lang="ts">
 import type { Validation } from '@vuelidate/core'
-import type { Size } from 'bootstrap-vue-next'
-import { computed, unref } from 'vue'
+import { computed, toValue, unref } from 'vue'
 import { useInput } from './Composables/useInput'
 
 import FormInputFeedbackMessage from './FormInputFeedbackMessage.vue'
+import VfiFormGroup from './Bootstrap/VfiFormGroup.vue'
+import VfiFormTextarea from './Bootstrap/VfiFormTextarea.vue'
+import useId from './Composables/useId'
 
 export interface ComponentProps {
     label?: string
     rows?: number
-    size?: Size
+    size?: 'sm' | 'lg'
     validationMessages?: Record<string, any>
     validation?: Validation
     disabled?: boolean
-    modelValue?: string | undefined
+    modelValue?: string | null
     hint?: string
     placeholder?: string
-    formatter?: CallableFunction
-    renderAsGroup?: boolean
+    formatter?: (value: string, event: Event) => string
     id?: string
     readOnly?: boolean
     showAsRequired?: boolean
     lazyFormatter?: boolean
+    modelModifiers?: Record<'number' | 'lazy' | 'trim', boolean | undefined>
 }
 
 const props = withDefaults(
     defineProps<ComponentProps>(),
     {
         disabled: false,
-        renderAsGroup: false,
         readOnly: false,
         lazyFormatter: true
     }
 )
+
+const computedId = computed(() => useId(props.id))
 
 const $emit = defineEmits(['update:modelValue', 'change', 'update', 'blur'])
 
@@ -90,6 +97,9 @@ const model = computed({
         }
     }
 })
+function onUpdateModelValue (value: modelType): void {
+    model.value = value
+}
 
 const {
     isRequired,

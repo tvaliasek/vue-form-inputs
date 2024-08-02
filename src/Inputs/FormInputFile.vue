@@ -1,19 +1,30 @@
 <template>
-    <BFormGroup
+    <VfiFormGroup
         :description="hint"
-        :label-for="id"
-        :class="{ 'form-group-required': isRequired, 'bs-form-group': true }"
+        :id="toValue(computedId)"
+        :class="{ 'form-group-required': isRequired }"
+        :label="label"
+        :disabled="disabled"
+        :state="invalid === null ? invalid : !invalid"
     >
         <template #label>
-            {{ label }}
+            <slot name="label"></slot>
         </template>
         <div
             v-if="renderAsGroup"
-            :class="{ 'input-group': true, 'is-invalid': ((invalid !== null) ? !invalid : undefined), 'is-valid': ((invalid !== null) ? !!invalid : undefined) }"
+            :class="[
+                'input-group',
+                {
+                    'is-invalid': ((invalid !== null) ? !!invalid : undefined),
+                    'is-valid': ((invalid !== null) ? !invalid : undefined)
+                }
+            ]"
         >
+            <slot name="prepend"></slot>
             <input
                 ref="fileInput"
-                :id="id"
+                :name="name"
+                :id="toValue(computedId)"
                 :class="inputClassNames"
                 :disabled="disabled"
                 :placeholder="placeholder"
@@ -24,14 +35,13 @@
                 @change="onInputEvent"
                 @blur="onInputEvent"
             />
-            <div class="input-group-append">
-                <slot></slot>
-            </div>
+            <slot name="append"></slot>
         </div>
         <input
             v-else
             ref="fileInput"
-            :id="id"
+            :name="name"
+            :id="toValue(computedId)"
             :class="inputClassNames"
             :disabled="disabled"
             :placeholder="placeholder"
@@ -42,29 +52,30 @@
             @change="onInputEvent"
             @blur="onInputEvent"
         />
-        <BFormInvalidFeedback
+        <template #invalid-feedback
             v-if="invalid && validation"
         >
             <FormInputFeedbackMessage
                 :validation-model="validation"
                 :messages="validationMessages"
             />
-        </BFormInvalidFeedback>
+        </template>
         <slot name="input-text"></slot>
-    </BFormGroup>
+    </VfiFormGroup>
 </template>
 
 <script setup lang="ts">
 import type { Validation } from '@vuelidate/core'
-import type { Size } from 'bootstrap-vue-next'
-import { computed, unref, watch, ref } from 'vue'
+import { computed, unref, watch, ref, toValue } from 'vue'
 import { useInput } from './Composables/useInput'
 
 import FormInputFeedbackMessage from './FormInputFeedbackMessage.vue'
+import VfiFormGroup from './Bootstrap/VfiFormGroup.vue'
+import useId from './Composables/useId'
 
 export interface ComponentProps {
     label?: string
-    size?: Size
+    size?: 'sm' | 'lg'
     validationMessages?: Record<string, any>
     validation?: Validation
     disabled?: boolean
@@ -77,6 +88,7 @@ export interface ComponentProps {
     showAsRequired?: boolean
     multiple?: boolean
     accept: string | string[]
+    name?: string
 }
 
 const props = withDefaults(
@@ -90,6 +102,7 @@ const props = withDefaults(
 )
 
 const $emit = defineEmits(['update:modelValue', 'change', 'blur'])
+const computedId = computed(() => useId(props.id))
 
 const fileInput = ref<HTMLInputElement | null>(null)
 const model = computed({

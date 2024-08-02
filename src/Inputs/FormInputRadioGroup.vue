@@ -1,15 +1,18 @@
 <template>
-    <BFormGroup
+    <VfiFormGroup
         :description="hint"
-        :class="{ 'form-group-required': isRequired, 'bs-form-group': true }"
-        :label-for="id"
+        :id="toValue(computedId)"
+        :class="{ 'form-group-required': isRequired }"
+        :label="label"
+        :disabled="disabled"
+        :state="invalid === null ? invalid : !invalid"
     >
         <template #label>
-            {{ label }}
+            <slot name="label"></slot>
         </template>
-        <BFormRadioGroup
+        <VfiFormRadioGroup
             v-model="model"
-            :id="id"
+            :id="toValue(computedId)"
             :size="size"
             :state="(invalid !== null) ? !invalid : undefined"
             :disabled="disabled || readOnly"
@@ -19,33 +22,35 @@
             @update="onUpdate"
             @blur="onBlur"
         />
-        <BFormInvalidFeedback
+        <template #invalid-feedback
             v-if="invalid && validation"
         >
             <FormInputFeedbackMessage
                 :validation-model="validation"
                 :messages="validationMessages"
             />
-        </BFormInvalidFeedback>
-    </BFormGroup>
+        </template>
+        <slot name="input-text"></slot>
+    </VfiFormGroup>
 </template>
 
 <script setup lang="ts">
 import type { Validation } from '@vuelidate/core'
-import type { InputType, Size } from 'bootstrap-vue-next'
-import { computed, unref } from 'vue'
+import { computed, unref, toValue } from 'vue'
 import { useInput } from './Composables/useInput'
+import VfiFormGroup from './Bootstrap/VfiFormGroup.vue'
+import VfiFormRadioGroup from './Bootstrap/VfiFormRadioGroup.vue'
+import useId from './Composables/useId'
 
 import FormInputFeedbackMessage from './FormInputFeedbackMessage.vue'
 
 export interface ComponentProps {
     label?: string
-    type?: InputType
-    size?: Size
+    size?: 'sm' | 'lg'
     validationMessages?: Record<string, any>
     validation?: Validation
     disabled?: boolean
-    modelValue: string | number | undefined
+    modelValue?: string | number | null | boolean | undefined
     hint?: string
     id?: string
     readOnly?: boolean
@@ -64,9 +69,12 @@ const props = withDefaults(
     }
 )
 
+const computedId = computed(() => useId(props.id))
+
 const $emit = defineEmits(['update:modelValue', 'change', 'update', 'blur'])
 
-type modelType = string | number | undefined
+type modelType = string | number | null | boolean | undefined
+
 const model = computed({
     get (): modelType {
         return props.modelValue

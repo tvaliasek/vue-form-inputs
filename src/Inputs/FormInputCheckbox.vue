@@ -1,45 +1,69 @@
 <template>
-    <BFormGroup
+    <VfiFormGroup
         :description="hint"
-        :class="{ 'form-group-required': isRequired, 'bs-form-group': true }"
+        :class="{ 'form-group-required': isRequired }"
+        :id="toValue(computedId)"
+        :disabled="disabled"
+        :state="invalid === null ? invalid : !invalid"
     >
-        <BFormCheckbox
+        <VfiFormCheckbox
+            v-if="$slots?.label === undefined && $slots?.default === undefined"
             v-model="model"
-            :id="id"
+            :id="toValue(computedId)"
             :size="size"
-            :state="(invalid !== null) ? !invalid : undefined"
+            ref="input"
+            :state="invalid === null ? invalid : !invalid"
+            :switch="renderAsSwitch === true ? true : undefined"
+            :disabled="disabled || readOnly"
+            :label="label"
+            @change="onChange"
+            @update="onUpdate"
+            @blur="onBlur"
+        />
+
+        <VfiFormCheckbox
+            v-else
+            v-model="model"
+            :id="toValue(computedId)"
+            :size="size"
+            ref="input"
+            :state="invalid === null ? invalid : !invalid"
             :switch="renderAsSwitch === true ? true : undefined"
             :disabled="disabled || readOnly"
             @change="onChange"
             @update="onUpdate"
             @blur="onBlur"
         >
-            <slot>
-                {{label}}
-            </slot>
-        </BFormCheckbox>
-        <BFormInvalidFeedback
+            <template #default>
+                <slot name="label"></slot>
+                <slot></slot>
+            </template>
+        </VfiFormCheckbox>
+
+        <template #invalid-feedback
             v-if="invalid && validation"
         >
             <FormInputFeedbackMessage
                 :validation-model="validation"
                 :messages="validationMessages"
             />
-        </BFormInvalidFeedback>
-    </BFormGroup>
+        </template>
+    </VfiFormGroup>
 </template>
 
 <script setup lang="ts">
 import type { Validation } from '@vuelidate/core'
-import type { Size } from 'bootstrap-vue-next'
-import { computed, unref } from 'vue'
+import { computed, unref, toValue } from 'vue'
 import { useInput } from './Composables/useInput'
 
 import FormInputFeedbackMessage from './FormInputFeedbackMessage.vue'
+import VfiFormGroup from './Bootstrap/VfiFormGroup.vue'
+import VfiFormCheckbox from './Bootstrap/VfiFormCheckbox.vue'
+import useId from './Composables/useId'
 
 export interface ComponentProps {
     label?: string
-    size?: Size
+    size?: 'sm' | 'lg'
     validationMessages?: Record<string, any>
     validation?: Validation
     disabled?: boolean
@@ -78,6 +102,8 @@ const model = computed({
         }
     }
 })
+
+const computedId = computed(() => useId(props.id))
 
 const {
     isRequired,

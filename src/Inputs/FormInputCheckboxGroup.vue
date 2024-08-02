@@ -1,57 +1,62 @@
 <template>
-    <BFormGroup
+    <VfiFormGroup
         :description="hint"
-        :class="{ 'form-group-required': isRequired, 'bs-form-group': true }"
-        :label-for="id"
+        :class="{ 'form-group-required': isRequired }"
+        :id="toValue(computedId)"
+        :disabled="disabled"
+        :state="invalid === null ? invalid : !invalid"
+        :label="label"
     >
         <template #label>
-            {{ label }}
+            <slot name="label"></slot>
         </template>
-        <BFormCheckboxGroup
+        <VfiFormCheckboxGroup
             v-model="model"
-            :id="id"
+            :id="toValue(computedId)"
             :size="size"
             :state="(invalid !== null) ? !invalid : undefined"
             :disabled="disabled || readOnly"
             :options="options"
-            :stacked="stacked"
+            :inline="!stacked"
+            :switch="renderAsSwitch"
             @change="onChange"
             @update="onUpdate"
             @blur="onBlur"
         />
-        <BFormInvalidFeedback
+        <template #invalid-feedback
             v-if="invalid && validation"
         >
             <FormInputFeedbackMessage
                 :validation-model="validation"
                 :messages="validationMessages"
             />
-        </BFormInvalidFeedback>
-    </BFormGroup>
+        </template>
+    </VfiFormGroup>
 </template>
 
 <script setup lang="ts">
 import type { Validation } from '@vuelidate/core'
-import type { InputType, Size } from 'bootstrap-vue-next'
-import { computed, unref } from 'vue'
+import { computed, unref, toValue } from 'vue'
 import { useInput } from './Composables/useInput'
-
+import VfiFormGroup from './Bootstrap/VfiFormGroup.vue'
+import VfiFormCheckboxGroup from './Bootstrap/VfiFormCheckboxGroup.vue'
+import useId from './Composables/useId'
 import FormInputFeedbackMessage from './FormInputFeedbackMessage.vue'
 
 export interface ComponentProps {
     label?: string
-    type?: InputType
-    size?: Size
+    size?: 'sm' | 'lg'
     validationMessages?: Record<string, any>
     validation?: Validation
     disabled?: boolean
-    modelValue?: Array<string | number | boolean | unknown[] | Record<string, unknown> | Set<unknown>> | undefined
+    modelValue?: Array<string | boolean | number | null>
     hint?: string
     id?: string
     readOnly?: boolean
     showAsRequired?: boolean
-    options?: Array<{ value: any, text: string }>
+    options?: Array<{ value: string | boolean | number | null, text: string }>
     stacked?: boolean
+    renderAsSwitch?: boolean
 }
 
 const props = withDefaults(
@@ -60,20 +65,19 @@ const props = withDefaults(
         disabled: false,
         readOnly: false,
         stacked: true,
-        options: () => []
+        options: () => [],
+        renderAsSwitch: false
     }
 )
 
 const $emit = defineEmits(['update:modelValue', 'change', 'update', 'blur'])
 
-type modelType = Array<string | number | boolean | unknown[] | Record<string, unknown> | Set<unknown>> | undefined
+const computedId = computed(() => useId(props.id))
+
+type modelType = Array<string | boolean | number | null>
 const model = computed({
     get (): modelType {
-        const modelValue = unref(props.modelValue)
-        if (Array.isArray(modelValue)) {
-            return modelValue
-        }
-        return undefined
+        return props.modelValue ?? []
     },
     set (value: modelType): void {
         $emit('update:modelValue', value)

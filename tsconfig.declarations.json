@@ -12,8 +12,10 @@
     "src/App.vue"
   ],
   "compilerOptions": {
+    "noEmit": false,
     "declaration": true,
     "composite": false,
+    "tsBuildInfoFile": null,
     "lib": [],
     "types": ["node", "jsdom"]
   }

@@ -6,6 +6,7 @@
         </div>
         <div class="col-12 col-sm-6">
             <p>Model value: {{ JSON.stringify(props.inputValue) }}</p>
+            <pre>{{ inputValue }} {{ `${inputValue}`.length }}</pre>
             <pre>{{ JSON.stringify(props.validation, null, 4) }}</pre>
         </div>
     </div>

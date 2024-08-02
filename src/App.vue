@@ -15,9 +15,7 @@
                         label="Text input"
                         v-model.trim="textInput"
                         :validation="v$.textInput"
-                        :validation-messages="{
-                            custom: 'musí být napsán string custom',
-                        }"
+                        :hint="'Text input hint'"
                         @blur="(...args: any) => onEvent('textInput', 'blur', ...args)"
                         @change="(...args: any) => onEvent('textInput', 'change', ...args)"
                         @update="(...args: any) => onEvent('textInput', 'update', ...args)"
@@ -35,6 +33,7 @@
                         @blur="(...args: any) => onEvent('textAreaInput', 'blur', ...args)"
                         @change="(...args: any) => onEvent('textAreaInput', 'change', ...args)"
                         @update="(...args: any) => onEvent('textAreaInput', 'update', ...args)"
+                        :hint="'Textarea input hint'"
                     />
                 </InputTester>
 
@@ -50,6 +49,24 @@
                         @blur="(...args: any) => onEvent('selectInput', 'blur', ...args)"
                         @change="(...args: any) => onEvent('selectInput', 'change', ...args)"
                         @update="(...args: any) => onEvent('selectInput', 'update', ...args)"
+                        :hint="'Select input hint'"
+                    />
+                </InputTester>
+
+                <InputTester
+                    :title="'Select input multiple'"
+                    :input-value="selectInputMulti"
+                >
+                    <form-input-select
+                        label="Select input"
+                        v-model="selectInputMulti"
+                        :validation="v$.selectInputMulti"
+                        :options="options"
+                        :multi="true"
+                        @blur="(...args: any) => onEvent('selectInput', 'blur', ...args)"
+                        @change="(...args: any) => onEvent('selectInput', 'change', ...args)"
+                        @update="(...args: any) => onEvent('selectInput', 'update', ...args)"
+                        :hint="'Multiselect input hint'"
                     />
                 </InputTester>
 
@@ -59,9 +76,12 @@
                 >
                     <form-input-checkbox
                         v-model="checkboxInput"
+                        :validation="v$.checkboxInput"
+                        :render-as-switch="checkboxInput"
                         @blur="(...args: any) => onEvent('checkboxInput', 'blur', ...args)"
                         @change="(...args: any) => onEvent('checkboxInput', 'change', ...args)"
                         @update="(...args: any) => onEvent('checkboxInput', 'update', ...args)"
+                        :hint="'Checkbox input hint'"
                     >
                         Checkbox
                     </form-input-checkbox>
@@ -76,9 +96,11 @@
                         v-model="checkboxGroup"
                         :validation="v$.checkboxGroup"
                         :options="options"
+                        :render-as-switch="checkboxGroup.includes(1)"
                         @blur="(...args: any) => onEvent('checkboxGroup', 'blur', ...args)"
                         @change="(...args: any) => onEvent('checkboxGroup', 'change', ...args)"
                         @update="(...args: any) => onEvent('checkboxGroup', 'update', ...args)"
+                        :hint="'Checkbox group hint'"
                     />
                 </InputTester>
 
@@ -94,6 +116,7 @@
                         @blur="(...args: any) => onEvent('radioGroup', 'blur', ...args)"
                         @change="(...args: any) => onEvent('radioGroup', 'change', ...args)"
                         @update="(...args: any) => onEvent('radioGroup', 'update', ...args)"
+                        :hint="'Radio group hint'"
                     />
                 </InputTester>
 
@@ -109,6 +132,7 @@
                         @blur="(...args: any) => onEvent('datePicker', 'blur', ...args)"
                         @change="(...args: any) => onEvent('datePicker', 'change', ...args)"
                         @update="(...args: any) => onEvent('datePicker', 'update', ...args)"
+                        :hint="'Datepicker input hint'"
                     />
                 </InputTester>
 
@@ -124,6 +148,7 @@
                         @blur="(...args: any) => onEvent('datePicker', 'blur', ...args)"
                         @change="(...args: any) => onEvent('datePicker', 'change', ...args)"
                         @update="(...args: any) => onEvent('datePicker', 'update', ...args)"
+                        :hint="'Datepicker input hint'"
                     />
                 </InputTester>
 
@@ -139,6 +164,7 @@
                         @blur="(...args: any) => onEvent('datePicker', 'blur', ...args)"
                         @change="(...args: any) => onEvent('datePicker', 'change', ...args)"
                         @update="(...args: any) => onEvent('datePicker', 'update', ...args)"
+                        :hint="'Datepicker input hint'"
                     />
                 </InputTester>
 
@@ -155,14 +181,15 @@
                         @blur="(...args: any) => onEvent('fileInput', 'blur', ...args)"
                         @change="(...args: any) => onEvent('fileInput', 'change', ...args)"
                         @update="(...args: any) => onEvent('fileInput', 'update', ...args)"
+                        :hint="'File input hint'"
                     />
-                    <p>
-                        <b-button
-                            variant="primary"
-                            @click="fileInput = undefined"
+                    <p class="mt-4">
+                        <button
+                            class="btn btn-primary"
+                            @click.prevent="fileInput = undefined"
                         >
                             Clear
-                        </b-button>
+                        </button>
                     </p>
                 </InputTester>
             </div>
@@ -182,15 +209,16 @@
 
 <script setup lang="ts">
 import { useVuelidate } from '@vuelidate/core'
-import { required, minLength } from '@vuelidate/validators'
+import { required, minLength, helpers } from '@vuelidate/validators'
 import { ref, computed, onBeforeMount } from 'vue'
-import InputTester from './components/InputTester.vue'
+import InputTester from './Components/InputTester.vue'
 
 const textInput = ref(null)
 const textareaInput = ref(null)
 const selectInput = ref(null)
+const selectInputMulti = ref([])
 const checkboxInput = ref(null)
-const checkboxGroup = ref([])
+const checkboxGroup = ref<Array<string | boolean | number | undefined>>([])
 const radioGroup = ref(null)
 const dateInput = ref(null)
 const fileInput = ref<File | File[] | undefined | null>(null)
@@ -245,19 +273,21 @@ const v$ = useVuelidate({
     textInput: {
         required,
         minLength: minLength(4),
-        custom: (value: string) => {
+        custom: helpers.withMessage('$t:some.message', (value: string) => {
             return value === 'custom'
-        }
+        })
     },
     textareaInput: { required },
     selectInput: { required },
-    checkboxInput: { required },
+    selectInputMulti: { custom: (value: any) => value?.length > 1 },
+    checkboxInput: { required: (value: any): boolean => value === true },
     checkboxGroup: { required },
-    radioGroup: { required },
+    radioGroup: { required, custom: (value: any) => parseInt(value) > 1 },
     dateInput: { required },
     fileInput: { required }
 }, {
     textInput,
+    selectInputMulti,
     textareaInput,
     selectInput,
     checkboxInput,

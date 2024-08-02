@@ -37,10 +37,10 @@ export function useInput (props: Record<string, any>, $emit: (event: any, ...arg
     const onUpdate = onEvent('update')
     const onBlur = onEvent('blur')
 
-    const formatValue = function (value: unknown): unknown {
+    const formatValue = function (value: string, event?: Event): string {
         const formatter = unref(props.formatter)
         if (typeof formatter === 'function') {
-            return formatter(value)
+            return formatter(value, event)
         }
         return value
     }
