@@ -37,9 +37,7 @@
     "test:unit": "vitest --environment jsdom --root src/",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts --fix --ignore-path .gitignore",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
-    "declarations:generate": "vue-tsc --emitDeclarationOnly -p tsconfig.declarations.json",
-    "declarations:move": "node ./.bin/moveDeclarations.js"
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@vueuse/core": "^10.11.0",
@@ -85,16 +83,12 @@
     "jsdom": "^24.1.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "rollup-plugin-typescript2": "^0.36.0",
     "sass": "^1.77.8",
     "storybook": "^8.2.6",
     "typescript": "~5.5.4",
-    "unplugin-icons": "^0.19.1",
-    "unplugin-vue-components": "^0.27.3",
     "vite": "^5.3.5",
     "vite-plugin-dts": "^3.9.1",
     "vitest": "^2.0.4",
-    "vue-i18n": "^9.13.1",
-    "vue-tsc": "^2.0.29"
+    "vue-i18n": "^9.13.1"
   }
 }

@@ -54,12 +54,10 @@
 
 <script setup lang="ts">
 import { dateFormat as dateFormatFunction, dateTimeFormat } from './datePickerUtils'
-import DatePicker from '@vuepic/vue-datepicker'
-import '@vuepic/vue-datepicker/dist/main.css'
 import type { Validation } from '@vuelidate/core'
 import { computed, unref, toValue } from 'vue'
 import { useInput } from './Composables/useInput'
-
+import DatePicker from '@vuepic/vue-datepicker'
 import FormInputFeedbackMessage from './FormInputFeedbackMessage.vue'
 import VfiFormGroup from './Bootstrap/VfiFormGroup.vue'
 import VfiFormInput from './Bootstrap/VfiFormInput.vue'

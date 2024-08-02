@@ -1,16 +1,16 @@
 /* eslint-disable import/no-unresolved */
 import { fileURLToPath, URL } from 'node:url'
-import Components from 'unplugin-vue-components/vite'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve } from 'node:path'
+import dts from 'vite-plugin-dts'
 
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [
         vue(),
-        Components({
-            dts: true
+        dts({
+            tsconfigPath: resolve(__dirname, 'tsconfig.declarations.json')
         })
     ],
     resolve: {
@@ -29,11 +29,12 @@ export default defineConfig({
                 'vue',
                 'bootstrap',
                 'vuelidate',
-                { '@vuepic/vue-datepicker': '@vuepic/vue-datepicker' }
+                '@vuepic/vue-datepicker'
             ],
             output: {
                 globals: {
-                    vue: 'Vue'
+                    vue: 'Vue',
+                    '@vuepic/vue-datepicker': '@vuepic/vue-datepicker'
                 },
                 assetFileNames: 'vue-form-inputs.[ext]'
             }
