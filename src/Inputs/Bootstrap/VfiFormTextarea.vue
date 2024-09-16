@@ -2,6 +2,7 @@
     <textarea
         :id="computedId"
         ref="input"
+        :value="model"
         :class="computedClasses"
         :name="name || undefined"
         :disabled="disabled"
