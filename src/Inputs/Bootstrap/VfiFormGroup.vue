@@ -10,6 +10,7 @@
     >
         <slot name="label">
             <label
+                v-if="label"
                 :for="`${(labelFor) ? labelFor : id}`"
                 :id="`${id}_formGroupLabel`"
                 class="form-label"
