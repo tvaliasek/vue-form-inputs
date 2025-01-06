@@ -147,7 +147,30 @@ Datepicker is wrapped [@vuepic/vue-datepicker](https://vue3datepicker.com/)
 
 ## i18n
 
-If vue i18n is detected, please add these translations:
+If you want to automatically translate validation messages, you can use vue i18n, or custom function. Just add translations to your i18n instance and provide "t" function as below:  
+
+``` ts
+import { provide } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { TRANSLATE_INJECTION_KEY } from '@tvaliasek/vue-form-inputs'
+
+const { t } = useI18n()
+provide<((message: string, params: Record<string, any>) => string)>(TRANSLATE_INJECTION_KEY, (message: string, params?: Record<string, any>) => t(message, params)) 
+
+// for automatic translation of custom messages you could use $t: prefix
+const v$ = useVuelidate({
+    textInput: {
+        required,
+        minLength: minLength(4),
+        custom: helpers.withMessage('$t:some.message', (value: string) => {
+            return value === 'custom'
+        })
+    },
+}, { textInput })
+
+```
+
+Add default translations to your i18n instance:
 
 ``` json
 {
@@ -200,4 +223,5 @@ If vue i18n is detected, please add these translations:
         }
     }
 }
+
 ```

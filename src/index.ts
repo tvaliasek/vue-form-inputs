@@ -19,6 +19,7 @@ export const FormInputTextarea = textareaInput
 export const FormInputDatePicker = datePickerInput
 export const FormInputFile = fileInput
 export const FormInputDatePickerAlt = datePickerAltInput
+export const TRANSLATE_INJECTION_KEY = '$vfiTranslate'
 
 export const FormInputsPlugin = (): Plugin => {
     return {

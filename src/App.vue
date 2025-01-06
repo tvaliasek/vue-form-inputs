@@ -210,8 +210,10 @@
 <script setup lang="ts">
 import { useVuelidate } from '@vuelidate/core'
 import { required, minLength, helpers } from '@vuelidate/validators'
-import { ref, computed, onBeforeMount } from 'vue'
+import { ref, computed, onBeforeMount, provide } from 'vue'
 import InputTester from './Components/InputTester.vue'
+import { useI18n } from 'vue-i18n'
+import { TRANSLATE_INJECTION_KEY } from './index.ts'
 
 const textInput = ref(null)
 const textareaInput = ref(null)
@@ -243,6 +245,7 @@ const options = computed(() => [
 const vuelidateDetected = ref(false)
 const vueI18nDetected = ref(false)
 const events = ref<Array<Record<string, any>>>([])
+const { t: $t } = useI18n()
 
 onBeforeMount(() => {
 })
@@ -295,5 +298,9 @@ const v$ = useVuelidate({
     radioGroup,
     dateInput,
     fileInput
+})
+
+provide(TRANSLATE_INJECTION_KEY, (message: string, params?: Record<string, any>) => {
+    return $t(message, params)
 })
 </script>
