@@ -17,7 +17,7 @@
             :state="(invalid !== null) ? !invalid : undefined"
             :disabled="disabled || readOnly"
             :options="options"
-            :stacked="stacked"
+            :inline="!stacked"
             @change="onChange"
             @update="onUpdate"
             @blur="onBlur"
