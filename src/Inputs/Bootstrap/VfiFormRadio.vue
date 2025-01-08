@@ -21,6 +21,7 @@
             :id="id"
             :disabled="disabled ?? undefined"
             :name="name"
+            :checked="model === value ? true : undefined"
             :aria-invalid="props.state === false ? 'true' : 'false'"
             @input="onInput"
         />
