@@ -53,13 +53,12 @@
 
 <script setup lang="ts">
 import type { Validation } from '@vuelidate/core'
-import { computed, unref, toValue } from 'vue'
+import { computed, unref, toValue, useId } from 'vue'
 import { useInput } from './Composables/useInput'
 
 import FormInputFeedbackMessage from './FormInputFeedbackMessage.vue'
 import VfiFormGroup from './Bootstrap/VfiFormGroup.vue'
 import VfiFormCheckbox from './Bootstrap/VfiFormCheckbox.vue'
-import useId from './Composables/useId'
 
 export interface ComponentProps {
     label?: string
@@ -103,7 +102,7 @@ const model = computed({
     }
 })
 
-const computedId = computed(() => useId(props.id))
+const computedId = computed(() => (props.id) ? props.id : useId())
 
 const {
     isRequired,

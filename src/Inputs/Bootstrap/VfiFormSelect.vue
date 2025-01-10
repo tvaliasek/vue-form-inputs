@@ -7,7 +7,7 @@
         :name="name || undefined"
         :disabled="disabled || undefined"
         :required="required || undefined"
-        :readonly="readonly || props.plaintext"
+        :readonly="readonly"
         :aria-required="required || undefined"
         :aria-invalid="computedAriaInvalid"
         :multiple="props.multiple || undefined"
@@ -27,11 +27,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, toValue } from 'vue'
+import { computed, ref, toValue, useId } from 'vue'
 import useStateClass from '../Composables/useStateClass'
 import useAriaInvalid from '../Composables/useAriaInvalid'
 import { useFocus } from '@vueuse/core'
-import useId from '../Composables/useId'
 
 const props = withDefaults(defineProps<{
     id: string
@@ -54,7 +53,6 @@ const props = withDefaults(defineProps<{
     options?: Array<{ value: string | number | boolean | null, text: string, disabled?: boolean }>
 }>(), {
     disabled: false,
-    plaintext: false,
     required: false,
     readonly: false,
     state: null,
@@ -103,7 +101,7 @@ const computedClasses = computed(() => {
     ]
 })
 
-const computedId = useId(() => props.id)
+const computedId = computed(() => (props.id) ? props.id : useId())
 
 const computedAriaInvalid = useAriaInvalid(
     () => props.ariaInvalid,

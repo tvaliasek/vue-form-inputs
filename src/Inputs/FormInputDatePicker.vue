@@ -55,13 +55,12 @@
 <script setup lang="ts">
 import { dateFormat as dateFormatFunction, dateTimeFormat } from './datePickerUtils'
 import type { Validation } from '@vuelidate/core'
-import { computed, unref, toValue } from 'vue'
+import { computed, unref, toValue, useId } from 'vue'
 import { useInput } from './Composables/useInput'
 import DatePicker from '@vuepic/vue-datepicker'
 import FormInputFeedbackMessage from './FormInputFeedbackMessage.vue'
 import VfiFormGroup from './Bootstrap/VfiFormGroup.vue'
 import VfiFormInput from './Bootstrap/VfiFormInput.vue'
-import useId from './Composables/useId'
 
 export interface ComponentProps {
     label?: string
@@ -102,7 +101,7 @@ const props = withDefaults(
     }
 )
 
-const computedId = computed(() => useId(props.id))
+const computedId = computed(() => (props.id) ? props.id : useId())
 
 const $emit = defineEmits(['update:modelValue', 'change', 'update', 'blur'])
 

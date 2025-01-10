@@ -29,9 +29,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, toValue } from 'vue'
+import { computed, toValue, useId } from 'vue'
 import VfiFormCheckbox from './VfiFormCheckbox.vue'
-import useId from '../Composables/useId'
 
 const props = withDefaults(defineProps<{
     id: string
@@ -52,7 +51,7 @@ const props = withDefaults(defineProps<{
 
 const $emit = defineEmits(['update:modelValue'])
 
-const computedId = computed(() => useId(props.id))
+const computedId = computed(() => (props.id) ? props.id : useId())
 
 const model = computed<Array<number | string | null | boolean | undefined>>({
     get () {

@@ -73,11 +73,10 @@
 
 <script setup lang="ts">
 import type { Validation } from '@vuelidate/core'
-import { computed, unref, toValue } from 'vue'
+import { computed, unref, toValue, useId } from 'vue'
 import { useInput } from './Composables/useInput'
 import VfiFormGroup from './Bootstrap/VfiFormGroup.vue'
 import VfiFormSelect from './Bootstrap/VfiFormSelect.vue'
-import useId from './Composables/useId'
 import FormInputFeedbackMessage from './FormInputFeedbackMessage.vue'
 
 export interface ComponentProps {
@@ -109,7 +108,7 @@ const props = withDefaults(
     }
 )
 
-const computedId = computed(() => useId(props.id))
+const computedId = computed(() => (props.id) ? props.id : useId())
 
 /**
  * Computed property which adds  `placeholder` prop as first "empty" option.

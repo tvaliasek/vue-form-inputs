@@ -26,8 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, toValue } from 'vue'
-import useId from '../Composables/useId'
+import { computed, toValue, useId } from 'vue'
 import VfiFormRadio from './VfiFormRadio.vue'
 
 const props = withDefaults(defineProps<{
@@ -48,7 +47,7 @@ const props = withDefaults(defineProps<{
 
 const $emit = defineEmits(['update:modelValue'])
 
-const computedId = computed(() => useId(props.id))
+const computedId = computed(() => (props.id) ? props.id : useId())
 
 const model = computed<number | string | null | boolean | undefined>({
     get () {

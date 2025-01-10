@@ -1,6 +1,5 @@
-import { nextTick, onActivated, onMounted, ref, type ComputedRef, type Ref } from 'vue'
+import { nextTick, onActivated, onMounted, ref, type ComputedRef, type Ref, useId, computed } from 'vue'
 import useAriaInvalid from './useAriaInvalid'
-import useId from './useId'
 import { useDebounceFn, useFocus } from '@vueuse/core'
 
 export default (
@@ -25,7 +24,7 @@ export default (
         focus: () => void
         blur: () => void
     } => {
-    const computedId = useId(() => props.id)
+    const computedId = computed(() => (props.id) ? props.id : useId())
     const input = ref<HTMLInputElement | null>(null)
 
     const internalUpdateModelValue = useDebounceFn(
