@@ -21,46 +21,43 @@
             ]"
         >
             <slot name="prepend"></slot>
-            <VfiFormInput
+            <VfiFormSelect
                 :id="toValue(computedId)"
                 :size="size"
-                :type="type"
                 :state="(invalid !== null) ? !invalid : undefined"
-                :disabled="disabled"
-                :formatter="formatValue"
+                :disabled="disabled || readOnly"
+                :options="computedOptions"
                 :placeholder="placeholder"
                 :readonly="readOnly"
-                :lazy-formatter="(lazyFormatter === false ? undefined : true)"
-                :autocomplete="autocomplete"
                 :name="name"
-                :model-modifiers="modelModifiers"
                 :model-value="model"
                 @update:model-value="onUpdateModelValue"
                 @change="onChange"
                 @update="onUpdate"
                 @blur="onBlur"
+                :multiple="multi"
+                :select-size="(multi === true) ? selectSize : undefined"
             />
+            <slot></slot>
             <slot name="append"></slot>
         </div>
-        <VfiFormInput
+        <VfiFormSelect
             v-else
             :id="toValue(computedId)"
             :size="size"
-            :type="type"
             :state="(invalid !== null) ? !invalid : undefined"
-            :disabled="disabled"
-            :formatter="formatValue"
+            :disabled="disabled || readOnly"
+            :options="computedOptions"
             :placeholder="placeholder"
             :readonly="readOnly"
-            :lazy-formatter="(lazyFormatter === false ? undefined : true)"
-            :autocomplete="autocomplete"
-            :model-modifiers="modelModifiers"
-            :model-value="model"
             :name="name"
+            :model-value="model"
             @update:model-value="onUpdateModelValue"
             @change="onChange"
             @update="onUpdate"
             @blur="onBlur"
+            :multiple="multi"
+            :select-size="(multi === true) ? selectSize : undefined"
         />
         <template #invalid-feedback
             v-if="invalid && validation"
@@ -75,58 +72,69 @@
 </template>
 
 <script setup lang="ts">
-import { computed, toValue, unref, useId } from 'vue'
+import { computed, unref, toValue, useId } from 'vue'
 import { useInput } from './Composables/useInput'
-
-import FormInputFeedbackMessage from './FormInputFeedbackMessage.vue'
 import VfiFormGroup from './Bootstrap/VfiFormGroup.vue'
-import VfiFormInput from './Bootstrap/VfiFormInput.vue'
+import VfiFormSelect from './Bootstrap/VfiFormSelect.vue'
+import FormInputFeedbackMessage from './FormInputFeedbackMessage.vue'
 import type { ValidationProp } from './ValidationProp.interface'
 
 export interface ComponentProps {
     label?: string
-    type?: string
     size?: 'sm' | 'lg'
     validationMessages?: Record<string, any>
     validation?: ValidationProp
     disabled?: boolean
-    modelValue?: string | number | null
+    modelValue?: string | number | null | boolean | undefined | Array<string | number | null | boolean | undefined>
     hint?: string
     placeholder?: string
-    formatter?: (value: string, event: Event) => string
     renderAsGroup?: boolean
     id?: string
     readOnly?: boolean
     showAsRequired?: boolean
-    lazyFormatter?: boolean
-    autocomplete?: string
+    options?: Array<{ value: string | number | boolean | null, text: string, disabled?: boolean }>
+    multi?: boolean
+    selectSize?: number
     name?: string
-    modelModifiers?: Record<'number' | 'lazy' | 'trim', boolean | undefined>
 }
 
 const props = withDefaults(
     defineProps<ComponentProps>(),
     {
-        type: 'text',
         disabled: false,
         renderAsGroup: false,
         readOnly: false,
-        lazyFormatter: true
+        options: () => []
     }
 )
 
-const computedId = computed(() => (props?.id) ? props.id : useId())
+const computedId = computed(() => (props.id) ? props.id : useId())
+
+/**
+ * Computed property which adds  `placeholder` prop as first "empty" option.
+ * But only if there is no option with empty string directly passed from user in `options` prop.
+ */
+const computedOptions = computed(() => {
+    const options = unref(props.options)
+    const placeholder = unref(props.placeholder)
+
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+    if (placeholder && !options.some((option) => (option.value === ''))) {
+        return [
+            { value: '', text: placeholder, disabled: true },
+            ...options
+        ]
+    } else {
+        return options
+    }
+})
 
 const $emit = defineEmits(['update:modelValue', 'change', 'update', 'blur'])
 
-type modelType = string | number | undefined
+type modelType = string | number | undefined | null | boolean | Array<string | number | null | undefined | boolean>
 const model = computed({
     get (): modelType {
-        const modelValue = unref(props.modelValue)
-        if (typeof modelValue === 'string' || typeof modelValue === 'number') {
-            return modelValue
-        }
-        return undefined
+        return props.modelValue
     },
     set (value: modelType): void {
         $emit('update:modelValue', value)
@@ -144,9 +152,8 @@ function onUpdateModelValue (value: modelType): void {
 const {
     isRequired,
     invalid,
-    onUpdate,
     onChange,
-    onBlur,
-    formatValue
+    onUpdate,
+    onBlur
 } = useInput(props, $emit)
 </script>

@@ -24,7 +24,7 @@ export default (
         focus: () => void
         blur: () => void
     } => {
-    const computedId = computed(() => (props?.id) ? props.id : useId())
+    const computedId = computed(() => (props.id) ? props.id : useId())
     const input = ref<HTMLInputElement | null>(null)
 
     const internalUpdateModelValue = useDebounceFn(

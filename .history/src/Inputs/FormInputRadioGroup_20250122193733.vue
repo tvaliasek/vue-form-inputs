@@ -35,19 +35,19 @@
 </template>
 
 <script setup lang="ts">
+import type { Validation } from '@vuelidate/core'
 import { computed, unref, toValue, useId } from 'vue'
 import { useInput } from './Composables/useInput'
 import VfiFormGroup from './Bootstrap/VfiFormGroup.vue'
 import VfiFormRadioGroup from './Bootstrap/VfiFormRadioGroup.vue'
 
 import FormInputFeedbackMessage from './FormInputFeedbackMessage.vue'
-import type { ValidationProp } from './ValidationProp.interface'
 
 export interface ComponentProps {
     label?: string
     size?: 'sm' | 'lg'
     validationMessages?: Record<string, any>
-    validation?: ValidationProp
+    validation?: Validation
     disabled?: boolean
     modelValue?: string | number | null | boolean | undefined
     hint?: string
@@ -68,7 +68,7 @@ const props = withDefaults(
     }
 )
 
-const computedId = computed(() => (props?.id) ? props.id : useId())
+const computedId = computed(() => (props.id) ? props.id : useId())
 
 const $emit = defineEmits(['update:modelValue', 'change', 'update', 'blur'])
 

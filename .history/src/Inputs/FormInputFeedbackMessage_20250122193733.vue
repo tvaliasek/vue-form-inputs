@@ -3,12 +3,12 @@
 </template>
 
 <script setup lang="ts">
+import type { Validation } from '@vuelidate/core'
 import { inject, computed } from 'vue'
-import type { ValidationProp } from './ValidationProp.interface'
 
 const props = defineProps<{
     messages: Record<string, string> | undefined
-    validationModel: ValidationProp
+    validationModel: Validation
 }>()
 
 const $t = inject<((message: string, params?: Record<string, any>) => string) | null>('$vfiTranslate', null)

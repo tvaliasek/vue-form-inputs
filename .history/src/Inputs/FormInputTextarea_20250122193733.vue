@@ -10,17 +10,22 @@
         <template #label>
             <slot name="label"></slot>
         </template>
-        <VfiFormRadioGroup
-            v-model="model"
-            :id="toValue(computedId)"
+        <VfiFormTextarea
             :size="size"
+            :id="toValue(computedId)"
             :state="(invalid !== null) ? !invalid : undefined"
-            :disabled="disabled || readOnly"
-            :options="options"
-            :inline="!stacked"
+            :disabled="disabled"
+            :formatter="formatValue"
+            :placeholder="placeholder"
+            :lazy-formatter="(lazyFormatter === false ? undefined : true)"
+            :model-modifiers="modelModifiers"
+            :model-value="model"
+            @update:model-value="onUpdateModelValue"
             @change="onChange"
             @update="onUpdate"
             @blur="onBlur"
+            :readonly="readOnly"
+            :rows="rows"
         />
         <template #invalid-feedback
             v-if="invalid && validation"
@@ -35,27 +40,30 @@
 </template>
 
 <script setup lang="ts">
-import { computed, unref, toValue, useId } from 'vue'
+import type { Validation } from '@vuelidate/core'
+import { computed, toValue, unref, useId } from 'vue'
 import { useInput } from './Composables/useInput'
-import VfiFormGroup from './Bootstrap/VfiFormGroup.vue'
-import VfiFormRadioGroup from './Bootstrap/VfiFormRadioGroup.vue'
 
 import FormInputFeedbackMessage from './FormInputFeedbackMessage.vue'
-import type { ValidationProp } from './ValidationProp.interface'
+import VfiFormGroup from './Bootstrap/VfiFormGroup.vue'
+import VfiFormTextarea from './Bootstrap/VfiFormTextarea.vue'
 
 export interface ComponentProps {
     label?: string
+    rows?: number
     size?: 'sm' | 'lg'
     validationMessages?: Record<string, any>
-    validation?: ValidationProp
+    validation?: Validation
     disabled?: boolean
-    modelValue?: string | number | null | boolean | undefined
+    modelValue?: string | null
     hint?: string
+    placeholder?: string
+    formatter?: (value: string, event: Event) => string
     id?: string
     readOnly?: boolean
     showAsRequired?: boolean
-    options?: Array<{ value: any, text: string }>
-    stacked?: boolean
+    lazyFormatter?: boolean
+    modelModifiers?: Record<'number' | 'lazy' | 'trim', boolean | undefined>
 }
 
 const props = withDefaults(
@@ -63,20 +71,22 @@ const props = withDefaults(
     {
         disabled: false,
         readOnly: false,
-        stacked: true,
-        options: () => []
+        lazyFormatter: true
     }
 )
 
-const computedId = computed(() => (props?.id) ? props.id : useId())
+const computedId = computed(() => (props.id) ? props.id : useId())
 
 const $emit = defineEmits(['update:modelValue', 'change', 'update', 'blur'])
 
-type modelType = string | number | null | boolean | undefined
-
+type modelType = string | undefined
 const model = computed({
     get (): modelType {
-        return props.modelValue
+        const modelValue = unref(props.modelValue)
+        if (typeof modelValue === 'string' || typeof modelValue === 'number') {
+            return modelValue
+        }
+        return undefined
     },
     set (value: modelType): void {
         $emit('update:modelValue', value)
@@ -86,12 +96,16 @@ const model = computed({
         }
     }
 })
+function onUpdateModelValue (value: modelType): void {
+    model.value = value
+}
 
 const {
     isRequired,
     invalid,
     onChange,
     onUpdate,
-    onBlur
+    onBlur,
+    formatValue
 } = useInput(props, $emit)
 </script>

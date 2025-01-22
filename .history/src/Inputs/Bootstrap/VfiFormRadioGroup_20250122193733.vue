@@ -1,7 +1,7 @@
 <template>
     <div
         :class="[
-            'form-checkbox-group',
+            'form-radio-group',
             {
                 'is-invalid': state === false,
                 'is-valid': state === true
@@ -9,39 +9,35 @@
         ]"
         :id="toValue(computedId)"
     >
-        <VfiFormCheckbox
+        <VfiFormRadio
             v-for="(option, index) in options"
             :key="`${toValue(computedId)}-${option.value}-${index}`"
-            :id="`${toValue(computedId)}-checkbox-${option.value}`"
+            :id="`${toValue(computedId)}-radio-${option.value}`"
             :label="option.text"
             :size="size"
             :state="state"
-            :switch="props.switch"
             :disabled="disabled"
-            :name="`${name}-${index}`"
+            :name="name ?? toValue(computedId)"
             :inline="inline"
             :value="option.value"
-            :model-value="model.includes(option.value)"
-            @add:checkboxValue="onAddCheckboxValue"
-            @remove:checkboxValue="onRemoveCheckboxValue"
+            v-model="model"
         />
     </div>
 </template>
 
 <script setup lang="ts">
 import { computed, toValue, useId } from 'vue'
-import VfiFormCheckbox from './VfiFormCheckbox.vue'
+import VfiFormRadio from './VfiFormRadio.vue'
 
 const props = withDefaults(defineProps<{
     id: string
     label?: string
     size?: 'sm' | 'lg'
     state?: boolean | null
-    switch?: boolean
     disabled?: boolean
     name?: string
     inline?: boolean
-    modelValue: Array<number | string | null | boolean | undefined>
+    modelValue: number | string | null | boolean | undefined
     options?: Array<{ value: string | number | boolean | null | undefined, text: string, disabled?: boolean }>
 }>(), {
     disabled: false,
@@ -51,25 +47,14 @@ const props = withDefaults(defineProps<{
 
 const $emit = defineEmits(['update:modelValue'])
 
-const computedId = computed(() => (props?.id) ? props.id : useId())
+const computedId = computed(() => (props.id) ? props.id : useId())
 
-const model = computed<Array<number | string | null | boolean | undefined>>({
+const model = computed<number | string | null | boolean | undefined>({
     get () {
-        return [...props.options.map(item => item.value)].filter(value => props.modelValue.includes(value))
+        return props.modelValue
     },
     set (value) {
         $emit('update:modelValue', value)
     }
 })
-
-function onAddCheckboxValue (value: number | string | null | boolean | undefined): void {
-    if (model.value.includes(value)) {
-        return
-    }
-    model.value = [...model.value, value]
-}
-
-function onRemoveCheckboxValue (value: number | string | null | boolean | undefined): void {
-    model.value = model.value.filter(item => item !== value)
-}
 </script>

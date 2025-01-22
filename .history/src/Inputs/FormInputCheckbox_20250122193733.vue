@@ -1,27 +1,45 @@
 <template>
     <VfiFormGroup
         :description="hint"
-        :id="toValue(computedId)"
         :class="{ 'form-group-required': isRequired }"
-        :label="label"
+        :id="toValue(computedId)"
         :disabled="disabled"
         :state="invalid === null ? invalid : !invalid"
     >
-        <template #label>
-            <slot name="label"></slot>
-        </template>
-        <VfiFormRadioGroup
+        <VfiFormCheckbox
+            v-if="$slots?.label === undefined && $slots?.default === undefined"
             v-model="model"
             :id="toValue(computedId)"
             :size="size"
-            :state="(invalid !== null) ? !invalid : undefined"
+            ref="input"
+            :state="invalid === null ? invalid : !invalid"
+            :switch="renderAsSwitch === true ? true : undefined"
             :disabled="disabled || readOnly"
-            :options="options"
-            :inline="!stacked"
+            :label="label"
             @change="onChange"
             @update="onUpdate"
             @blur="onBlur"
         />
+
+        <VfiFormCheckbox
+            v-else
+            v-model="model"
+            :id="toValue(computedId)"
+            :size="size"
+            ref="input"
+            :state="invalid === null ? invalid : !invalid"
+            :switch="renderAsSwitch === true ? true : undefined"
+            :disabled="disabled || readOnly"
+            @change="onChange"
+            @update="onUpdate"
+            @blur="onBlur"
+        >
+            <template #default>
+                <slot name="label"></slot>
+                <slot></slot>
+            </template>
+        </VfiFormCheckbox>
+
         <template #invalid-feedback
             v-if="invalid && validation"
         >
@@ -30,53 +48,50 @@
                 :messages="validationMessages"
             />
         </template>
-        <slot name="input-text"></slot>
     </VfiFormGroup>
 </template>
 
 <script setup lang="ts">
+import type { Validation } from '@vuelidate/core'
 import { computed, unref, toValue, useId } from 'vue'
 import { useInput } from './Composables/useInput'
-import VfiFormGroup from './Bootstrap/VfiFormGroup.vue'
-import VfiFormRadioGroup from './Bootstrap/VfiFormRadioGroup.vue'
 
 import FormInputFeedbackMessage from './FormInputFeedbackMessage.vue'
-import type { ValidationProp } from './ValidationProp.interface'
+import VfiFormGroup from './Bootstrap/VfiFormGroup.vue'
+import VfiFormCheckbox from './Bootstrap/VfiFormCheckbox.vue'
 
 export interface ComponentProps {
     label?: string
     size?: 'sm' | 'lg'
     validationMessages?: Record<string, any>
-    validation?: ValidationProp
+    validation?: Validation
     disabled?: boolean
-    modelValue?: string | number | null | boolean | undefined
+    modelValue?: boolean
     hint?: string
     id?: string
     readOnly?: boolean
     showAsRequired?: boolean
-    options?: Array<{ value: any, text: string }>
-    stacked?: boolean
+    renderAsSwitch?: boolean
 }
 
 const props = withDefaults(
     defineProps<ComponentProps>(),
     {
         disabled: false,
-        readOnly: false,
-        stacked: true,
-        options: () => []
+        readOnly: false
     }
 )
 
-const computedId = computed(() => (props?.id) ? props.id : useId())
-
 const $emit = defineEmits(['update:modelValue', 'change', 'update', 'blur'])
 
-type modelType = string | number | null | boolean | undefined
-
+type modelType = boolean | undefined
 const model = computed({
     get (): modelType {
-        return props.modelValue
+        const modelValue = unref(props.modelValue)
+        if (typeof modelValue === 'boolean') {
+            return modelValue
+        }
+        return undefined
     },
     set (value: modelType): void {
         $emit('update:modelValue', value)
@@ -87,11 +102,13 @@ const model = computed({
     }
 })
 
+const computedId = computed(() => (props.id) ? props.id : useId())
+
 const {
     isRequired,
     invalid,
-    onChange,
     onUpdate,
-    onBlur
+    onBlur,
+    onChange
 } = useInput(props, $emit)
 </script>

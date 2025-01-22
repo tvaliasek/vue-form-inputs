@@ -65,18 +65,18 @@
 </template>
 
 <script setup lang="ts">
+import type { Validation } from '@vuelidate/core'
 import { computed, unref, watch, ref, toValue, useId } from 'vue'
 import { useInput } from './Composables/useInput'
 
 import FormInputFeedbackMessage from './FormInputFeedbackMessage.vue'
 import VfiFormGroup from './Bootstrap/VfiFormGroup.vue'
-import type { ValidationProp } from './ValidationProp.interface'
 
 export interface ComponentProps {
     label?: string
     size?: 'sm' | 'lg'
     validationMessages?: Record<string, any>
-    validation?: ValidationProp
+    validation?: Validation
     disabled?: boolean
     modelValue?: File | File[] | null
     hint?: string
@@ -101,7 +101,7 @@ const props = withDefaults(
 )
 
 const $emit = defineEmits(['update:modelValue', 'change', 'blur'])
-const computedId = computed(() => (props?.id) ? props.id : useId())
+const computedId = computed(() => (props.id) ? props.id : useId())
 
 const fileInput = ref<HTMLInputElement | null>(null)
 const model = computed({

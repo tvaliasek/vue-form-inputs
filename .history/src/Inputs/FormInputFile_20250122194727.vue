@@ -101,7 +101,7 @@ const props = withDefaults(
 )
 
 const $emit = defineEmits(['update:modelValue', 'change', 'blur'])
-const computedId = computed(() => (props?.id) ? props.id : useId())
+const computedId = computed(() => (props.id) ? props.id : useId())
 
 const fileInput = ref<HTMLInputElement | null>(null)
 const model = computed({

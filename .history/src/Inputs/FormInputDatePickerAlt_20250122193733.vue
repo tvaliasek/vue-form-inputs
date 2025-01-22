@@ -45,19 +45,19 @@
 </template>
 
 <script setup lang="ts">
+import type { Validation } from '@vuelidate/core'
 import { computed, unref, toValue, useId } from 'vue'
 import { useInput } from './Composables/useInput'
 import DatePicker from '@vuepic/vue-datepicker'
 import FormInputFeedbackMessage from './FormInputFeedbackMessage.vue'
 import VfiFormGroup from './Bootstrap/VfiFormGroup.vue'
-import type { ValidationProp } from './ValidationProp.interface'
 
 export interface ComponentProps {
     modelValue: string | Date | undefined
     label?: string
     size?: 'sm' | 'lg'
     validationMessages?: Record<string, any>
-    validation?: ValidationProp
+    validation?: Validation
     disabled?: boolean
     hint?: string
     placeholder?: string
@@ -85,7 +85,7 @@ const props = withDefaults(
     }
 )
 
-const computedId = computed(() => (props?.id) ? props.id : useId())
+const computedId = computed(() => (props.id) ? props.id : useId())
 
 const $emit = defineEmits(['update:modelValue', 'change', 'update', 'blur'])
 

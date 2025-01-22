@@ -101,7 +101,7 @@ const computedClasses = computed(() => {
     ]
 })
 
-const computedId = computed(() => (props?.id) ? props.id : useId())
+const computedId = computed(() => (props.id) ? props.id : useId())
 
 const computedAriaInvalid = useAriaInvalid(
     () => props.ariaInvalid,

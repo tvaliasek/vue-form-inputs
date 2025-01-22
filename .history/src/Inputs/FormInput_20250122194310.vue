@@ -75,13 +75,21 @@
 </template>
 
 <script setup lang="ts">
+import type { Validation } from '@vuelidate/core'
 import { computed, toValue, unref, useId } from 'vue'
 import { useInput } from './Composables/useInput'
 
 import FormInputFeedbackMessage from './FormInputFeedbackMessage.vue'
 import VfiFormGroup from './Bootstrap/VfiFormGroup.vue'
 import VfiFormInput from './Bootstrap/VfiFormInput.vue'
-import type { ValidationProp } from './ValidationProp.interface'
+
+export interface ValidationProp {
+    $touch: () => void
+    $reset: () => void
+    $invalid: boolean
+    $dirty: boolean
+    [key: string]: any
+}
 
 export interface ComponentProps {
     label?: string
@@ -115,7 +123,7 @@ const props = withDefaults(
     }
 )
 
-const computedId = computed(() => (props?.id) ? props.id : useId())
+const computedId = computed(() => (props.id) ? props.id : useId())
 
 const $emit = defineEmits(['update:modelValue', 'change', 'update', 'blur'])
 

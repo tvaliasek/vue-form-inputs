@@ -51,7 +51,7 @@ const props = withDefaults(defineProps<{
 
 const $emit = defineEmits(['update:modelValue'])
 
-const computedId = computed(() => (props?.id) ? props.id : useId())
+const computedId = computed(() => (props.id) ? props.id : useId())
 
 const model = computed<Array<number | string | null | boolean | undefined>>({
     get () {

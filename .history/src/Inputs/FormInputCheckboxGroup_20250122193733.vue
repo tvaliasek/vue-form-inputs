@@ -1,16 +1,16 @@
 <template>
     <VfiFormGroup
         :description="hint"
-        :id="toValue(computedId)"
         :class="{ 'form-group-required': isRequired }"
-        :label="label"
+        :id="toValue(computedId)"
         :disabled="disabled"
         :state="invalid === null ? invalid : !invalid"
+        :label="label"
     >
         <template #label>
             <slot name="label"></slot>
         </template>
-        <VfiFormRadioGroup
+        <VfiFormCheckboxGroup
             v-model="model"
             :id="toValue(computedId)"
             :size="size"
@@ -18,6 +18,7 @@
             :disabled="disabled || readOnly"
             :options="options"
             :inline="!stacked"
+            :switch="renderAsSwitch"
             @change="onChange"
             @update="onUpdate"
             @blur="onBlur"
@@ -30,32 +31,31 @@
                 :messages="validationMessages"
             />
         </template>
-        <slot name="input-text"></slot>
     </VfiFormGroup>
 </template>
 
 <script setup lang="ts">
+import type { Validation } from '@vuelidate/core'
 import { computed, unref, toValue, useId } from 'vue'
 import { useInput } from './Composables/useInput'
 import VfiFormGroup from './Bootstrap/VfiFormGroup.vue'
-import VfiFormRadioGroup from './Bootstrap/VfiFormRadioGroup.vue'
-
+import VfiFormCheckboxGroup from './Bootstrap/VfiFormCheckboxGroup.vue'
 import FormInputFeedbackMessage from './FormInputFeedbackMessage.vue'
-import type { ValidationProp } from './ValidationProp.interface'
 
 export interface ComponentProps {
     label?: string
     size?: 'sm' | 'lg'
     validationMessages?: Record<string, any>
-    validation?: ValidationProp
+    validation?: Validation
     disabled?: boolean
-    modelValue?: string | number | null | boolean | undefined
+    modelValue?: Array<string | boolean | number | null>
     hint?: string
     id?: string
     readOnly?: boolean
     showAsRequired?: boolean
-    options?: Array<{ value: any, text: string }>
+    options?: Array<{ value: string | boolean | number | null, text: string }>
     stacked?: boolean
+    renderAsSwitch?: boolean
 }
 
 const props = withDefaults(
@@ -64,19 +64,19 @@ const props = withDefaults(
         disabled: false,
         readOnly: false,
         stacked: true,
-        options: () => []
+        options: () => [],
+        renderAsSwitch: false
     }
 )
 
-const computedId = computed(() => (props?.id) ? props.id : useId())
-
 const $emit = defineEmits(['update:modelValue', 'change', 'update', 'blur'])
 
-type modelType = string | number | null | boolean | undefined
+const computedId = computed(() => (props.id) ? props.id : useId())
 
+type modelType = Array<string | boolean | number | null>
 const model = computed({
     get (): modelType {
-        return props.modelValue
+        return props.modelValue ?? []
     },
     set (value: modelType): void {
         $emit('update:modelValue', value)
@@ -90,8 +90,8 @@ const model = computed({
 const {
     isRequired,
     invalid,
+    onBlur,
     onChange,
-    onUpdate,
-    onBlur
+    onUpdate
 } = useInput(props, $emit)
 </script>

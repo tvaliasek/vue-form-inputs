@@ -68,7 +68,7 @@ const props = withDefaults(
     }
 )
 
-const computedId = computed(() => (props?.id) ? props.id : useId())
+const computedId = computed(() => (props.id) ? props.id : useId())
 
 const $emit = defineEmits(['update:modelValue', 'change', 'update', 'blur'])
 
