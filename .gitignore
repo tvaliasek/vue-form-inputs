@@ -28,3 +28,6 @@ coverage
 *.sw?
 stats.html
 .history
+**/.history
+**/.qodo
+.qodo
