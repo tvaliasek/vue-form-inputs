@@ -11,7 +11,7 @@ export default (
         disabled?: boolean
         ariaInvalid?: boolean | 'grammar' | 'spelling'
         state?: boolean | null
-        modelModifiers?: Record<'number' | 'lazy' | 'trim', boolean | undefined>
+        modelModifiers?: Partial<Record<'number' | 'lazy' | 'trim', boolean | undefined>>
     }>,
     modelValue: Ref<string | number | null>
 ): {

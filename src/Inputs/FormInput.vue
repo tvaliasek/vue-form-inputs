@@ -101,7 +101,7 @@ export interface ComponentProps {
     lazyFormatter?: boolean
     autocomplete?: string
     name?: string
-    modelModifiers?: Record<'number' | 'lazy' | 'trim', boolean | undefined>
+    modelModifiers?: Partial<Record<'number' | 'lazy' | 'trim', boolean | undefined>>
 }
 
 const props = withDefaults(

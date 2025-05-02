@@ -1,6 +1,6 @@
 export default (
     value: string | number | null,
-    modelModifiers: Record<'number' | 'lazy' | 'trim', true | undefined>
+    modelModifiers: Partial<Record<'number' | 'lazy' | 'trim', true | undefined>>
 ) => {
     if (value === null) {
         return

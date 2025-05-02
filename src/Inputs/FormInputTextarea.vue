@@ -63,7 +63,7 @@ export interface ComponentProps {
     readOnly?: boolean
     showAsRequired?: boolean
     lazyFormatter?: boolean
-    modelModifiers?: Record<'number' | 'lazy' | 'trim', boolean | undefined>
+    modelModifiers?: Partial<Record<'number' | 'lazy' | 'trim', boolean | undefined>>
 }
 
 const props = withDefaults(

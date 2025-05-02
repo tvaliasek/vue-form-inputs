@@ -46,7 +46,7 @@ const props = withDefaults(defineProps<{
     lazyFormatter?: boolean
     ariaInvalid?: boolean | 'grammar' | 'spelling'
     modelValue?: string | number | null
-    modelModifiers?: Record<'number' | 'lazy' | 'trim', boolean | undefined>
+    modelModifiers?: Partial<Record<'number' | 'lazy' | 'trim', boolean | undefined>>
     rows?: number | string
 }>(), {
     disabled: false,
