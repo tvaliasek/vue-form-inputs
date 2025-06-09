@@ -16,7 +16,7 @@
             :label="option.text"
             :size="size"
             :state="state"
-            :disabled="disabled"
+            :disabled="disabled || option.disabled"
             :name="name ?? toValue(computedId)"
             :inline="inline"
             :value="option.value"
