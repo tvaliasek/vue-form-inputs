@@ -17,7 +17,7 @@
             :size="size"
             :state="state"
             :switch="props.switch"
-            :disabled="disabled"
+            :disabled="disabled || option.disabled"
             :name="`${name}-${index}`"
             :inline="inline"
             :value="option.value"
