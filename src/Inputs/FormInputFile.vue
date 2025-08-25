@@ -52,7 +52,8 @@
             @change="onInputEvent"
             @blur="onInputEvent"
         />
-        <template #invalid-feedback
+        <template
+            #invalid-feedback
             v-if="invalid && validation"
         >
             <FormInputFeedbackMessage
@@ -105,10 +106,10 @@ const computedId = computed(() => (props?.id) ? props.id : useId())
 
 const fileInput = ref<HTMLInputElement | null>(null)
 const model = computed({
-    get (): File | File[] | undefined | null {
+    get(): File | File[] | undefined | null {
         return unref(props.modelValue)
     },
-    set (value: File | File[] | undefined | null): void {
+    set(value: File | File[] | undefined | null): void {
         $emit('update:modelValue', value)
         const validation = unref(props.validation)
         if (typeof validation?.$touch === 'function') {
@@ -145,22 +146,22 @@ watch(computed(() => props.modelValue), (value: File | File[] | undefined | null
     }
 })
 
-function onInputEvent (event: Event): void {
+function onInputEvent(event: Event): void {
     if (['change', 'blur'].includes(event.type)) {
         const accept = unref(acceptTypes)
         const files = (event.target as HTMLInputElement).files
         if (files !== null && files?.length > 0) {
             const patterns = (accept !== undefined) ? accept.split(',') : []
-            const acceptedFiles: File[] = [...files].filter((file: File) => {
+            const acceptedFiles: File[] = Array.from(files).filter((file: File) => {
                 if (patterns.length === 0) {
                     return true
                 }
                 for (const pattern of patterns) {
                     if (
-                        (pattern.startsWith('.') && file.name.toLowerCase().endsWith(pattern)) ||
-                        (pattern.startsWith('*') && file.type.endsWith(pattern.replace('*', ''))) ||
-                        (pattern.endsWith('*') && file.type.startsWith(pattern.replace('*', ''))) ||
-                        (file.type === pattern)
+                        (pattern.startsWith('.') && file.name.toLowerCase().endsWith(pattern))
+                        || (pattern.startsWith('*') && file.type.endsWith(pattern.replace('*', '')))
+                        || (pattern.endsWith('*') && file.type.startsWith(pattern.replace('*', '')))
+                        || (file.type === pattern)
                     ) {
                         return true
                     }

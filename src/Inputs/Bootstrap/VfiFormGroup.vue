@@ -20,17 +20,26 @@
         </slot>
         <slot></slot>
         <slot name="description">
-            <div v-if="description" class="form-text">
+            <div
+                v-if="description"
+                class="form-text"
+            >
                 {{ description }}
             </div>
         </slot>
         <slot name="invalid-feedback">
-            <div v-if="invalidFeedback && state === false" class="invalid-feedback">
+            <div
+                v-if="invalidFeedback && state === false"
+                class="invalid-feedback"
+            >
                 {{ invalidFeedback }}
             </div>
         </slot>
         <slot name="valid-feedback">
-            <div v-if="validFeedback && state === true" class="valid-feedback">
+            <div
+                v-if="validFeedback && state === true"
+                class="valid-feedback"
+            >
                 {{ validFeedback }}
             </div>
         </slot>

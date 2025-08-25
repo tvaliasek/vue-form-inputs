@@ -1,22 +1,28 @@
 {
   "extends": "./tsconfig.app.json",
   "include": [
-    "./src/index.ts",
-    "./types.d.ts"
+    "./src/**/*.ts",
+    "./src/**/*.vue",
   ],
   "exclude": [
     "src/**/*.spec.ts",
     "src/**/*.stories.ts",
-    "src/components/**/*",
     "src/main.ts",
-    "src/App.vue"
+    "src/App.vue",
   ],
   "compilerOptions": {
     "noEmit": false,
     "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": true,
     "composite": false,
     "tsBuildInfoFile": null,
-    "lib": [],
-    "types": ["node", "jsdom"]
+    "lib": [
+      "ES2023",
+      "DOM"
+    ],
+    "types": [
+      "node"
+    ]
   }
 }

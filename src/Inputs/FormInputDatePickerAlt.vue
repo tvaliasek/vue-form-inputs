@@ -23,16 +23,16 @@
             :ignore-time-validation="ignoreTimeValidation"
             :format="dateFormat"
             :placeholder="placeholder"
-            hideInputIcon
-            :showNowButton="showNowButton"
+            hide-input-icon
+            :show-now-button="showNowButton"
             :readonly="readOnly"
-            :inputClassName="`form-control form-control-${size}`"
+            :input-class-name="`form-control form-control-${size}`"
             :locale="locale"
             :uid="id ?? undefined"
             :class="{ 'is-datepicker-invalid': ((invalid !== null) ? invalid : false) }"
-        >
-        </DatePicker>
-        <template #invalid-feedback
+        />
+        <template
+            #invalid-feedback
             v-if="invalid && validation"
         >
             <FormInputFeedbackMessage
@@ -90,9 +90,9 @@ const computedId = computed(() => (props?.id) ? props.id : useId())
 const $emit = defineEmits(['update:modelValue', 'change', 'update', 'blur'])
 
 const model = computed({
-    get (): string | Date | undefined {
+    get(): string | Date | undefined {
         const modelValue = unref(props.modelValue)
-        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+
         if (!modelValue) {
             return undefined
         }
@@ -100,15 +100,15 @@ const model = computed({
             return modelValue
         }
         const dateValue = new Date(modelValue)
-        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+
         if (dateValue && !isNaN(dateValue.valueOf())) {
             return dateValue
         }
         return undefined
     },
-    set (value: string | Date | undefined): void {
+    set(value: string | Date | undefined): void {
         let dateValue = unref(value)
-        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+
         if (!(dateValue instanceof Date) && (typeof dateValue === 'string' || typeof dateValue === 'number')) {
             dateValue = new Date(dateValue)
         }

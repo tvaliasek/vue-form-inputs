@@ -59,7 +59,8 @@
             :multiple="multi"
             :select-size="(multi === true) ? selectSize : undefined"
         />
-        <template #invalid-feedback
+        <template
+            #invalid-feedback
             v-if="invalid && validation"
         >
             <FormInputFeedbackMessage
@@ -118,8 +119,7 @@ const computedOptions = computed(() => {
     const options = unref(props.options)
     const placeholder = unref(props.placeholder)
 
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-    if (placeholder && !options.some((option) => (option.value === ''))) {
+    if (placeholder && !options.some(option => (option.value === ''))) {
         return [
             { value: '', text: placeholder, disabled: true },
             ...options
@@ -133,10 +133,10 @@ const $emit = defineEmits(['update:modelValue', 'change', 'update', 'blur'])
 
 type modelType = string | number | undefined | null | boolean | Array<string | number | null | undefined | boolean>
 const model = computed({
-    get (): modelType {
+    get(): modelType {
         return props.modelValue
     },
-    set (value: modelType): void {
+    set(value: modelType): void {
         $emit('update:modelValue', value)
         const validation = unref(props.validation)
         if (typeof validation?.$touch === 'function') {
@@ -145,7 +145,7 @@ const model = computed({
     }
 })
 
-function onUpdateModelValue (value: modelType): void {
+function onUpdateModelValue(value: modelType): void {
     model.value = value
 }
 

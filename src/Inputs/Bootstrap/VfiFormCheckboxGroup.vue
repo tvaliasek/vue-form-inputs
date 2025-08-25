@@ -22,8 +22,8 @@
             :inline="inline"
             :value="option.value"
             :model-value="model.includes(option.value)"
-            @add:checkboxValue="onAddCheckboxValue"
-            @remove:checkboxValue="onRemoveCheckboxValue"
+            @add:checkbox-value="onAddCheckboxValue"
+            @remove:checkbox-value="onRemoveCheckboxValue"
         />
     </div>
 </template>
@@ -54,22 +54,22 @@ const $emit = defineEmits(['update:modelValue'])
 const computedId = computed(() => (props?.id) ? props.id : useId())
 
 const model = computed<Array<number | string | null | boolean | undefined>>({
-    get () {
-        return [...props.options.map(item => item.value)].filter(value => props.modelValue.includes(value))
+    get() {
+        return props.options.map(item => item.value).filter(value => props.modelValue.includes(value))
     },
-    set (value) {
+    set(value) {
         $emit('update:modelValue', value)
     }
 })
 
-function onAddCheckboxValue (value: number | string | null | boolean | undefined): void {
+function onAddCheckboxValue(value: number | string | null | boolean | undefined): void {
     if (model.value.includes(value)) {
         return
     }
     model.value = [...model.value, value]
 }
 
-function onRemoveCheckboxValue (value: number | string | null | boolean | undefined): void {
+function onRemoveCheckboxValue(value: number | string | null | boolean | undefined): void {
     model.value = model.value.filter(item => item !== value)
 }
 </script>

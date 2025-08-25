@@ -1,5 +1,6 @@
 <template>
-    <div :class="[
+    <div
+        :class="[
             'form-check',
             (size !== undefined) ? `form-control-${size}` : undefined,
             {
@@ -8,7 +9,8 @@
                 'is-invalid': props.state === false,
                 'is-valid': props.state === true
             }
-        ]">
+        ]"
+    >
         <input
             :class="[
                 'form-check-input',
@@ -70,7 +72,7 @@ watch(model, (newValue) => {
     }
 })
 
-function onInput (event: Event): void {
+function onInput(event: Event): void {
     model.value = (event.target as HTMLInputElement).checked
 }
 </script>

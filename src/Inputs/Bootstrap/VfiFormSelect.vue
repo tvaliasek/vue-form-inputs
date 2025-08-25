@@ -14,15 +14,16 @@
         @change="onChange($event)"
         @blur="onBlur($event)"
     >
-        <slot name="first" />
+        <slot name="first"></slot>
         <option
-            v-for="option in options" :value="option.value"
+            v-for="option in options"
+            :value="option.value"
             :key="`${option.value}-${option.text}`"
             :disabled="option.disabled || undefined"
         >
             {{ option.text }}
         </option>
-        <slot name="last" />
+        <slot name="last"></slot>
     </select>
 </template>
 
@@ -62,23 +63,23 @@ const props = withDefaults(defineProps<{
 const input = ref<HTMLSelectElement | null>(null)
 const $emit = defineEmits(['update:modelValue', 'change', 'blur'])
 
-function onChange (data: any): void {
+function onChange(data: any): void {
     $emit('change', data)
 }
 
-function onBlur (data: any): void {
+function onBlur(data: any): void {
     $emit('blur', data)
 }
 
 const model = computed<string | number | undefined | null | boolean | Array<string | number | null | undefined | boolean>>({
-    get () {
+    get() {
         const value = props.modelValue
         if (props.multiple) {
             return Array.isArray(value) ? value : ((value !== undefined) ? [value] : [])
         }
         return value ?? ''
     },
-    set (value) {
+    set(value) {
         if (props.multiple) {
             $emit('update:modelValue', Array.isArray(value) ? value : ((value !== undefined) ? [value] : []))
             return
@@ -109,14 +110,12 @@ const computedAriaInvalid = useAriaInvalid(
 )
 
 const focus = (): void => {
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (!props.disabled) {
         focused.value = true
     }
 }
 
 const blur = (): void => {
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (!props.disabled) {
         focused.value = false
     }

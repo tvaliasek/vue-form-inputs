@@ -9,8 +9,8 @@ export default (
     const resolvedAriaInvalid = toValue(ariaInvalid)
     const resolvedState = toValue(state)
 
-    const resolvedAriaInvalidValue =
-      resolvedAriaInvalid === true
+    const resolvedAriaInvalidValue
+      = resolvedAriaInvalid === true
           ? 'true'
           : typeof resolvedAriaInvalid === 'string'
               ? resolvedAriaInvalid

@@ -50,10 +50,10 @@ const $emit = defineEmits(['update:modelValue'])
 const computedId = computed(() => (props?.id) ? props.id : useId())
 
 const model = computed<number | string | null | boolean | undefined>({
-    get () {
+    get() {
         return props.modelValue
     },
-    set (value) {
+    set(value) {
         $emit('update:modelValue', value)
     }
 })

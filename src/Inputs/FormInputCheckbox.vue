@@ -40,7 +40,8 @@
             </template>
         </VfiFormCheckbox>
 
-        <template #invalid-feedback
+        <template
+            #invalid-feedback
             v-if="invalid && validation"
         >
             <FormInputFeedbackMessage
@@ -86,14 +87,14 @@ const $emit = defineEmits(['update:modelValue', 'change', 'update', 'blur'])
 
 type modelType = boolean | undefined
 const model = computed({
-    get (): modelType {
+    get(): modelType {
         const modelValue = unref(props.modelValue)
         if (typeof modelValue === 'boolean') {
             return modelValue
         }
         return undefined
     },
-    set (value: modelType): void {
+    set(value: modelType): void {
         $emit('update:modelValue', value)
         const validation = unref(props.validation)
         if (typeof validation?.$touch === 'function') {

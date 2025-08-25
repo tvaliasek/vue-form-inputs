@@ -23,7 +23,7 @@ export const TRANSLATE_INJECTION_KEY = '$vfiTranslate'
 
 export const FormInputsPlugin = (): Plugin => {
     return {
-        install (app: App) {
+        install(app: App) {
             app.component('FormInput', FormInput)
             app.component('FormInputTextarea', FormInputTextarea)
             app.component('FormInputCheckbox', FormInputCheckbox)

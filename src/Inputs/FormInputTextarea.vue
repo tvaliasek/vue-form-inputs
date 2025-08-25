@@ -27,7 +27,8 @@
             :readonly="readOnly"
             :rows="rows"
         />
-        <template #invalid-feedback
+        <template
+            #invalid-feedback
             v-if="invalid && validation"
         >
             <FormInputFeedbackMessage
@@ -81,14 +82,14 @@ const $emit = defineEmits(['update:modelValue', 'change', 'update', 'blur'])
 
 type modelType = string | undefined
 const model = computed({
-    get (): modelType {
+    get(): modelType {
         const modelValue = unref(props.modelValue)
         if (typeof modelValue === 'string' || typeof modelValue === 'number') {
             return modelValue
         }
         return undefined
     },
-    set (value: modelType): void {
+    set(value: modelType): void {
         $emit('update:modelValue', value)
         const validation = unref(props.validation)
         if (typeof validation?.$touch === 'function') {
@@ -96,7 +97,7 @@ const model = computed({
         }
     }
 })
-function onUpdateModelValue (value: modelType): void {
+function onUpdateModelValue(value: modelType): void {
     model.value = value
 }
 

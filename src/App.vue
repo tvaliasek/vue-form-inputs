@@ -4,7 +4,7 @@
         <p>
             Vuelidate detected: {{ vuelidateDetected }}, Vue I18n detected: {{ vueI18nDetected }}
         </p>
-        <hr/>
+        <hr />
         <div class="row">
             <div class="col-12 col-md-8">
                 <InputTester
@@ -195,8 +195,11 @@
             </div>
             <div class="col-12 col-md-4">
                 <h4>Events</h4>
-                <hr/>
-                <div v-for="event in events" :key="JSON.stringify(event)">
+                <hr />
+                <div
+                    v-for="event in events"
+                    :key="JSON.stringify(event)"
+                >
                     <p>
                         <strong>{{ event.inputName }}</strong> - {{ event.eventName }}
                     </p>
@@ -301,6 +304,6 @@ const v$ = useVuelidate({
 })
 
 provide(TRANSLATE_INJECTION_KEY, (message: string, params?: Record<string, any>) => {
-    return $t(message, params)
+    return $t(message, params ?? {})
 })
 </script>

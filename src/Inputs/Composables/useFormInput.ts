@@ -15,15 +15,15 @@ export default (
     }>,
     modelValue: Ref<string | number | null>
 ): {
-        input: Ref<HTMLInputElement | null>
-        computedId: ComputedRef<string>
-        computedAriaInvalid: ComputedRef<'grammar' | 'spelling' | 'true' | 'false' | undefined>
-        onInput: (evt: Readonly<Event>) => void
-        onChange: (evt: Readonly<Event>) => void
-        onBlur: (evt: Readonly<FocusEvent>) => void
-        focus: () => void
-        blur: () => void
-    } => {
+    input: Ref<HTMLInputElement | null>
+    computedId: ComputedRef<string>
+    computedAriaInvalid: ComputedRef<'grammar' | 'spelling' | 'true' | 'false' | undefined>
+    onInput: (evt: Readonly<Event>) => void
+    onChange: (evt: Readonly<Event>) => void
+    onBlur: (evt: Readonly<FocusEvent>) => void
+    focus: () => void
+    blur: () => void
+} => {
     const computedId = computed(() => (props?.id) ? props.id : useId())
     const input = ref<HTMLInputElement | null>(null)
 
@@ -47,7 +47,6 @@ export default (
     })
 
     const _formatValue = (value: string, evt: Readonly<Event>, force = false): string => {
-        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
         if (props.formatter !== undefined && (!props.lazyFormatter || force)) {
             return props.formatter(value, evt)
         }
@@ -55,7 +54,6 @@ export default (
     }
 
     onMounted(() => {
-        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
         if (input?.value) {
             input.value.value = modelValue?.value?.toString() ?? ''
         }
@@ -63,7 +61,6 @@ export default (
 
     onActivated(() => {
         void nextTick(() => {
-            // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
             if (props?.autofocus) {
                 focused.value = true
             }
@@ -102,7 +99,6 @@ export default (
     }
 
     const onBlur = (evt: Readonly<FocusEvent>): void => {
-        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
         if (!props.modelModifiers?.lazy && !props.lazyFormatter) {
             return
         }
@@ -117,14 +113,12 @@ export default (
     }
 
     const focus = (): void => {
-        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
         if (!props.disabled) {
             focused.value = true
         }
     }
 
     const blur = (): void => {
-        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
         if (!props.disabled) {
             focused.value = false
         }

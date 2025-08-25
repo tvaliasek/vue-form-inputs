@@ -1,5 +1,7 @@
 <template>
-    <div class="invalid-feedback">{{ message }}</div>
+    <div class="invalid-feedback">
+        {{ message }}
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -16,7 +18,6 @@ const $t = inject<((message: string, params?: Record<string, any>) => string) | 
 const message = computed(() => {
     const rules = Object.keys(props.validationModel).filter(item => !`${item}`.startsWith('$'))
     for (const ruleName of rules) {
-        // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
         if (props?.validationModel?.[ruleName]?.$invalid) {
             if (typeof props.messages?.[ruleName] === 'string') {
                 return props.messages[ruleName]
@@ -28,7 +29,7 @@ const message = computed(() => {
     return getDefaultMessage()
 })
 
-function getDefaultMessage (ruleType?: string, validationRule?: any): string {
+function getDefaultMessage(ruleType?: string, validationRule?: any): string {
     let parameter
     let params: Record<string, any> = {}
     if (validationRule?.$params !== undefined) {
@@ -46,11 +47,11 @@ function getDefaultMessage (ruleType?: string, validationRule?: any): string {
             case 'maxLength':
                 return $t('vueFormInputs.feedback.maxLength', { maxLength: params.max })
             case 'minValue':
-                // eslint-disable-next-line no-case-declarations
+
                 parameter = (params.min instanceof Date) ? params.min.toLocaleDateString() : params.min
                 return $t('vueFormInputs.feedback.minValue', { minValue: parameter })
             case 'maxValue':
-                // eslint-disable-next-line no-case-declarations
+
                 parameter = (params.max instanceof Date) ? params.max.toLocaleDateString() : params.max
                 return $t('vueFormInputs.feedback.maxValue', { maxValue: parameter })
             case 'between':
@@ -91,23 +92,23 @@ function getDefaultMessage (ruleType?: string, validationRule?: any): string {
         case 'requiredUnless':
             return 'Toto pole je nutné vyplnit.'
         case 'minLength':
-            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+
             return `Hodnota musí být minimálně ${params.min} znaků dlouhá.`
         case 'maxLength':
-            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+
             return `Hodnota musí být maximálně ${params.max} znaků dlouhá.`
         case 'minValue':
-            // eslint-disable-next-line no-case-declarations
+
             parameter = (params.min instanceof Date) ? params.min.toLocaleDateString() : params.min
-            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+
             return `Hodnota musí být minimálně ${parameter}.`
         case 'maxValue':
-            // eslint-disable-next-line no-case-declarations
+
             parameter = (params.max instanceof Date) ? params.max.toLocaleDateString() : params.max
-            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+
             return `Hodnota musí být maximálně ${parameter}.`
         case 'between':
-            // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+
             return `Hodnota musí být mezi ${params.min} a ${params.max}.`
         case 'alpha':
             return 'Jsou povoleny pouze písmena.'

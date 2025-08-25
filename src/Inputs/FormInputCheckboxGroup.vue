@@ -23,7 +23,8 @@
             @update="onUpdate"
             @blur="onBlur"
         />
-        <template #invalid-feedback
+        <template
+            #invalid-feedback
             v-if="invalid && validation"
         >
             <FormInputFeedbackMessage
@@ -75,10 +76,10 @@ const computedId = computed(() => (props?.id) ? props.id : useId())
 
 type modelType = Array<string | boolean | number | null>
 const model = computed({
-    get (): modelType {
+    get(): modelType {
         return props.modelValue ?? []
     },
-    set (value: modelType): void {
+    set(value: modelType): void {
         $emit('update:modelValue', value)
         const validation = unref(props.validation)
         if (typeof validation?.$touch === 'function') {

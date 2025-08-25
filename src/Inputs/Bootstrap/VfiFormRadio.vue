@@ -1,5 +1,6 @@
 <template>
-    <div :class="[
+    <div
+        :class="[
             'form-check',
             (size !== undefined) ? `form-control-${size}` : undefined,
             {
@@ -7,7 +8,8 @@
                 'is-invalid': props.state === false,
                 'is-valid': props.state === true
             }
-        ]">
+        ]"
+    >
         <input
             :class="[
                 'form-check-input',
@@ -57,7 +59,7 @@ const props = withDefaults(defineProps<{
 
 const model = defineModel<string | number | boolean | null>({ default: null })
 
-function onInput (event: Event): void {
+function onInput(): void {
     if (props.value !== undefined) {
         model.value = props.value
     }

@@ -1,25 +1,30 @@
-/* eslint-disable import/no-unresolved */
 import { fileURLToPath, URL } from 'node:url'
+
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import vueDevTools from 'vite-plugin-vue-devtools'
 import { resolve } from 'node:path'
 import dts from 'vite-plugin-dts'
-import { writeFileSync } from 'node:fs'
 import { visualizer } from 'rollup-plugin-visualizer'
 
-// https://vitejs.dev/config/
+
+const customElements: string[] = [
+//    'iconify-icon',
+]
+
+// https://vite.dev/config/
 export default defineConfig({
     plugins: [
-        vue(),
-        dts({
-            tsconfigPath: resolve(__dirname, 'tsconfig.declarations.json'),
-            beforeWriteFile: (filePath, content) => {
-                writeFileSync('dist/index.d.mts', content)
-                return {
-                    filePath,
-                    content
+        vue({
+            template: {
+                compilerOptions: {
+                    isCustomElement: tag => customElements.includes(tag)
                 }
             }
+        }),
+        vueDevTools(),
+        dts({
+            tsconfigPath: resolve(__dirname, 'tsconfig.declarations.json')
         }),
         visualizer()
     ],
@@ -32,7 +37,8 @@ export default defineConfig({
         lib: {
             entry: resolve(__dirname, 'src/index.ts'),
             name: 'VueFormInputs',
-            fileName: 'vue-form-inputs'
+            fileName: format => `vue-form-inputs${(format !== 'es') ? `.${format}` : ''}.js`,
+            formats: ['es', 'umd']
         },
         rollupOptions: {
             external: [
@@ -43,11 +49,12 @@ export default defineConfig({
             ],
             output: {
                 globals: {
-                    vue: 'Vue',
+                    'vue': 'Vue',
                     '@vuepic/vue-datepicker': '@vuepic/vue-datepicker'
                 },
                 assetFileNames: 'vue-form-inputs.[ext]'
             }
         }
+
     }
 })
