@@ -15,7 +15,7 @@
                 :id="`${id}_formGroupLabel`"
                 class="form-label"
             >
-                {{ label }}
+                <slot name="label-prepend"></slot><slot name="label-text">{{ label }}</slot><slot name="label-append"></slot>
             </label>
         </slot>
         <slot></slot>
