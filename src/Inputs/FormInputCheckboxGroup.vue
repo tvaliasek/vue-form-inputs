@@ -10,6 +10,15 @@
         <template #label>
             <slot name="label"></slot>
         </template>
+        <template #label-prepend>
+            <slot name="label-prepend"></slot>
+        </template>
+        <template #label-text>
+            <slot name="label-text"></slot>
+        </template>
+        <template #label-append>
+            <slot name="label-append"></slot>
+        </template>
         <VfiFormCheckboxGroup
             v-model="model"
             :id="toValue(computedId)"
