@@ -35,6 +35,7 @@
             :utc="enforceUtc ? 'preserve' : false"
             :class="{ 'is-datepicker-invalid': ((invalid !== null) ? invalid : false) }"
             :start-time="defaultTime"
+            :start-date="calendarStartDate"
         >
             <template #dp-input>
                 <VfiFormInput
@@ -160,6 +161,14 @@ const displayValue = computed(() => {
         return unref(dateFormatter)(value, unref(props.locale), unref(props.enforceUtc))
     }
     return value
+})
+
+const calendarStartDate = computed(() => {
+    const maxDate = unref(props.maxDate)
+    if (maxDate && new Date() > maxDate) {
+        return maxDate
+    }
+    return undefined
 })
 
 const {
