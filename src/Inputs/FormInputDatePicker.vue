@@ -78,7 +78,7 @@ export interface ComponentProps {
     validationMessages?: Record<string, any>
     validation?: ValidationProp
     disabled?: boolean
-    modelValue: string | Date | undefined
+    modelValue: string | Date | null | undefined
     hint?: string
     placeholder?: string
     id?: string
@@ -116,7 +116,7 @@ const computedId = computed(() => (props?.id) ? props.id : useId())
 const $emit = defineEmits(['update:modelValue', 'change', 'update', 'blur'])
 
 const model = computed({
-    get(): string | Date | undefined {
+    get(): string | Date | null | undefined {
         const modelValue = unref(props.modelValue)
 
         if (!modelValue) {
@@ -132,7 +132,7 @@ const model = computed({
         }
         return undefined
     },
-    set(value: string | Date | undefined): void {
+    set(value: string | Date | null | undefined): void {
         let dateValue = unref(value)
 
         if (!(dateValue instanceof Date) && (typeof dateValue === 'string' || typeof dateValue === 'number')) {
