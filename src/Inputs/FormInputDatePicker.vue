@@ -19,7 +19,7 @@
         <template #label-append>
             <slot name="label-append"></slot>
         </template>
-        <DatePicker
+        <VueDatePicker
             v-model="model"
             text-input
             :auto-apply="true"
@@ -49,7 +49,7 @@
                     :readonly="true"
                 />
             </template>
-        </DatePicker>
+        </VueDatePicker>
         <template
             #invalid-feedback
             v-if="invalid && validation"
@@ -67,11 +67,13 @@
 import { dateFormat as dateFormatFunction, dateTimeFormat } from './datePickerUtils'
 import { computed, unref, toValue, useId } from 'vue'
 import { useInput } from './Composables/useInput'
-import DatePicker from '@vuepic/vue-datepicker'
+import { VueDatePicker } from '@vuepic/vue-datepicker'
 import FormInputFeedbackMessage from './FormInputFeedbackMessage.vue'
 import VfiFormGroup from './Bootstrap/VfiFormGroup.vue'
 import VfiFormInput from './Bootstrap/VfiFormInput.vue'
 import type { ValidationProp } from './ValidationProp.interface'
+import type { Locale } from 'date-fns'
+import { cs } from 'date-fns/locale'
 
 export interface ComponentProps {
     label?: string
@@ -85,7 +87,7 @@ export interface ComponentProps {
     id?: string
     readOnly?: boolean
     showAsRequired?: boolean
-    locale?: string
+    locale?: Locale
     minDate?: Date
     maxDate?: Date
     enableTime?: boolean
@@ -107,7 +109,7 @@ const props = withDefaults(
         readOnly: false,
         ignoreTimeValidation: true,
         enableTime: false,
-        locale: 'cs-CZ',
+        locale: () => cs,
         enforceUtc: false
     }
 )
@@ -156,9 +158,9 @@ const dateFormatter = computed(() => {
 })
 
 const displayValue = computed(() => {
-    const value = unref(model)
+    const value = toValue(model)
     if (value instanceof Date) {
-        return unref(dateFormatter)(value, unref(props.locale), unref(props.enforceUtc))
+        return unref(dateFormatter)(value, unref(props.locale.code), unref(props.enforceUtc))
     }
     return value
 })

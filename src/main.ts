@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
 import { createI18n } from 'vue-i18n'
 import App from './App.vue'
-import DatePicker from '@vuepic/vue-datepicker'
+import { VueDatePicker } from '@vuepic/vue-datepicker'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -66,6 +66,6 @@ const i18n = createI18n({
 
 app.use(FormInputsPlugin())
 app.use(i18n)
-app.component('DatePicker', DatePicker)
+app.component('VueDatePicker', VueDatePicker)
 
 app.mount('#app')

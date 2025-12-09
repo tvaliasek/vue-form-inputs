@@ -19,7 +19,7 @@
         <template #label-append>
             <slot name="label-append"></slot>
         </template>
-        <DatePicker
+        <VueDatePicker
             v-model="model"
             text-input
             :auto-apply="true"
@@ -56,10 +56,12 @@
 <script setup lang="ts">
 import { computed, unref, toValue, useId } from 'vue'
 import { useInput } from './Composables/useInput'
-import DatePicker from '@vuepic/vue-datepicker'
+import { VueDatePicker } from '@vuepic/vue-datepicker'
 import FormInputFeedbackMessage from './FormInputFeedbackMessage.vue'
 import VfiFormGroup from './Bootstrap/VfiFormGroup.vue'
 import type { ValidationProp } from './ValidationProp.interface'
+import type { Locale } from 'date-fns'
+import { cs } from 'date-fns/locale'
 
 export interface ComponentProps {
     modelValue: string | Date | undefined
@@ -74,7 +76,7 @@ export interface ComponentProps {
     readOnly?: boolean
     showAsRequired?: boolean
     showNowButton?: boolean
-    locale?: string
+    locale?: Locale
     minDate?: Date
     maxDate?: Date
     enableTime?: boolean
@@ -90,7 +92,7 @@ const props = withDefaults(
         readOnly: false,
         ignoreTimeValidation: true,
         enableTime: false,
-        locale: 'cs-CZ'
+        locale: () => cs
     }
 )
 

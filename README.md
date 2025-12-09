@@ -205,7 +205,7 @@ Datepicker wraps [@vuepic/vue-datepicker](https://vue3datepicker.com/).
 
 | prop | type | required | default | description |
 |------|------|----------|---------|-------------|
-| locale | string | false | 'cs-CZ' | Locale string |
+| locale | Locale | false | cs | Locale from date-fns lib as for vuepic/vue-datepicker |
 | minDate | Date | false | undefined | Minimum selectable date |
 | maxDate | Date | false | undefined | Maximum selectable date |
 | enableTime | boolean | false | false | Allow time selection |
@@ -219,7 +219,7 @@ Datepicker wraps [@vuepic/vue-datepicker](https://vue3datepicker.com/).
 
 | prop | type | required | default | description |
 |------|------|----------|---------|-------------|
-| locale | string | false | 'cs-CZ' | Locale |
+| locale | Locale | false | cs | Locale from date-fns |
 | minDate | Date | false | undefined | Minimum date |
 | maxDate | Date | false | undefined | Maximum date |
 | enableTime | boolean | false | false | Time selection |
