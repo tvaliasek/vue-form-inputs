@@ -24,7 +24,7 @@ export function useInput(props: Record<string, any>, $emit: (event: any, ...args
         return null
     })
 
-    const onEvent = (eventName: 'change' | 'update' | 'blur') => {
+    const onEvent = (eventName: 'change' | 'update' | 'blur' | 'focus') => {
         return (eventData: unknown) => {
             $emit(eventName, eventData)
         }
@@ -33,6 +33,7 @@ export function useInput(props: Record<string, any>, $emit: (event: any, ...args
     const onChange = onEvent('change')
     const onUpdate = onEvent('update')
     const onBlur = onEvent('blur')
+    const onFocus = onEvent('focus')
 
     const formatValue = function (value: string, event?: Event): string {
         const formatter = unref(props.formatter)
@@ -49,6 +50,7 @@ export function useInput(props: Record<string, any>, $emit: (event: any, ...args
         onUpdate,
         onBlur,
         onEvent,
+        onFocus,
         formatValue
     }
 }

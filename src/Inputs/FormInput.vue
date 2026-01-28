@@ -48,6 +48,7 @@
                 @change="onChange"
                 @update="onUpdate"
                 @blur="onBlur"
+                @focus="onFocus"
             />
             <slot name="append"></slot>
         </div>
@@ -70,6 +71,7 @@
             @change="onChange"
             @update="onUpdate"
             @blur="onBlur"
+            @focus="onFocus"
         />
         <template
             #invalid-feedback
@@ -127,7 +129,7 @@ const props = withDefaults(
 
 const computedId = computed(() => (props?.id) ? props.id : useId())
 
-const $emit = defineEmits(['update:modelValue', 'change', 'update', 'blur'])
+const $emit = defineEmits(['update:modelValue', 'change', 'update', 'blur', 'focus'])
 
 type modelType = string | number | undefined
 const model = computed({
@@ -157,6 +159,7 @@ const {
     onUpdate,
     onChange,
     onBlur,
+    onFocus,
     formatValue
 } = useInput(props, $emit)
 </script>
