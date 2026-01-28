@@ -1,6 +1,6 @@
 {
     "name": "@tvaliasek/vue-form-inputs",
-    "version": "5.2.0",
+    "version": "5.2.2",
     "private": false,
     "files": [
         "src",
@@ -60,7 +60,7 @@
     "dependencies": {
         "@vueuse/core": "^14.1.0",
         "date-fns": "^4.1.0",
-        "vue": "^3.5.25"
+        "vue": "^3.5.27"
     },
     "peerDependencies": {
         "@vuepic/vue-datepicker": "*",
@@ -70,11 +70,11 @@
     "devDependencies": {
         "@iconify-json/bi": "^1.2.7",
         "@popperjs/core": "^2.11.8",
-        "@stylistic/eslint-plugin": "^5.6.1",
-        "@tsconfig/node24": "^24.0.3",
+        "@stylistic/eslint-plugin": "^5.7.1",
+        "@tsconfig/node24": "^24.0.4",
         "@types/jsdom": "^27.0.0",
-        "@types/node": "^24.10.2",
-        "@vitejs/plugin-vue": "^6.0.2",
+        "@types/node": "^24.10.9",
+        "@vitejs/plugin-vue": "^6.0.3",
         "@vue/eslint-config-typescript": "^14.6.0",
         "@vue/tsconfig": "^0.8.1",
         "@vuelidate/core": "^2.0.3",
@@ -82,21 +82,21 @@
         "@vuepic/vue-datepicker": "^12.1.0",
         "bootstrap": "^5.3.8",
         "cross-env": "^10.1.0",
-        "eslint": "^9.39.1",
-        "eslint-plugin-oxlint": "^1.32.0",
-        "eslint-plugin-vue": "^10.6.2",
+        "eslint": "^9.39.2",
+        "eslint-plugin-oxlint": "^1.42.0",
+        "eslint-plugin-vue": "^10.7.0",
         "jiti": "^2.6.1",
-        "jsdom": "^27.3.0",
+        "jsdom": "^27.4.0",
         "npm-run-all2": "^8.0.4",
-        "oxlint": "^1.32.0",
+        "oxlint": "^1.42.0",
         "rollup-plugin-visualizer": "^6.0.5",
-        "sass": "^1.95.0",
+        "sass": "^1.97.3",
         "typescript": "~5.9.3",
-        "vite": "^7.2.7",
+        "vite": "^7.3.1",
         "vite-plugin-dts": "^4.5.4",
         "vite-plugin-vue-devtools": "^8.0.5",
-        "vitest": "^4.0.15",
-        "vue-i18n": "^11.2.2",
-        "vue-tsc": "^3.1.8"
+        "vitest": "^4.0.18",
+        "vue-i18n": "^11.2.8",
+        "vue-tsc": "^3.2.4"
     }
 }
