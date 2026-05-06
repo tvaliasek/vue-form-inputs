@@ -3,7 +3,6 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import { resolve } from 'node:path'
-import dts from 'vite-plugin-dts'
 
 const customElements: string[] = [
 //    'iconify-icon',
@@ -20,9 +19,6 @@ export default defineConfig({
             }
         }),
         vueDevTools(),
-        dts({
-            tsconfigPath: resolve(__dirname, 'tsconfig.declarations.json')
-        })
     ],
     resolve: {
         alias: {
@@ -33,7 +29,7 @@ export default defineConfig({
         lib: {
             entry: resolve(__dirname, 'src/index.ts'),
             name: 'VueFormInputs',
-            fileName: format => `vue-form-inputs${(format !== 'es') ? `.${format}` : ''}.js`,
+            fileName: format => format === 'es' ? 'vue-form-inputs.mjs' : 'vue-form-inputs.umd.cjs',
             formats: ['es', 'umd']
         },
         rollupOptions: {

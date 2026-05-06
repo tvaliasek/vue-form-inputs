@@ -15,6 +15,8 @@
     "declaration": true,
     "declarationMap": true,
     "emitDeclarationOnly": true,
+    "rootDir": "./src",
+    "outDir": "./dist",
     "composite": false,
     "tsBuildInfoFile": null,
     "lib": [

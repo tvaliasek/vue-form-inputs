@@ -1,6 +1,6 @@
 {
     "name": "@tvaliasek/vue-form-inputs",
-    "version": "5.2.3",
+    "version": "5.2.4",
     "private": false,
     "files": [
         "src",
@@ -15,23 +15,39 @@
     "exports": {
         ".": {
             "import": {
-                "types": "./dist/index.d.ts",
-                "default": "./dist/vue-form-inputs.js"
+                "types": "./dist/index.d.mts",
+                "default": "./dist/vue-form-inputs.mjs"
             },
             "require": {
                 "types": "./dist/index.d.ts",
-                "default": "./dist/vue-form-inputs.umd.js"
+                "default": "./dist/vue-form-inputs.umd.cjs"
             }
         },
         "./dist/vue-form-inputs.css": {
             "import": "./dist/vue-form-inputs.css",
             "require": "./dist/vue-form-inputs.css"
         },
+        "./Inputs/*": {
+            "types": "./dist/Inputs/*.vue.d.ts",
+            "import": "./src/Inputs/*.vue"
+        },
+        "./Inputs/*.vue": {
+            "types": "./dist/Inputs/*.vue.d.ts",
+            "import": "./src/Inputs/*.vue"
+        },
+        "./Inputs/Bootstrap/*": {
+            "types": "./dist/Inputs/Bootstrap/*.vue.d.ts",
+            "import": "./src/Inputs/Bootstrap/*.vue"
+        },
+        "./Inputs/Bootstrap/*.vue": {
+            "types": "./dist/Inputs/Bootstrap/*.vue.d.ts",
+            "import": "./src/Inputs/Bootstrap/*.vue"
+        },
         "./package.json": "./package.json"
     },
     "types": "./dist/index.d.ts",
-    "main": "dist/vue-form-inputs.umd.js",
-    "module": "dist/vue-form-inputs.js",
+    "main": "dist/vue-form-inputs.umd.cjs",
+    "module": "dist/vue-form-inputs.mjs",
     "homepage": "https://github.com/tvaliasek/vue-form-inputs#readme",
     "bugs": {
         "url": "https://github.com/tvaliasek/vue-form-inputs/issues"
@@ -49,9 +65,10 @@
     },
     "scripts": {
         "dev": "vite",
-        "build": "run-p type-check \"build-only {@}\" --",
+        "build": "run-s type-check build-only build:types",
         "preview": "vite preview",
         "build-only": "vite build",
+        "build:types": "vue-tsc -p tsconfig.declarations.json && node scripts/copy-esm-types.mjs",
         "type-check": "vue-tsc --build",
         "lint:oxlint": "oxlint . --fix -D correctness --ignore-path .oxlintignore",
         "lint:eslint": "eslint . --fix",
@@ -93,7 +110,6 @@
         "sass": "^1.99.0",
         "typescript": "~5.9.3",
         "vite": "^8.0.10",
-        "vite-plugin-dts": "^5.0.0",
         "vite-plugin-vue-devtools": "^8.1.1",
         "vitest": "^4.1.5",
         "vue-i18n": "^11.4.0",

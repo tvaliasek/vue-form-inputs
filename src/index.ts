@@ -1,26 +1,28 @@
-import type { Plugin, App } from 'vue'
+import type { App, Plugin } from 'vue'
 
-import input from './Inputs/FormInput.vue'
-import checkboxInput from './Inputs/FormInputCheckbox.vue'
-import checkboxGroupInput from './Inputs/FormInputCheckboxGroup.vue'
-import radioGroupInput from './Inputs/FormInputRadioGroup.vue'
-import selectInput from './Inputs/FormInputSelect.vue'
-import textareaInput from './Inputs/FormInputTextarea.vue'
-import datePickerInput from './Inputs/FormInputDatePicker.vue'
-import fileInput from './Inputs/FormInputFile.vue'
-import datePickerAltInput from './Inputs/FormInputDatePickerAlt.vue'
-import formGroup from './Inputs/Bootstrap/VfiFormGroup.vue'
+import FormInput from './Inputs/FormInput.vue'
+import FormInputCheckbox from './Inputs/FormInputCheckbox.vue'
+import FormInputCheckboxGroup from './Inputs/FormInputCheckboxGroup.vue'
+import FormInputRadioGroup from './Inputs/FormInputRadioGroup.vue'
+import FormInputSelect from './Inputs/FormInputSelect.vue'
+import FormInputTextarea from './Inputs/FormInputTextarea.vue'
+import FormInputDatePicker from './Inputs/FormInputDatePicker.vue'
+import FormInputFile from './Inputs/FormInputFile.vue'
+import FormInputDatePickerAlt from './Inputs/FormInputDatePickerAlt.vue'
+import FormGroup from './Inputs/Bootstrap/VfiFormGroup.vue'
 
-export const FormInput = input
-export const FormInputCheckbox = checkboxInput
-export const FormInputCheckboxGroup = checkboxGroupInput
-export const FormInputRadioGroup = radioGroupInput
-export const FormInputSelect = selectInput
-export const FormInputTextarea = textareaInput
-export const FormInputDatePicker = datePickerInput
-export const FormInputFile = fileInput
-export const FormInputDatePickerAlt = datePickerAltInput
-export const FormGroup = formGroup
+export {
+    FormInput,
+    FormInputCheckbox,
+    FormInputCheckboxGroup,
+    FormInputRadioGroup,
+    FormInputSelect,
+    FormInputTextarea,
+    FormInputDatePicker,
+    FormInputFile,
+    FormInputDatePickerAlt,
+    FormGroup
+}
 export const TRANSLATE_INJECTION_KEY = '$vfiTranslate'
 
 export const FormInputsPlugin = (): Plugin => {
