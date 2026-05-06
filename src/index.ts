@@ -9,6 +9,7 @@ import textareaInput from './Inputs/FormInputTextarea.vue'
 import datePickerInput from './Inputs/FormInputDatePicker.vue'
 import fileInput from './Inputs/FormInputFile.vue'
 import datePickerAltInput from './Inputs/FormInputDatePickerAlt.vue'
+import formGroup from './Inputs/Bootstrap/VfiFormGroup.vue'
 
 export const FormInput = input
 export const FormInputCheckbox = checkboxInput
@@ -19,6 +20,7 @@ export const FormInputTextarea = textareaInput
 export const FormInputDatePicker = datePickerInput
 export const FormInputFile = fileInput
 export const FormInputDatePickerAlt = datePickerAltInput
+export const FormGroup = formGroup
 export const TRANSLATE_INJECTION_KEY = '$vfiTranslate'
 
 export const FormInputsPlugin = (): Plugin => {
@@ -33,6 +35,7 @@ export const FormInputsPlugin = (): Plugin => {
             app.component('FormInputDatePicker', FormInputDatePicker)
             app.component('FormInputFile', FormInputFile)
             app.component('FormInputDatePickerAlt', FormInputDatePickerAlt)
+            app.component('FormGroup', FormGroup)
         }
     }
 }

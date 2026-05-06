@@ -10,15 +10,15 @@ export default (
     const resolvedState = toValue(state)
 
     const resolvedAriaInvalidValue
-      = resolvedAriaInvalid === true
-          ? 'true'
-          : typeof resolvedAriaInvalid === 'string'
-              ? resolvedAriaInvalid
-              : resolvedState === false
-                  ? 'true'
-                  : resolvedAriaInvalid === false
-                      ? 'false'
-                      : undefined
+        = resolvedAriaInvalid === true
+            ? 'true'
+            : typeof resolvedAriaInvalid === 'string'
+                ? resolvedAriaInvalid
+                : resolvedState === false
+                    ? 'true'
+                    : resolvedAriaInvalid === false
+                        ? 'false'
+                        : undefined
 
     return resolvedAriaInvalidValue
 })

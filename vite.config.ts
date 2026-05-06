@@ -4,7 +4,6 @@ import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import { resolve } from 'node:path'
 import dts from 'vite-plugin-dts'
-import { visualizer } from 'rollup-plugin-visualizer'
 
 const customElements: string[] = [
 //    'iconify-icon',
@@ -23,8 +22,7 @@ export default defineConfig({
         vueDevTools(),
         dts({
             tsconfigPath: resolve(__dirname, 'tsconfig.declarations.json')
-        }),
-        visualizer()
+        })
     ],
     resolve: {
         alias: {
